@@ -225,6 +225,8 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .ainput{flex:1;min-width:110px;padding:9px 13px;border:1px solid var(--rim2);border-radius:var(--r-sm);font-size:13px;font-family:var(--body);background:var(--ink2);color:var(--cream);outline:none;transition:border .2s}
 .ainput:focus{border-color:var(--gold)}
 .ainput::placeholder{color:var(--cream3)}
+.ainput.aqty{flex:0 0 58px;min-width:0;text-align:center;padding:9px 6px;-moz-appearance:textfield}
+.ainput.aqty::-webkit-outer-spin-button,.ainput.aqty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .aselect{padding:9px 11px;border:1px solid var(--rim2);border-radius:var(--r-sm);font-size:12px;font-family:var(--body);background:var(--ink2);color:var(--cream);outline:none;cursor:pointer}
 .abtn{padding:9px 16px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--body);white-space:nowrap;transition:opacity .2s}
 .abtn:hover{opacity:.85}

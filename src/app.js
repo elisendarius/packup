@@ -65,7 +65,7 @@ const T={
     choose:'Choose your adventure',eye:'Your trips',choose2:'Track your packing. Share your progress.',
     duration:'Trip duration',days:'days',loading:'Loading…',
     progress:'My progress',teamProg:'Team progress',packed:'packed',of:'of',
-    addItem:'Add an item',addName:'Item name…',addCat:'Category',
+    addItem:'Add an item',addName:'Item name…',addCat:'Category',addQty:'Qty',
     addPerm:'Save permanently',addBtn:'Add',
     reset:'Reset my packing',resetConfirm:'Reset your checked items?',
     pTitle:"Who's packing?",pSub:"Type your name",pEdit:'Edit profile',pSave:'Let\'s go →',pPh:'Your name…',
@@ -94,7 +94,7 @@ const T={
     choose:'Välj ditt äventyr',eye:'Dina resor',choose2:'Spåra din packning. Dela framstegen.',
     duration:'Reslängd',days:'dagar',loading:'Laddar…',
     progress:'Mitt framsteg',teamProg:'Lagets framsteg',packed:'packade',of:'av',
-    addItem:'Lägg till sak',addName:'Namn på sak…',addCat:'Kategori',
+    addItem:'Lägg till sak',addName:'Namn på sak…',addCat:'Kategori',addQty:'Antal',
     addPerm:'Spara permanent',addBtn:'Lägg till',
     reset:'Återställ min packning',resetConfirm:'Återställa dina bockade?',
     pTitle:'Vem packar?',pSub:'Skriv ditt namn',pEdit:'Redigera profil',pSave:'Kör! →',pPh:'Ditt namn…',
@@ -180,7 +180,7 @@ function allItemsList(id, st) {
     arr.push({id:i.id,catId:c.id,qty,rule});
   }
   for(const ci of (st.customItems||[]))
-    arr.push({id:ci.id,catId:ci.catId,qty:1,rule:'fixed',custom:true,name:ci.name,permanent:ci.permanent});
+    arr.push({id:ci.id,catId:ci.catId,qty:ci.qty||1,rule:'fixed',custom:true,name:ci.name,permanent:ci.permanent});
   return arr;
 }
 function calcProg(tid, st, chk) {
@@ -427,7 +427,8 @@ function renderTrip(tripId){
     const custH=(st.customItems||[]).filter(ci=>ci.catId===cat.id).map(ci=>{
       const done=myChk.has(ci.id);
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
-      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name}${ci.permanent?'':' ✦'}</div>${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')">×</button></div>`;
+      const qtyBadge=(ci.qty&&ci.qty>1)?`<span class="iqty fixed">×${ci.qty}</span>`:'';
+      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name}${ci.permanent?'':' ✦'}</div>${qtyBadge}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')">×</button></div>`;
     }).join('');
     const total=cat.items.length+(st.customItems||[]).filter(ci=>ci.catId===cat.id).length;
     const done2=cat.items.filter(i=>myChk.has(i.id)).length+(st.customItems||[]).filter(ci=>ci.catId===cat.id&&myChk.has(ci.id)).length;
@@ -471,6 +472,7 @@ function renderTrip(tripId){
       <div class="addtitle">+ ${t('addItem')}</div>
       <div class="addrow">
         <input class="ainput" id="newN" placeholder="${t('addName')}" maxlength="60" onkeydown="if(event.key==='Enter')addItem('${tripId}')"/>
+        <input class="ainput aqty" id="newQ" type="number" min="1" max="99" value="1" placeholder="${t('addQty')}" style="width:62px;flex-shrink:0;text-align:center"/>
         <select class="aselect" id="newC">${catOpts}</select>
       </div>
       <div class="addrow">
@@ -588,11 +590,14 @@ async function chDur(tid,d){
 }
 async function addItem(tid){
   const n=(document.getElementById('newN').value||'').trim();if(!n){document.getElementById('newN').focus();return;}
+  const qty=Math.max(1,Math.min(99,parseInt(document.getElementById('newQ')?.value)||1));
   const st=tripStates[tid]||defState(tid);st.customItems=st.customItems||[];
   const id='c'+Date.now();
-  st.customItems.push({id,name:n,catId:document.getElementById('newC').value,permanent:document.getElementById('newP').checked});
+  st.customItems.push({id,name:n,qty,catId:document.getElementById('newC').value,permanent:document.getElementById('newP').checked});
   tripStates[tid]=st;syncDot('busy');await sSet('trip-'+tid,st);syncDot('ok');
-  document.getElementById('newN').value='';renderTrip(tid);showToast('✓ '+n);
+  document.getElementById('newN').value='';
+  const qEl=document.getElementById('newQ');if(qEl)qEl.value='1';
+  renderTrip(tid);showToast('✓ '+n);
 }
 async function delItem(tid,iid){
   const st=tripStates[tid];if(!st)return;
