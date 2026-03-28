@@ -772,13 +772,13 @@ function goHome(){
   switchTab(activeTab);
 }
 function toggleLang(){
-  lang=lang==='en'?'sv':'en';localStorage.setItem('pu-lang',lang);
+  lang=lang==='en'?'sv':'en';
+  localStorage.setItem('pu-lang',lang);
   document.getElementById('langBtn').textContent=lang==='en'?'SV':'EN';
   document.getElementById('tl-trips').textContent=lang==='sv'?'Resor':'Trips';
   document.getElementById('tl-links').textContent=lang==='sv'?'Länkar':'Links';
   document.getElementById('tl-car').textContent=lang==='sv'?'Bil':'Car';
   document.getElementById('tl-dog').textContent=lang==='sv'?'Hund':'Dog';
-  document.getElementById('tl-newuser').textContent=lang==='sv'?'Ny användare':'New user';
   if(currentTrip)renderTrip(currentTrip);else switchTab(activeTab);
 }
 document.getElementById('sidebar').querySelector('.sidebar-logo').onclick=goHome;
