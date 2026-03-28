@@ -232,12 +232,13 @@ function halfGauge(color, pct, label){
   </div>`;
 }
 
-function bigGauge(color, pct, label, sublabel){
-  // Large gauge for "My progress" card (r=54)
+function bigGauge(color, pct, label, sublabel, name){
   const r = 54, arcTotal = +(Math.PI * r).toFixed(1);
   const arcFill = (pct / 100 * arcTotal).toFixed(1);
   const cx = 70, cy = 74;
+  const nameLabel = name ? `${name}'s progress` : t('progress');
   return `<div style="display:flex;flex-direction:column;align-items:center;gap:0">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--cream3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">${nameLabel}</div>
     <svg width="140" height="80" viewBox="0 0 140 80" style="overflow:visible">
       <path d="M${cx-r},${cy} A${r},${r} 0 0,1 ${cx+r},${cy}" fill="none" stroke="rgba(0,0,0,.07)" stroke-width="13" stroke-linecap="round"/>
       <path d="M${cx-r},${cy} A${r},${r} 0 0,1 ${cx+r},${cy}" fill="none" stroke="${color}" stroke-width="13" stroke-linecap="round"
@@ -575,7 +576,7 @@ function renderTrip(tripId){
         ${pillsHTML?`<div class="dur-pills">${pillsHTML}</div>`:''}
       </div>
       <div class="dcard trip-top-card" style="display:flex;align-items:center;justify-content:center;padding:16px">
-        ${bigGauge(myCol, pct, ini(myProfile?.name||'?'), `${p.done} ${t('of')} ${p.total} ${t('packed')}`)}
+        ${bigGauge(myCol, pct, ini(myProfile?.name||'?'), `${p.done} ${t('of')} ${p.total} ${t('packed')}`, myProfile?.name)}
       </div>
       ${allProfiles.length>1?`<div class="dcard trip-top-card">
         <div class="uc-title">${t('teamProg')}</div>
