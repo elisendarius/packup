@@ -3,6 +3,8 @@
 // Data loaded from src/data/*.json at startup
 
 // ── SUPABASE ───────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://klhyopbigqpmqlkdotmh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_GgQw-Lk_M2OvvfKWSiPLOw_DKZaKxG1';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── SYNC DOT ───────────────────────────────────────────────────────────
@@ -147,6 +149,50 @@ async function loadData() {
   CAR_SEARCH = car.search;
   DOG_LISTS  = dog.lists;
   DOG_LINKS  = dog.links;
+}
+
+// ── APP STATE ─────────────────────────────────────────────────
+const IDS = ['ski','summer','winter','weekend'];
+let lang         = localStorage.getItem('pu-lang') || 'en';
+let currentTrip  = null;
+let activeTab    = 'trips';
+let pollTimer    = null;
+let myProfile    = null;
+let tripStates   = {};
+let allProfiles  = [];
+let userChecked  = {};
+let carChecked   = JSON.parse(localStorage.getItem('pu-car') || '{}');
+
+function defState(id)   { return { duration: TRIPS[id]?.defaultDuration || 7, customItems: [] }; }
+const t  = k => (T[lang] && T[lang][k]) || k;
+const ti = id => (T[lang]?.items  || {})[id] || id;
+const tc = id => (T[lang]?.cats   || {})[id] || id;
+function showToast(msg, ms=2100) {
+  const e = document.getElementById('toast');
+  e.textContent = msg; e.classList.add('show');
+  setTimeout(() => e.classList.remove('show'), ms);
+}
+function allItemsList(id, st) {
+  const tr=TRIPS[id], d=st.duration, arr=[];
+  if(!tr) return arr;
+  for(const c of tr.cats) for(const i of c.items) {
+    const {qty,rule}=resolveQ(i.q,d);
+    arr.push({id:i.id,catId:c.id,qty,rule});
+  }
+  for(const ci of (st.customItems||[]))
+    arr.push({id:ci.id,catId:ci.catId,qty:1,rule:'fixed',custom:true,name:ci.name,permanent:ci.permanent});
+  return arr;
+}
+function calcProg(tid, st, chk) {
+  const all=allItemsList(tid,st), s=new Set(chk);
+  return { done: all.filter(i=>s.has(i.id)).length, total: all.length };
+}
+function durPills(tid, dur) {
+  if(!TRIPS[tid]) return [];
+  return TRIPS[tid].cats.flatMap(c =>
+    c.items.filter(i => typeof i.q==='string' && i.q!=='fixed')
+           .map(i => ({id:i.id, qty:calcQ(i.q,dur), rule:i.q}))
+  );
 }
 
 function halfGauge(color,pct,label){
