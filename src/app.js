@@ -217,17 +217,35 @@ function durPills(tid, dur) {
   );
 }
 
-function halfGauge(color,pct,label){
-  const arcTotal = 100.5; // π × r=32, matches the SVG path radius
+function halfGauge(color, pct, label){
+  // Small gauge used in team rows (r=32)
+  const arcTotal = 100.5;
   const arcFill  = (pct / 100 * arcTotal).toFixed(1);
-  return `<div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px">
+  return `<div style="display:inline-flex;flex-direction:column;align-items:center;gap:2px">
     <svg width="76" height="46" viewBox="0 0 76 46" style="overflow:visible">
       <path d="M6,42 A32,32 0 0,1 70,42" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="11" stroke-linecap="round"/>
       <path d="M6,42 A32,32 0 0,1 70,42" fill="none" stroke="${color}" stroke-width="11" stroke-linecap="round"
         stroke-dasharray="${arcFill} ${arcTotal}" style="transition:stroke-dasharray .6s ease"/>
       <text x="38" y="36" text-anchor="middle" font-size="12" font-weight="700" fill="${color}" font-family="DM Mono,monospace">${label}</text>
     </svg>
-    <span style="font-size:13px;font-weight:700;color:${color};font-family:var(--display);line-height:1">${pct}%</span>
+    <span style="font-size:12px;font-weight:700;color:${color};font-family:var(--display);line-height:1">${pct}%</span>
+  </div>`;
+}
+
+function bigGauge(color, pct, label, sublabel){
+  // Large gauge for "My progress" card (r=54)
+  const r = 54, arcTotal = +(Math.PI * r).toFixed(1);
+  const arcFill = (pct / 100 * arcTotal).toFixed(1);
+  const cx = 70, cy = 74;
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:0">
+    <svg width="140" height="80" viewBox="0 0 140 80" style="overflow:visible">
+      <path d="M${cx-r},${cy} A${r},${r} 0 0,1 ${cx+r},${cy}" fill="none" stroke="rgba(0,0,0,.07)" stroke-width="13" stroke-linecap="round"/>
+      <path d="M${cx-r},${cy} A${r},${r} 0 0,1 ${cx+r},${cy}" fill="none" stroke="${color}" stroke-width="13" stroke-linecap="round"
+        stroke-dasharray="${arcFill} ${arcTotal}" style="transition:stroke-dasharray .7s cubic-bezier(.4,0,.2,1)"/>
+      <text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="28" font-weight="700" fill="${color}" font-family="Playfair Display,serif">${pct}%</text>
+      <text x="${cx}" y="${cy+14}" text-anchor="middle" font-size="11" fill="rgba(42,37,32,.4)" font-family="DM Mono,monospace">${label}</text>
+    </svg>
+    <span style="font-size:11px;color:var(--cream3);font-family:var(--mono);margin-top:-4px">${sublabel}</span>
   </div>`;
 }
 
@@ -483,15 +501,20 @@ function renderTrip(tripId){
         </div>
         ${pillsHTML?`<div class="dur-pills">${pillsHTML}</div>`:''}
       </div>
-      <div class="dcard trip-top-card">
-        <div class="prog-hdr">
-          <div><div class="prog-label">${t('progress')}</div><div class="prog-pct" id="progPct" style="color:${myCol}">${pct}%</div></div>
-          <div style="text-align:right;margin-top:4px"><div style="font-family:var(--mono);font-size:12px;color:var(--cream3)">${p.done} ${t('of')} ${p.total}</div></div>
-        </div>
-        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:${pct}%;background:${myCol}"></div></div>
-        <div class="prog-sub" id="progSub">${p.done} ${t('of')} ${p.total} ${t('packed')}</div>
+      <div class="dcard trip-top-card" style="display:flex;align-items:center;justify-content:center;padding:16px">
+        ${bigGauge(myCol, pct, ini(myProfile?.name||'?'), `${p.done} ${t('of')} ${p.total} ${t('packed')}`)}
       </div>
-      ${allProfiles.length>1?`<div class="dcard trip-top-card"><div class="uc-title">${t('teamProg')}</div>${teamHTML}</div>`:''}
+      ${allProfiles.length>1?`<div class="dcard trip-top-card">
+        <div class="uc-title">${t('teamProg')}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+          ${allProfiles.map(pr=>{
+            const ch=userChecked['_u'+pr.id+'_'+tripId]||[];
+            const up=calcProg(tripId,st,ch);
+            const upct=up.total?Math.round(up.done/up.total*100):0;
+            return halfGauge(pr.color, upct, ini(pr.name));
+          }).join('')}
+        </div>
+      </div>`:''}
     </div>
     ${catsHTML}
     <div class="addsec">
@@ -507,12 +530,8 @@ function renderTrip(tripId){
     <div style="height:24px"></div>`;
 }
 function updProg(tid){
-  const st=tripStates[tid];if(!st)return;
-  const p=calcProg(tid,st,userChecked[tid]||[]);
-  const pct=p.total?Math.round(p.done/p.total*100):0;
-  const pf=document.getElementById('progFill'),pp=document.getElementById('progPct'),ps=document.getElementById('progSub');
-  if(pf)pf.style.width=pct+'%';if(pp)pp.textContent=pct+'%';
-  if(ps)ps.textContent=`${p.done} ${t('of')} ${p.total} ${t('packed')}`;
+  // Just re-render the whole trip — the gauge has no simple partial update
+  if(currentTrip===tid) renderTrip(tid);
 }
 
 // ── RENDER LINKS ──────────────────────────────────────────────────────
