@@ -1,5 +1,5 @@
 // ── SVG Icon Library ─────────────────────────────────────────
-// All icons: 16×16, stroke-only, no fill, no colour.
+// All icons: 18×18, stroke-only, no fill, no colour.
 const _s = d => `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
 const SVGI = {
   clothing:    _s('<path d="M5 1L2 4l2 1v10h8V5l2-1-3-3Q9.5 3 8 3Q6.5 3 5 1z"/>'),
@@ -37,7 +37,7 @@ const SVGI = {
   suitcase:    _s('<rect x="2" y="6" width="12" height="8" rx="1.5"/><path d="M5 6V4.5A1.5 1.5 0 0 1 6.5 3h3A1.5 1.5 0 0 1 11 4.5V6"/><line x1="2" y1="10" x2="14" y2="10"/>'),
   grid:        _s('<circle cx="4.5" cy="4.5" r="1.5"/><circle cx="11.5" cy="4.5" r="1.5"/><circle cx="4.5" cy="11.5" r="1.5"/><circle cx="11.5" cy="11.5" r="1.5"/>'),
 };
-function si(key, sz = 16) {
+function si(key, sz = 18) {
   const s = SVGI[key];
   if (!s) return '';
   return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${sz}px;height:${sz}px;flex-shrink:0;opacity:.7">${s.replace('<svg ', `<svg width="${sz}" height="${sz}" `)}</span>`;
