@@ -97,9 +97,9 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .new-user-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(184,120,0,.05)}
 
 /* ── LAYOUT WRAPPER ── */
-.app-layout{margin-left:200px;padding-top:57px}
+.app-layout{margin-left:200px;padding-top:57px;min-height:100vh}
 
-/* ── MOBILE: sidebar becomes bottom bar ── */
+/* ── MOBILE ── */
 @media(max-width:700px){
   .sidebar{top:auto;bottom:0;left:0;right:0;width:100%;height:auto;flex-direction:row;border-right:none;border-top:1px solid var(--rim);padding:0;overflow-y:visible;z-index:90}
   .sidebar-logo,.sidebar-users,.sidebar-nav>.sidenav-btn:last-child{display:none}
@@ -116,12 +116,12 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
   .hbtn{padding:4px 9px;font-size:11px}
 }
 
-.home{padding:20px 24px 24px;max-width:860px;min-height:calc(100vh - 57px);display:flex;flex-direction:column;justify-content:center}
-.home-hero{margin-bottom:14px}
-.home-eyebrow{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.home{padding:32px 40px 32px;width:100%;max-width:1000px;margin:0 auto;min-height:calc(100vh - 57px);display:flex;flex-direction:column;justify-content:center}
+.home-hero{margin-bottom:18px}
+.home-eyebrow{display:none}
 .home-hero h2{font-family:var(--display);font-size:26px;font-weight:700;color:var(--cream);line-height:1.15;margin-bottom:4px}
 .home-hero p{font-size:13px;color:var(--cream3)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:540px){.grid{grid-template-columns:1fr}}
 
 /* ── TRIP CARD ── */
@@ -146,7 +146,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .cgauges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 
 /* ── TRIP DETAIL VIEW ── */
-.trip{display:none;max-width:680px;margin:0 auto;padding:0 0 30px}
+.trip{display:none;max-width:760px;margin:0 auto;padding:0 40px 40px}
 .trip.on{display:block}
 .thero{padding:20px 16px 6px;text-align:center}
 .thero h1{font-family:var(--display);font-size:22px;font-weight:700;color:var(--cream);margin-bottom:2px}
@@ -234,7 +234,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .resetbtn:hover{border-color:#a32d2d;color:#e24b4a}
 
 /* ── LINKS VIEW ── */
-.links-view{display:none;padding:20px 24px 32px;max-width:860px}
+.links-view{display:none;padding:32px 40px 40px;max-width:1000px;margin:0 auto}
 .links-view.on{display:block}
 .sec-eyebrow{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;margin-top:20px;display:block}
 .sec-eyebrow:first-child{margin-top:0}
@@ -253,7 +253,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .lcard:hover .lc-arrow{color:var(--gold);transform:translate(2px,-2px)}
 
 /* ── CAR VIEW ── */
-.car-view{display:none;padding:20px 24px 32px;max-width:680px}
+.car-view{display:none;padding:32px 40px 40px;max-width:760px;margin:0 auto}
 .car-view.on{display:block}
 .car-search-box{background:var(--surface);border-radius:var(--r);padding:18px;border:1px solid var(--rim);box-shadow:var(--sh-sm);margin-bottom:16px;position:relative;overflow:hidden}
 .car-search-box::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(184,120,0,.08),transparent 70%);pointer-events:none}

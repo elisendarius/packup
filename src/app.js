@@ -336,9 +336,7 @@ async function deleteProfile(id){
 }
 
 function renderHome(){
-  document.getElementById('homeEye').textContent=t('eye');
   document.getElementById('homeTitle').textContent=t('choose');
-  document.getElementById('homeSub').textContent=t('choose2');
   document.getElementById('langBtn').textContent=lang==='en'?'SV':'EN';
   const grid=document.getElementById('tripsGrid');grid.innerHTML='';
   const list=[{id:'ski',name:t('tripSki'),sub:t('subSki')},{id:'summer',name:t('tripSummer'),sub:t('subSummer')},{id:'winter',name:t('tripWinter'),sub:t('subWinter')},{id:'weekend',name:t('tripWeekend'),sub:t('subWeekend')}];
