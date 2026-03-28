@@ -250,89 +250,94 @@ function bigGauge(color, pct, label, sublabel, name){
   </div>`;
 }
 
-// ── AUTH ─────────────────────────────────────────────────────────────
-// Uses Supabase Auth (email + password). Each person has one account.
-// myProfile.id = Supabase auth user UUID → guaranteed unique, no duplicates.
+// ── AUTH — username only ─────────────────────────────────────────────
+// No email or password. Identity = name matched against profiles table.
+// Returning users are recognised by localStorage profile ID.
+// New name = new profile. Same name = same profile (load existing).
 
 function showAuthMode(mode) {
-  // mode: 'signin' | 'signup' | 'edit'
-  document.getElementById('authSignIn').style.display = mode==='signin' ? 'block' : 'none';
-  document.getElementById('authSignUp').style.display = mode==='signup' ? 'block' : 'none';
-  document.getElementById('authEdit').style.display   = mode==='edit'   ? 'block' : 'none';
-  document.getElementById('mTitle').textContent =
-    mode==='signin' ? (lang==='sv'?'Logga in':'Sign in') :
-    mode==='signup' ? (lang==='sv'?'Skapa konto':'Create account') :
-                     (lang==='sv'?'Din profil':'Your profile');
-  const el = mode==='signin' ? document.getElementById('siEmail') :
-             mode==='signup' ? document.getElementById('suName') :
-                               document.getElementById('editName');
-  setTimeout(()=>el&&el.focus(), 140);
+  document.getElementById('authMain').style.display = mode === 'main' ? 'block' : 'none';
+  document.getElementById('authEdit').style.display = mode === 'edit' ? 'block' : 'none';
+  if(mode === 'main') setTimeout(() => document.getElementById('uName')?.focus(), 140);
+  if(mode === 'edit') setTimeout(() => document.getElementById('editName')?.focus(), 140);
 }
 
-function showProfileModal(editMode=false) {
+function showProfileModal(editMode = false) {
   document.getElementById('profileModal').style.display = 'flex';
   if(editMode && myProfile) {
     const r = document.getElementById('avRingEdit');
-    if(r){ r.style.background=myProfile.color; r.style.borderColor=myProfile.color; r.textContent=ini(myProfile.name); }
+    if(r){ r.style.background=myProfile.color; r.style.borderColor=myProfile.color; r.textContent=ini(myProfile.name); r.classList.add('has-name'); }
     const inp = document.getElementById('editName');
     if(inp) inp.value = myProfile.name;
     showAuthMode('edit');
   } else {
-    showAuthMode('signin');
+    const inp = document.getElementById('uName');
+    if(inp) inp.value = '';
+    const r = document.getElementById('avRing');
+    if(r){ r.style.background='var(--rim2)'; r.style.borderColor='var(--rim2)'; r.textContent='?'; r.classList.remove('has-name'); }
+    showAuthMode('main');
   }
 }
 
-function addNewUser(){ showProfileModal(false); } // legacy hook
+function addNewUser(){ showProfileModal(false); }
 
 function setAuthErr(id, msg) {
   const el = document.getElementById(id);
   if(el){ el.textContent = msg; el.style.display = msg ? 'block' : 'none'; }
 }
 
-async function doSignIn() {
-  const email = (document.getElementById('siEmail').value||'').trim();
-  const pass  = (document.getElementById('siPass').value||'');
-  if(!email||!pass){ setAuthErr('siErr','Please fill in both fields.'); return; }
-  setAuthErr('siErr','');
-  const btn = document.getElementById('mSaveBtn');
-  btn.textContent = '…'; btn.disabled = true;
-  const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-  btn.textContent = 'Sign in →'; btn.disabled = false;
-  if(error){ setAuthErr('siErr', error.message); return; }
-  await onAuthSuccess(data.user);
-}
+async function doLogin() {
+  const name = (document.getElementById('uName')?.value || '').trim();
+  if(!name){ setAuthErr('uErr', lang==='sv'?'Skriv ditt namn.':'Please enter your name.'); return; }
+  setAuthErr('uErr', '');
+  document.getElementById('mSaveBtn').textContent = '…';
+  document.getElementById('mSaveBtn').disabled = true;
 
-async function doSignUp() {
-  const name  = (document.getElementById('suName').value||'').trim();
-  const email = (document.getElementById('suEmail').value||'').trim();
-  const pass  = (document.getElementById('suPass').value||'');
-  if(!name){ setAuthErr('suErr','Please enter your name.'); return; }
-  if(!email||!pass){ setAuthErr('suErr','Please fill in all fields.'); return; }
-  if(pass.length < 6){ setAuthErr('suErr','Password must be at least 6 characters.'); return; }
-  setAuthErr('suErr','');
-  const { data, error } = await db.auth.signUp({
-    email, password: pass,
-    options: { data: { display_name: name } }
-  });
-  if(error){ setAuthErr('suErr', error.message); return; }
-  if(data.user) {
-    await onAuthSuccess(data.user, name);
+  // Reload profiles to get the freshest list
+  const fresh = await sGet('profiles');
+  if(fresh) allProfiles = fresh;
+
+  // Look for an existing profile with this exact name (case-insensitive)
+  const existing = allProfiles.find(p => p.name.trim().toLowerCase() === name.toLowerCase());
+
+  if(existing) {
+    // Returning user — load their profile
+    myProfile = { ...existing, color: colorFromName(existing.name) };
   } else {
-    // Email confirmation required
-    setAuthErr('suErr', '');
-    document.getElementById('authSignUp').innerHTML = `
-      <p style="color:var(--cream2);font-size:14px;line-height:1.6;margin-bottom:16px">
-        Check your email for a confirmation link, then sign in.
-      </p>
-      <button class="mbtn" onclick="showAuthMode('signin')">Go to sign in →</button>`;
+    // New user — create a fresh profile
+    myProfile = { id: 'u' + Date.now() + Math.random().toString(36).slice(2,6), name, color: colorFromName(name) };
+    allProfiles.push({ ...myProfile });
+    syncDot('busy');
+    await sSet('profiles', allProfiles);
+    syncDot('ok');
   }
+
+  // Persist to localStorage so they're auto-recognised next visit
+  localStorage.setItem('pu-me', JSON.stringify(myProfile));
+
+  // Load their checked items
+  for(const id of IDS){
+    const ch = await sGet('checked-' + id + '-' + myProfile.id);
+    userChecked[id] = ch || [];
+    userChecked['_u' + myProfile.id + '_' + id] = ch || [];
+  }
+
+  document.getElementById('mSaveBtn').textContent = "Let's go →";
+  document.getElementById('mSaveBtn').disabled = false;
+  document.getElementById('profileModal').style.display = 'none';
+  updateProfBtn();
+  switchTab('trips');
 }
 
 async function doEditName() {
-  const name = (document.getElementById('editName').value||'').trim();
-  if(!name){ setAuthErr('editErr','Please enter a name.'); return; }
+  const name = (document.getElementById('editName')?.value || '').trim();
+  if(!name){ setAuthErr('editErr', lang==='sv'?'Skriv ett namn.':'Please enter a name.'); return; }
+  // Check if name is taken by someone else
+  const taken = allProfiles.find(p => p.id !== myProfile.id && p.name.trim().toLowerCase() === name.toLowerCase());
+  if(taken){ setAuthErr('editErr', lang==='sv'?'Det namnet finns redan.':'That name is already taken.'); return; }
   myProfile.name  = name;
   myProfile.color = colorFromName(name);
+  localStorage.setItem('pu-me', JSON.stringify(myProfile));
   const idx = allProfiles.findIndex(p => p.id === myProfile.id);
   if(idx >= 0) allProfiles[idx] = {...myProfile};
   syncDot('busy');
@@ -343,47 +348,22 @@ async function doEditName() {
   if(currentTrip) renderTrip(currentTrip); else renderHome();
 }
 
-async function doSignOut() {
-  await db.auth.signOut();
+function doSignOut() {
+  // Clear localStorage identity — next visit will prompt for name
+  localStorage.removeItem('pu-me');
   myProfile = null;
   document.getElementById('profileModal').style.display = 'none';
   updateProfBtn();
   showProfileModal(false);
 }
 
-async function onAuthSuccess(user, nameOverride) {
-  // Build myProfile from auth user
-  const name = nameOverride || user.user_metadata?.display_name || user.email.split('@')[0];
-  const color = colorFromName(name);
-  myProfile = { id: user.id, name, color };
-
-  // Upsert into profiles table
-  const idx = allProfiles.findIndex(p => p.id === myProfile.id);
-  if(idx >= 0) allProfiles[idx] = {...myProfile};
-  else         allProfiles.push({...myProfile});
-  syncDot('busy');
-  await sSet('profiles', allProfiles);
-
-  // Load this user's checked items
-  for(const id of IDS){
-    const ch = await sGet('checked-' + id + '-' + myProfile.id);
-    userChecked[id] = ch || [];
-    userChecked['_u' + myProfile.id + '_' + id] = ch || [];
-  }
-  syncDot('ok');
-
-  document.getElementById('profileModal').style.display = 'none';
-  updateProfBtn();
-  switchTab('trips');
-}
-
 function onNameInput(v){
-  const c=colorFromName(v),r=document.getElementById('avRing');
-  if(r){r.style.background=c;r.style.borderColor=c;r.textContent=ini(v)||'?';r.classList.toggle('has-name',!!v.trim());}
+  const c=colorFromName(v), r=document.getElementById('avRing');
+  if(r){ r.style.background=c; r.style.borderColor=c; r.textContent=ini(v)||'?'; r.classList.toggle('has-name',!!v.trim()); }
 }
 function onEditNameInput(v){
-  const c=colorFromName(v),r=document.getElementById('avRingEdit');
-  if(r){r.style.background=c;r.style.borderColor=c;r.textContent=ini(v)||'?';r.classList.toggle('has-name',!!v.trim());}
+  const c=colorFromName(v), r=document.getElementById('avRingEdit');
+  if(r){ r.style.background=c; r.style.borderColor=c; r.textContent=ini(v)||'?'; r.classList.toggle('has-name',!!v.trim()); }
 }
 
 function updateProfBtn(){
@@ -874,23 +854,19 @@ async function init(){
   document.getElementById('tl-dog').textContent=lang==='sv'?'Hund':'Dog';
   syncDot('busy');
 
-  // ── Check Supabase Auth session ──
-  const { data: { session } } = await db.auth.getSession();
-  if(session?.user){
-    const user = session.user;
-    const name = user.user_metadata?.display_name || user.email.split('@')[0];
-    myProfile = { id: user.id, name, color: colorFromName(name) };
-  }
+  // Restore identity from this device
+  const saved = localStorage.getItem('pu-me');
+  if(saved) try { myProfile = JSON.parse(saved); myProfile.color = colorFromName(myProfile.name); } catch(e){}
 
   // Load profiles + trip states in parallel
   const[shPr,...trs]=await Promise.all([sGet('profiles'),...IDS.map(id=>sGet('trip-'+id))]);
   allProfiles=shPr||[];
-  IDS.forEach((id,i)=>{tripStates[id]=trs[i]||defState(id);if(!tripStates[id].customItems)tripStates[id].customItems=[];});
+  IDS.forEach((id,i)=>{ tripStates[id]=trs[i]||defState(id); if(!tripStates[id].customItems) tripStates[id].customItems=[]; });
 
-  // Merge own profile into shared list if authenticated
+  // Merge own profile into shared list
   if(myProfile){
     const idx=allProfiles.findIndex(p=>p.id===myProfile.id);
-    if(idx>=0)allProfiles[idx]={...myProfile};else allProfiles.push({...myProfile});
+    if(idx>=0) allProfiles[idx]={...myProfile}; else allProfiles.push({...myProfile});
     await sSet('profiles',allProfiles);
   }
 
@@ -908,21 +884,9 @@ async function init(){
   updateProfBtn();
 
   if(!myProfile){
-    // Not signed in — show app but prompt sign-in
     showProfileModal(false);
-    switchTab('trips');
   } else {
     switchTab('trips');
   }
-
-  // Listen for auth state changes (sign in/out from other tabs)
-  db.auth.onAuthStateChange(async (event, session) => {
-    if(event === 'SIGNED_IN' && session?.user && !myProfile){
-      await onAuthSuccess(session.user);
-    } else if(event === 'SIGNED_OUT'){
-      myProfile = null;
-      updateProfBtn();
-    }
-  });
 }
 init();

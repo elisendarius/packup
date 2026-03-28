@@ -16,47 +16,35 @@
   <div class="load-bar"><div class="load-fill"></div></div>
 </div>
 
-<!-- AUTH MODAL -->
+<!-- AUTH MODAL — username only -->
 <div class="modal-over" id="profileModal" style="display:none">
   <div class="modal">
     <div class="modal-logo">pack<span>Up</span></div>
-    <h2 id="mTitle">Sign in</h2>
 
-    <!-- Sign in form -->
-    <div id="authSignIn">
-      <input class="minput" id="siEmail" type="email" placeholder="Email" autocomplete="email"
-        onkeydown="if(event.key==='Enter')document.getElementById('siPass').focus()"/>
-      <input class="minput" id="siPass" type="password" placeholder="Password" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter')doSignIn()"/>
-      <div class="auth-err" id="siErr"></div>
-      <button class="mbtn" id="mSaveBtn" onclick="doSignIn()">Sign in →</button>
-      <button class="manage-toggle" onclick="showAuthMode('signup')">No account? Sign up</button>
-    </div>
-
-    <!-- Sign up form -->
-    <div id="authSignUp" style="display:none">
+    <!-- Enter name (sign in or join) -->
+    <div id="authMain">
+      <h2 id="mTitle">Who's packing?</h2>
       <div class="av-ring" id="avRing">?</div>
-      <input class="minput" id="suName" placeholder="Your display name…" maxlength="22"
+      <input class="minput" id="uName" placeholder="Your name…" maxlength="22"
         oninput="onNameInput(this.value)"
-        onkeydown="if(event.key==='Enter')document.getElementById('suEmail').focus()"/>
-      <input class="minput" id="suEmail" type="email" placeholder="Email" autocomplete="email"
-        onkeydown="if(event.key==='Enter')document.getElementById('suPass').focus()"/>
-      <input class="minput" id="suPass" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password"
-        onkeydown="if(event.key==='Enter')doSignUp()"/>
-      <div class="auth-err" id="suErr"></div>
-      <button class="mbtn" onclick="doSignUp()">Create account →</button>
-      <button class="manage-toggle" onclick="showAuthMode('signin')">Already have an account? Sign in</button>
+        onkeydown="if(event.key==='Enter')doLogin()"/>
+      <div class="auth-err" id="uErr"></div>
+      <button class="mbtn" id="mSaveBtn" onclick="doLogin()">Let's go →</button>
+      <p style="font-size:11px;color:var(--cream3);margin-top:12px;line-height:1.5">
+        New name = new account. Same name = same account.
+      </p>
     </div>
 
-    <!-- Edit name form (shown when already signed in) -->
+    <!-- Edit name (when already signed in) -->
     <div id="authEdit" style="display:none">
+      <h2>Your profile</h2>
       <div class="av-ring" id="avRingEdit">?</div>
       <input class="minput" id="editName" placeholder="Display name…" maxlength="22"
         oninput="onEditNameInput(this.value)"
         onkeydown="if(event.key==='Enter')doEditName()"/>
       <div class="auth-err" id="editErr"></div>
       <button class="mbtn" onclick="doEditName()">Save →</button>
-      <button class="manage-toggle" onclick="doSignOut()" style="color:#e24b4a">Sign out</button>
+      <button class="manage-toggle" onclick="doSignOut()" style="color:#e24b4a">Switch user</button>
       <button class="manage-toggle" id="manageToggle" onclick="toggleManage()">manage users</button>
       <div class="manage-panel" id="managePanel">
         <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;text-align:left">All users</div>
