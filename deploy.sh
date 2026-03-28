@@ -13,7 +13,7 @@ echo "💬 Committing: \"$MSG\""
 git commit -m "$MSG"
 
 echo "🚀 Pushing to GitHub..."
-git push
+git pull --rebase origin main && git push
 
 echo ""
 echo "✅ Done! Live at: https://elisendarius.github.io/packup/"
