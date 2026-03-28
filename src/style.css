@@ -38,6 +38,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .mbtn:hover{background:var(--gold2);transform:translateY(-1px)}
 .mbtn:active{transform:translateY(0)}
 .manage-toggle{margin-top:14px;background:none;border:none;color:var(--cream3);font-size:12px;cursor:pointer;font-family:var(--body);text-decoration:underline;padding:0}
+.auth-err{display:none;color:#e24b4a;font-size:12px;margin:-8px 0 10px;text-align:left;background:rgba(226,75,74,.08);border-radius:6px;padding:7px 10px;border:1px solid rgba(226,75,74,.2)}
 .manage-panel{margin-top:14px;display:none}
 .mu-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--rim)}
 .mu-row:last-child{border-bottom:none}

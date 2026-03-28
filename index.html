@@ -16,20 +16,52 @@
   <div class="load-bar"><div class="load-fill"></div></div>
 </div>
 
-<!-- PROFILE MODAL -->
+<!-- AUTH MODAL -->
 <div class="modal-over" id="profileModal" style="display:none">
   <div class="modal">
     <div class="modal-logo">pack<span>Up</span></div>
-    <h2 id="mTitle">who's packing?</h2>
-    <div class="av-ring" id="avRing">?</div>
-    <input class="minput" id="pName" placeholder="Your name…" maxlength="22"
-      oninput="onNameInput(this.value)"
-      onkeydown="if(event.key==='Enter')saveProfile()"/>
-    <button class="mbtn" id="mSaveBtn" onclick="saveProfile()">Let's go →</button>
-    <button class="manage-toggle" id="manageToggle" onclick="toggleManage()">manage users</button>
-    <div class="manage-panel" id="managePanel">
-      <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;text-align:left">All users</div>
-      <div id="userList"></div>
+    <h2 id="mTitle">Sign in</h2>
+
+    <!-- Sign in form -->
+    <div id="authSignIn">
+      <input class="minput" id="siEmail" type="email" placeholder="Email" autocomplete="email"
+        onkeydown="if(event.key==='Enter')document.getElementById('siPass').focus()"/>
+      <input class="minput" id="siPass" type="password" placeholder="Password" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doSignIn()"/>
+      <div class="auth-err" id="siErr"></div>
+      <button class="mbtn" id="mSaveBtn" onclick="doSignIn()">Sign in →</button>
+      <button class="manage-toggle" onclick="showAuthMode('signup')">No account? Sign up</button>
+    </div>
+
+    <!-- Sign up form -->
+    <div id="authSignUp" style="display:none">
+      <div class="av-ring" id="avRing">?</div>
+      <input class="minput" id="suName" placeholder="Your display name…" maxlength="22"
+        oninput="onNameInput(this.value)"
+        onkeydown="if(event.key==='Enter')document.getElementById('suEmail').focus()"/>
+      <input class="minput" id="suEmail" type="email" placeholder="Email" autocomplete="email"
+        onkeydown="if(event.key==='Enter')document.getElementById('suPass').focus()"/>
+      <input class="minput" id="suPass" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password"
+        onkeydown="if(event.key==='Enter')doSignUp()"/>
+      <div class="auth-err" id="suErr"></div>
+      <button class="mbtn" onclick="doSignUp()">Create account →</button>
+      <button class="manage-toggle" onclick="showAuthMode('signin')">Already have an account? Sign in</button>
+    </div>
+
+    <!-- Edit name form (shown when already signed in) -->
+    <div id="authEdit" style="display:none">
+      <div class="av-ring" id="avRingEdit">?</div>
+      <input class="minput" id="editName" placeholder="Display name…" maxlength="22"
+        oninput="onEditNameInput(this.value)"
+        onkeydown="if(event.key==='Enter')doEditName()"/>
+      <div class="auth-err" id="editErr"></div>
+      <button class="mbtn" onclick="doEditName()">Save →</button>
+      <button class="manage-toggle" onclick="doSignOut()" style="color:#e24b4a">Sign out</button>
+      <button class="manage-toggle" id="manageToggle" onclick="toggleManage()">manage users</button>
+      <div class="manage-panel" id="managePanel">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;text-align:left">All users</div>
+        <div id="userList"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -59,23 +91,24 @@
   <div class="sidebar-users" id="sidebarUsers">
     <div class="sidebar-users-label">Packers</div>
     <div id="sbUserList"></div>
-    <button class="sb-add-user" onclick="addNewUser()">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-      <span id="tl-newuser">New user</span>
+    <button class="sb-add-user" onclick="showProfileModal(true)" id="sbEditBtn" style="display:none">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M11 2l3 3-8 8H3v-3z"/></svg>
+      <span>Edit profile</span>
+    </button>
+    <button class="sb-add-user" onclick="doSignOut()" id="sbSignOutBtn" style="display:none;color:#e24b4a;border-color:#e24b4a">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 8H3M6 5l-3 3 3 3M10 3h3v10h-3"/></svg>
+      <span>Sign out</span>
     </button>
   </div>
 </nav>
 
-<!-- TOP BAR (users + actions, no nav tabs) -->
+<!-- TOP BAR -->
 <header class="header">
   <div class="header-row1">
     <div class="users-strip" id="usersStrip"></div>
     <div class="hright">
       <button class="hbtn" id="backBtn" onclick="goHome()" style="display:none">← Back</button>
-      <button class="new-user-btn" id="newUserBtn" onclick="addNewUser()">
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-        <span>+</span>
-      </button>
+      <button class="hbtn" id="signInHeaderBtn" onclick="showProfileModal(false)" style="display:none">Sign in</button>
       <button class="hbtn" id="langBtn" onclick="toggleLang()">SV</button>
     </div>
   </div>
