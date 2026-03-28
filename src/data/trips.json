@@ -1,0 +1,612 @@
+{
+  "ski": {
+    "theme": "ski",
+    "defaultDuration": 7,
+    "cats": [
+      {
+        "id": "clothing",
+        "icon": "clothing",
+        "items": [
+          {
+            "id": "ski-jacket",
+            "q": "fixed"
+          },
+          {
+            "id": "ski-pants",
+            "q": "fixed"
+          },
+          {
+            "id": "thermal-top",
+            "q": 2
+          },
+          {
+            "id": "thermal-bot",
+            "q": 2
+          },
+          {
+            "id": "fleece",
+            "q": "fixed"
+          },
+          {
+            "id": "ski-socks",
+            "q": "halfday"
+          },
+          {
+            "id": "wool-socks",
+            "q": 2
+          },
+          {
+            "id": "underwear",
+            "q": "daily"
+          },
+          {
+            "id": "tshirts",
+            "q": "less"
+          },
+          {
+            "id": "apres-outfit",
+            "q": "fixed"
+          },
+          {
+            "id": "casual-eve",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "equipment",
+        "icon": "equipment",
+        "items": [
+          {
+            "id": "skis",
+            "q": "fixed"
+          },
+          {
+            "id": "boots",
+            "q": "fixed"
+          },
+          {
+            "id": "helmet",
+            "q": "fixed"
+          },
+          {
+            "id": "goggles",
+            "q": "fixed"
+          },
+          {
+            "id": "poles",
+            "q": "fixed"
+          },
+          {
+            "id": "boot-bag",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "accessories",
+        "icon": "accessories",
+        "items": [
+          {
+            "id": "gloves",
+            "q": "fixed"
+          },
+          {
+            "id": "neck",
+            "q": "fixed"
+          },
+          {
+            "id": "ski-pass",
+            "q": "fixed"
+          },
+          {
+            "id": "backpack",
+            "q": "fixed"
+          },
+          {
+            "id": "sunglasses",
+            "q": "fixed"
+          },
+          {
+            "id": "hand-warmers",
+            "q": 4
+          }
+        ]
+      },
+      {
+        "id": "toiletries",
+        "icon": "toiletries",
+        "items": [
+          {
+            "id": "sunscreen",
+            "q": "fixed"
+          },
+          {
+            "id": "lip-balm",
+            "q": "fixed"
+          },
+          {
+            "id": "moisturizer",
+            "q": "fixed"
+          },
+          {
+            "id": "deodorant",
+            "q": "fixed"
+          },
+          {
+            "id": "first-aid",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "icon": "documents",
+        "items": [
+          {
+            "id": "passport",
+            "q": "fixed"
+          },
+          {
+            "id": "insurance",
+            "q": "fixed"
+          },
+          {
+            "id": "lift-booking",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "icon": "other",
+        "items": [
+          {
+            "id": "charger",
+            "q": "fixed"
+          },
+          {
+            "id": "power-bank",
+            "q": "fixed"
+          },
+          {
+            "id": "camera",
+            "q": "fixed"
+          },
+          {
+            "id": "snacks",
+            "q": "fixed"
+          },
+          {
+            "id": "water-bottle",
+            "q": "fixed"
+          },
+          {
+            "id": "apres-boots",
+            "q": "fixed"
+          }
+        ]
+      }
+    ]
+  },
+  "summer": {
+    "theme": "summer",
+    "defaultDuration": 10,
+    "cats": [
+      {
+        "id": "clothing",
+        "icon": "clothing",
+        "items": [
+          {
+            "id": "swimsuit",
+            "q": 2
+          },
+          {
+            "id": "shorts",
+            "q": "less"
+          },
+          {
+            "id": "tshirts",
+            "q": "less"
+          },
+          {
+            "id": "light-shirt",
+            "q": "less"
+          },
+          {
+            "id": "underwear",
+            "q": "daily"
+          },
+          {
+            "id": "socks",
+            "q": "halfday"
+          },
+          {
+            "id": "sandals",
+            "q": "fixed"
+          },
+          {
+            "id": "flip-flops",
+            "q": "fixed"
+          },
+          {
+            "id": "sneakers",
+            "q": "fixed"
+          },
+          {
+            "id": "light-jacket",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "beach",
+        "icon": "beach",
+        "items": [
+          {
+            "id": "beach-towel",
+            "q": "fixed"
+          },
+          {
+            "id": "beach-bag",
+            "q": "fixed"
+          },
+          {
+            "id": "snorkel",
+            "q": "fixed"
+          },
+          {
+            "id": "waterproof-case",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "accessories",
+        "icon": "accessories",
+        "items": [
+          {
+            "id": "sunglasses",
+            "q": "fixed"
+          },
+          {
+            "id": "hat",
+            "q": "fixed"
+          },
+          {
+            "id": "water-bottle",
+            "q": "fixed"
+          },
+          {
+            "id": "backpack",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "toiletries",
+        "icon": "toiletries",
+        "items": [
+          {
+            "id": "sunscreen",
+            "q": "fixed"
+          },
+          {
+            "id": "after-sun",
+            "q": "fixed"
+          },
+          {
+            "id": "mosquito",
+            "q": "fixed"
+          },
+          {
+            "id": "deodorant",
+            "q": "fixed"
+          },
+          {
+            "id": "shampoo",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "icon": "documents",
+        "items": [
+          {
+            "id": "passport",
+            "q": "fixed"
+          },
+          {
+            "id": "insurance",
+            "q": "fixed"
+          },
+          {
+            "id": "adapter",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "icon": "other",
+        "items": [
+          {
+            "id": "charger",
+            "q": "fixed"
+          },
+          {
+            "id": "camera",
+            "q": "fixed"
+          },
+          {
+            "id": "guidebook",
+            "q": "fixed"
+          },
+          {
+            "id": "phrase-book",
+            "q": "fixed"
+          },
+          {
+            "id": "snacks",
+            "q": "fixed"
+          }
+        ]
+      }
+    ]
+  },
+  "winter": {
+    "theme": "winter",
+    "defaultDuration": 7,
+    "cats": [
+      {
+        "id": "clothing",
+        "icon": "clothing",
+        "items": [
+          {
+            "id": "jeans",
+            "q": 2
+          },
+          {
+            "id": "sweaters",
+            "q": "sweaters"
+          },
+          {
+            "id": "tshirts",
+            "q": "less"
+          },
+          {
+            "id": "underwear",
+            "q": "daily"
+          },
+          {
+            "id": "socks",
+            "q": "daily"
+          },
+          {
+            "id": "rain-jacket",
+            "q": "fixed"
+          },
+          {
+            "id": "casual-shoes",
+            "q": "fixed"
+          },
+          {
+            "id": "ankle-boots",
+            "q": "fixed"
+          },
+          {
+            "id": "scarf",
+            "q": "fixed"
+          },
+          {
+            "id": "light-gloves",
+            "q": "fixed"
+          },
+          {
+            "id": "beanie",
+            "q": "fixed"
+          },
+          {
+            "id": "light-jacket",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "accessories",
+        "icon": "accessories",
+        "items": [
+          {
+            "id": "umbrella",
+            "q": "fixed"
+          },
+          {
+            "id": "sunglasses",
+            "q": "fixed"
+          },
+          {
+            "id": "daypack",
+            "q": "fixed"
+          },
+          {
+            "id": "water-bottle",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "toiletries",
+        "icon": "toiletries",
+        "items": [
+          {
+            "id": "moisturizer",
+            "q": "fixed"
+          },
+          {
+            "id": "lip-balm",
+            "q": "fixed"
+          },
+          {
+            "id": "deodorant",
+            "q": "fixed"
+          },
+          {
+            "id": "shampoo",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "icon": "documents",
+        "items": [
+          {
+            "id": "passport",
+            "q": "fixed"
+          },
+          {
+            "id": "insurance",
+            "q": "fixed"
+          },
+          {
+            "id": "adapter",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "icon": "other",
+        "items": [
+          {
+            "id": "charger",
+            "q": "fixed"
+          },
+          {
+            "id": "camera",
+            "q": "fixed"
+          },
+          {
+            "id": "guidebook",
+            "q": "fixed"
+          },
+          {
+            "id": "phrase-book",
+            "q": "fixed"
+          },
+          {
+            "id": "book",
+            "q": "fixed"
+          }
+        ]
+      }
+    ]
+  },
+  "weekend": {
+    "theme": "weekend",
+    "defaultDuration": 3,
+    "cats": [
+      {
+        "id": "clothing",
+        "icon": "clothing",
+        "items": [
+          {
+            "id": "tshirts",
+            "q": "daily"
+          },
+          {
+            "id": "casual-pants",
+            "q": 2
+          },
+          {
+            "id": "nice-outfit",
+            "q": "fixed"
+          },
+          {
+            "id": "underwear",
+            "q": "daily"
+          },
+          {
+            "id": "socks",
+            "q": "daily"
+          },
+          {
+            "id": "comfy-shoes",
+            "q": "fixed"
+          },
+          {
+            "id": "jacket",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "toiletries",
+        "icon": "toiletries",
+        "items": [
+          {
+            "id": "toothbrush",
+            "q": "fixed"
+          },
+          {
+            "id": "deodorant",
+            "q": "fixed"
+          },
+          {
+            "id": "shampoo",
+            "q": "fixed"
+          },
+          {
+            "id": "medications",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "accessories",
+        "icon": "accessories",
+        "items": [
+          {
+            "id": "sunglasses",
+            "q": "fixed"
+          },
+          {
+            "id": "reusable-bag",
+            "q": "fixed"
+          },
+          {
+            "id": "water-bottle",
+            "q": "fixed"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "icon": "other",
+        "items": [
+          {
+            "id": "charger",
+            "q": "fixed"
+          },
+          {
+            "id": "power-bank",
+            "q": "fixed"
+          },
+          {
+            "id": "cash",
+            "q": "fixed"
+          },
+          {
+            "id": "book",
+            "q": "fixed"
+          },
+          {
+            "id": "snacks",
+            "q": "fixed"
+          }
+        ]
+      }
+    ]
+  }
+}

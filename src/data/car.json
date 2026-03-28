@@ -1,0 +1,338 @@
+{
+  "lists": {
+    "en": [
+      {
+        "id": "pre",
+        "title": "Before you leave",
+        "items": [
+          {
+            "id": "tyre",
+            "label": "Tyre pressure",
+            "sub": "All 4 tyres including the spare"
+          },
+          {
+            "id": "oil",
+            "label": "Engine oil level",
+            "sub": "Check dipstick, top up if needed"
+          },
+          {
+            "id": "coolant",
+            "label": "Coolant level",
+            "sub": "Look at the reservoir — not a cold engine cap"
+          },
+          {
+            "id": "wash",
+            "label": "Screen wash fluid",
+            "sub": "Fill it up — you will need it on motorways"
+          },
+          {
+            "id": "lights",
+            "label": "All lights working",
+            "sub": "Headlights, brake, rear and indicators"
+          },
+          {
+            "id": "wipers",
+            "label": "Wiper blades OK",
+            "sub": "Check they clean without smearing"
+          },
+          {
+            "id": "fuel",
+            "label": "Full tank of fuel",
+            "sub": "Never start a long trip on half a tank"
+          },
+          {
+            "id": "triangle",
+            "label": "Warning triangle & vest",
+            "sub": "Mandatory in many countries"
+          },
+          {
+            "id": "firstaid",
+            "label": "First aid kit",
+            "sub": "Check it is stocked and nothing is expired"
+          },
+          {
+            "id": "docs",
+            "label": "Insurance documents",
+            "sub": "Print a copy — do not rely only on your phone"
+          },
+          {
+            "id": "reg",
+            "label": "Vehicle registration",
+            "sub": "Keep it in the glovebox"
+          },
+          {
+            "id": "lic",
+            "label": "All drivers have their licence",
+            "sub": "Everyone who might drive must have theirs"
+          },
+          {
+            "id": "mount",
+            "label": "Phone mount fitted",
+            "sub": "Never hold your phone while driving"
+          },
+          {
+            "id": "gps",
+            "label": "Route planned on GPS",
+            "sub": "Download offline maps just in case"
+          },
+          {
+            "id": "snacks",
+            "label": "Snacks & drinks in the car",
+            "sub": "Keeps everyone happy on the road"
+          },
+          {
+            "id": "chargercar",
+            "label": "Car phone charger",
+            "sub": "USB or 12V adapter ready to go"
+          },
+          {
+            "id": "shades",
+            "label": "Sunglasses accessible",
+            "sub": "Low sun on motorways is genuinely dangerous"
+          },
+          {
+            "id": "rests",
+            "label": "Rest stops planned",
+            "sub": "Every 2 hours is the recommended safe limit"
+          }
+        ]
+      },
+      {
+        "id": "kids",
+        "title": "Kids & comfort",
+        "items": [
+          {
+            "id": "seat",
+            "label": "Child seat fitted correctly",
+            "sub": "Check all straps and anchor points carefully"
+          },
+          {
+            "id": "tablets",
+            "label": "Tablets & games charged",
+            "sub": "Absolutely essential for long journeys"
+          },
+          {
+            "id": "phones",
+            "label": "Headphones for each child",
+            "sub": "Saves everyone's sanity"
+          },
+          {
+            "id": "motion",
+            "label": "Travel sickness tablets",
+            "sub": "Give before departure if needed"
+          },
+          {
+            "id": "blanket",
+            "label": "Blanket & travel pillow",
+            "sub": "For sleeping comfortably on the road"
+          },
+          {
+            "id": "toiletbag",
+            "label": "Toilet bag easy to reach",
+            "sub": "Not buried at the bottom of the boot"
+          },
+          {
+            "id": "wipes",
+            "label": "Wet wipes & tissues",
+            "sub": "Spills will happen"
+          },
+          {
+            "id": "spare",
+            "label": "Spare clothes within reach",
+            "sub": "One set per child — not inside the suitcase"
+          }
+        ]
+      }
+    ],
+    "sv": [
+      {
+        "id": "pre",
+        "title": "Innan avfärd",
+        "items": [
+          {
+            "id": "tyre",
+            "label": "Däcktryck",
+            "sub": "Alla 4 däck inklusive reservdäcket"
+          },
+          {
+            "id": "oil",
+            "label": "Motoroljenivå",
+            "sub": "Kolla mätstickan, fyll på vid behov"
+          },
+          {
+            "id": "coolant",
+            "label": "Kylvätskenivå",
+            "sub": "Titta på behållaren — inte ett kallt motorlock"
+          },
+          {
+            "id": "wash",
+            "label": "Spolarvätska",
+            "sub": "Fyll på den — du behöver den på motorvägen"
+          },
+          {
+            "id": "lights",
+            "label": "Alla lampor fungerar",
+            "sub": "Strålkastare, bromsar, bak och blinkers"
+          },
+          {
+            "id": "wipers",
+            "label": "Vindrutetorkare OK",
+            "sub": "Kontrollera att de torkar utan att smeta"
+          },
+          {
+            "id": "fuel",
+            "label": "Full tank",
+            "sub": "Börja aldrig en lång resa på halvtank"
+          },
+          {
+            "id": "triangle",
+            "label": "Varningstriangel & väst",
+            "sub": "Obligatoriskt i många länder"
+          },
+          {
+            "id": "firstaid",
+            "label": "Förbandslåda",
+            "sub": "Kontrollera att den är komplett och inte utgången"
+          },
+          {
+            "id": "docs",
+            "label": "Försäkringshandlingar",
+            "sub": "Skriv ut en kopia — lita inte bara på telefonen"
+          },
+          {
+            "id": "reg",
+            "label": "Registreringsbevis",
+            "sub": "Förvara det i handskfacket"
+          },
+          {
+            "id": "lic",
+            "label": "Alla förare har körkort",
+            "sub": "Alla som kan köra måste ha sitt med"
+          },
+          {
+            "id": "mount",
+            "label": "Telefonhållare monterad",
+            "sub": "Håll aldrig telefonen under körning"
+          },
+          {
+            "id": "gps",
+            "label": "Rutt planerad på GPS",
+            "sub": "Ladda ner offline-kartor ifall"
+          },
+          {
+            "id": "snacks",
+            "label": "Snacks & dryck i bilen",
+            "sub": "Håller alla glada på vägen"
+          },
+          {
+            "id": "chargercar",
+            "label": "Billaddare för telefon",
+            "sub": "USB eller 12V-adapter redo"
+          },
+          {
+            "id": "shades",
+            "label": "Solglasögon lättåtkomliga",
+            "sub": "Låg sol på motorväg är genuint farlig"
+          },
+          {
+            "id": "rests",
+            "label": "Rastplatser planerade",
+            "sub": "Var 2:e timme är den rekommenderade gränsen"
+          }
+        ]
+      },
+      {
+        "id": "kids",
+        "title": "Barn & komfort",
+        "items": [
+          {
+            "id": "seat",
+            "label": "Bilbarnstol monterad rätt",
+            "sub": "Kontrollera alla remmar och fästen noga"
+          },
+          {
+            "id": "tablets",
+            "label": "Surfplattor & spel laddade",
+            "sub": "Absolut nödvändigt för långa resor"
+          },
+          {
+            "id": "phones",
+            "label": "Hörlurar till varje barn",
+            "sub": "Räddar allas förstånd"
+          },
+          {
+            "id": "motion",
+            "label": "Tabletter mot åksjuka",
+            "sub": "Ge innan avfärd vid behov"
+          },
+          {
+            "id": "blanket",
+            "label": "Filt & resekudde",
+            "sub": "För att sova bekvämt på vägen"
+          },
+          {
+            "id": "toiletbag",
+            "label": "Necessär lättåtkomlig",
+            "sub": "Inte begravd i bagageutrymmet"
+          },
+          {
+            "id": "wipes",
+            "label": "Våtservetter & näsdukar",
+            "sub": "Spill kommer att hända"
+          },
+          {
+            "id": "spare",
+            "label": "Ombyteskläder nära till hands",
+            "sub": "Ett set per barn — inte i resväskan"
+          }
+        ]
+      }
+    ]
+  },
+  "search": {
+    "en": [
+      {
+        "l": "Service schedule",
+        "q": "service schedule intervals"
+      },
+      {
+        "l": "Oil specification",
+        "q": "engine oil spec grade"
+      },
+      {
+        "l": "Tyre size",
+        "q": "tyre size recommended"
+      },
+      {
+        "l": "Common faults",
+        "q": "common problems reliability forum"
+      },
+      {
+        "l": "Owner manual PDF",
+        "q": "owner manual PDF free download"
+      }
+    ],
+    "sv": [
+      {
+        "l": "Serviceintervall",
+        "q": "serviceintervall"
+      },
+      {
+        "l": "Oljespecifikation",
+        "q": "motoroljespecifikation"
+      },
+      {
+        "l": "Däckstorlek",
+        "q": "rekommenderad däckstorlek"
+      },
+      {
+        "l": "Vanliga fel",
+        "q": "vanliga problem forum tillförlitlighet"
+      },
+      {
+        "l": "Instruktionsbok PDF",
+        "q": "instruktionsbok PDF gratis"
+      }
+    ]
+  }
+}

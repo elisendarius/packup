@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>packUp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+<div id="loading" class="loading">
+  <div class="load-logo">pack<span>Up</span></div>
+  <div style="font-family:var(--mono);font-size:11px;color:var(--cream3);letter-spacing:2px;text-transform:uppercase;margin-top:4px">v 0.2</div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-over" id="profileModal" style="display:none">
+  <div class="modal">
+    <div class="modal-logo">pack<span>Up</span></div>
+    <h2 id="mTitle">who's packing?</h2>
+    <div class="av-ring" id="avRing">?</div>
+    <input class="minput" id="pName" placeholder="Your name…" maxlength="22"
+      oninput="onNameInput(this.value)"
+      onkeydown="if(event.key==='Enter')saveProfile()"/>
+    <button class="mbtn" id="mSaveBtn" onclick="saveProfile()">Let's go →</button>
+    <button class="manage-toggle" id="manageToggle" onclick="toggleManage()">manage users</button>
+    <div class="manage-panel" id="managePanel">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;text-align:left">All users</div>
+      <div id="userList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo" onclick="goHome()">pack<span>Up</span> <span class="sidebar-sync" id="sidebarSync"></span></div>
+  <div class="sidebar-nav">
+    <button class="sidenav-btn on" id="tab-trips" onclick="switchTab('trips')">
+      <svg width="16" height="16" viewBox="0 0 16 16" stroke-width="1.5"><rect x="2" y="6" width="12" height="8" rx="1.5"/><path d="M5 6V4.5A1.5 1.5 0 0 1 6.5 3h3A1.5 1.5 0 0 1 11 4.5V6"/><line x1="2" y1="10" x2="14" y2="10"/></svg>
+      <span id="tl-trips">Trips</span>
+    </button>
+    <button class="sidenav-btn" id="tab-links" onclick="switchTab('links')">
+      <svg width="16" height="16" viewBox="0 0 16 16" stroke-width="1.5"><circle cx="4.5" cy="4.5" r="1.5"/><circle cx="11.5" cy="4.5" r="1.5"/><circle cx="4.5" cy="11.5" r="1.5"/><circle cx="11.5" cy="11.5" r="1.5"/></svg>
+      <span id="tl-links">Links</span>
+    </button>
+    <button class="sidenav-btn" id="tab-car" onclick="switchTab('car')">
+      <svg width="16" height="16" viewBox="0 0 16 16" stroke-width="1.5"><path d="M2 9l1.5-4h9L14 9"/><rect x="1" y="9" width="14" height="4" rx="1.5"/><circle cx="4.5" cy="13" r="1.5"/><circle cx="11.5" cy="13" r="1.5"/></svg>
+      <span id="tl-car">Car</span>
+    </button>
+    <button class="sidenav-btn" id="tab-dog" onclick="switchTab('dog')">
+      <svg width="16" height="16" viewBox="0 0 16 16" stroke-width="1.5"><circle cx="5" cy="5" r="1.2"/><circle cx="8" cy="3.5" r="1.2"/><circle cx="11" cy="5" r="1.2"/><circle cx="6.5" cy="8" r="1.2"/><circle cx="9.5" cy="8" r="1.2"/></svg>
+      <span id="tl-dog">Dog</span>
+    </button>
+  </div>
+  <!-- Users in sidebar -->
+  <div class="sidebar-users" id="sidebarUsers">
+    <div class="sidebar-users-label">Packers</div>
+    <div id="sbUserList"></div>
+    <button class="sb-add-user" onclick="addNewUser()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+      <span id="tl-newuser">New user</span>
+    </button>
+  </div>
+</nav>
+
+<!-- TOP BAR (users + actions, no nav tabs) -->
+<header class="header">
+  <div class="header-row1">
+    <div class="users-strip" id="usersStrip"></div>
+    <div class="hright">
+      <button class="hbtn" id="backBtn" onclick="goHome()" style="display:none">← Back</button>
+      <button class="new-user-btn" id="newUserBtn" onclick="addNewUser()">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+        <span>+</span>
+      </button>
+      <button class="hbtn" id="langBtn" onclick="toggleLang()">SV</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="app-layout">
+  <div id="homeView" class="home" style="display:none">
+    <div class="home-hero">
+      <div class="home-eyebrow" id="homeEye">Your trips</div>
+      <h2 id="homeTitle">Choose your adventure</h2>
+      <p id="homeSub">Track your packing. Share your progress.</p>
+    </div>
+    <div class="grid" id="tripsGrid"></div>
+  </div>
+  <div id="linksView" class="links-view"></div>
+  <div id="carView"   class="car-view"></div>
+  <div id="dogView"   class="car-view"></div>
+  <div id="tripView"  class="trip"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Scripts: load order matters — icons and vans must come before app -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="src/icons.js"></script>
+<script src="src/vans.js"></script>
+<script src="src/config.js"></script> 
+<script src="src/app.js"></script>
+
+
+</body>
+</html>

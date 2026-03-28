@@ -1,0 +1,294 @@
+{
+  "en": [
+    {
+      "eye": "Sweden",
+      "title": "Nordic adventures",
+      "items": [
+        {
+          "icon": "cloud",
+          "name": "SMHI Weather",
+          "desc": "Official Swedish weather forecasts & warnings",
+          "badge": "Weather",
+          "url": "https://www.smhi.se/en"
+        },
+        {
+          "icon": "pin",
+          "name": "Google Maps",
+          "desc": "Navigate anywhere across Sweden",
+          "badge": "Navigation",
+          "url": "https://maps.google.com/?q=Sweden"
+        },
+        {
+          "icon": "fork",
+          "name": "The Fork — Sweden",
+          "desc": "Top-rated restaurants, reviews & bookings",
+          "badge": "Food",
+          "url": "https://www.thefork.co.uk/restaurant/sweden"
+        },
+        {
+          "icon": "mountain",
+          "name": "Skistar",
+          "desc": "Sweden's largest ski resort group",
+          "badge": "Skiing",
+          "url": "https://www.skistar.com/en"
+        },
+        {
+          "icon": "compass",
+          "name": "Visit Sweden",
+          "desc": "Official travel guide & inspiration",
+          "badge": "Tourism",
+          "url": "https://visitsweden.com"
+        },
+        {
+          "icon": "train",
+          "name": "SJ Rail",
+          "desc": "Book train tickets across Sweden",
+          "badge": "Transport",
+          "url": "https://www.sj.se/en"
+        }
+      ]
+    },
+    {
+      "eye": "Catalunya",
+      "title": "Mediterranean escapes",
+      "items": [
+        {
+          "icon": "sun",
+          "name": "Meteocat",
+          "desc": "Catalunya regional weather service",
+          "badge": "Weather",
+          "url": "https://www.meteo.cat"
+        },
+        {
+          "icon": "pin",
+          "name": "Google Maps BCN",
+          "desc": "Navigate Barcelona & Costa Brava",
+          "badge": "Navigation",
+          "url": "https://maps.google.com/?q=Barcelona"
+        },
+        {
+          "icon": "fork",
+          "name": "The Fork — BCN",
+          "desc": "Best tapas bars & restaurants rated",
+          "badge": "Food",
+          "url": "https://www.thefork.es/restaurantes/barcelona-c"
+        },
+        {
+          "icon": "building",
+          "name": "Gaudí sites",
+          "desc": "Sagrada Família, Park Güell & Casa Batlló",
+          "badge": "Culture",
+          "url": "https://www.gaudiclub.com"
+        },
+        {
+          "icon": "wave",
+          "name": "Costa Brava",
+          "desc": "Beaches, coves & coastal villages",
+          "badge": "Beach",
+          "url": "https://www.costabrava.org/en"
+        },
+        {
+          "icon": "circle",
+          "name": "FC Barcelona",
+          "desc": "Camp Nou tickets & match schedule",
+          "badge": "Sport",
+          "url": "https://www.fcbarcelona.com/en"
+        }
+      ]
+    },
+    {
+      "eye": "Everywhere",
+      "title": "Universal tools",
+      "items": [
+        {
+          "icon": "plane",
+          "name": "Google Flights",
+          "desc": "Compare flights & find the cheapest fares",
+          "badge": "Flights",
+          "url": "https://www.google.com/flights"
+        },
+        {
+          "icon": "arrows",
+          "name": "XE Currency",
+          "desc": "Live exchange rates & converter tool",
+          "badge": "Money",
+          "url": "https://www.xe.com"
+        },
+        {
+          "icon": "speech",
+          "name": "Google Translate",
+          "desc": "Translate in 100+ languages instantly",
+          "badge": "Language",
+          "url": "https://translate.google.com"
+        },
+        {
+          "icon": "cross",
+          "name": "1177 Health",
+          "desc": "Swedish health advice & emergency care",
+          "badge": "Health",
+          "url": "https://www.1177.se"
+        },
+        {
+          "icon": "signal",
+          "name": "Flightradar24",
+          "desc": "Watch real planes live on the map!",
+          "badge": "Cool",
+          "url": "https://www.flightradar24.com"
+        },
+        {
+          "icon": "thermometer",
+          "name": "World Weather",
+          "desc": "Hyperlocal weather for anywhere on Earth",
+          "badge": "Weather",
+          "url": "https://www.wunderground.com"
+        }
+      ]
+    }
+  ],
+  "sv": [
+    {
+      "eye": "Sverige",
+      "title": "Nordiska äventyr",
+      "items": [
+        {
+          "icon": "cloud",
+          "name": "SMHI Väder",
+          "desc": "Officiella väderprognoser & varningar",
+          "badge": "Väder",
+          "url": "https://www.smhi.se"
+        },
+        {
+          "icon": "pin",
+          "name": "Google Maps",
+          "desc": "Navigera var som helst i Sverige",
+          "badge": "Navigation",
+          "url": "https://maps.google.com/?q=Sweden"
+        },
+        {
+          "icon": "fork",
+          "name": "The Fork — Sverige",
+          "desc": "Topprankade restauranger & bokningar",
+          "badge": "Mat",
+          "url": "https://www.thefork.se"
+        },
+        {
+          "icon": "mountain",
+          "name": "Skistar",
+          "desc": "Sveriges största skidortsgrupp",
+          "badge": "Skidor",
+          "url": "https://www.skistar.com/sv"
+        },
+        {
+          "icon": "compass",
+          "name": "Visit Sweden",
+          "desc": "Officiell reseguide",
+          "badge": "Turism",
+          "url": "https://visitsweden.com/sv"
+        },
+        {
+          "icon": "train",
+          "name": "SJ Tåg",
+          "desc": "Boka tågbiljetter i Sverige",
+          "badge": "Transport",
+          "url": "https://www.sj.se"
+        }
+      ]
+    },
+    {
+      "eye": "Katalonien",
+      "title": "Medelhavets pärlor",
+      "items": [
+        {
+          "icon": "sun",
+          "name": "Meteocat",
+          "desc": "Kataloniens regionala vädertjänst",
+          "badge": "Väder",
+          "url": "https://www.meteo.cat"
+        },
+        {
+          "icon": "pin",
+          "name": "Google Maps BCN",
+          "desc": "Navigera Barcelona & Costa Brava",
+          "badge": "Navigation",
+          "url": "https://maps.google.com/?q=Barcelona"
+        },
+        {
+          "icon": "fork",
+          "name": "The Fork — BCN",
+          "desc": "Bästa tapas-barer & restauranger",
+          "badge": "Mat",
+          "url": "https://www.thefork.es"
+        },
+        {
+          "icon": "building",
+          "name": "Gaudí",
+          "desc": "Sagrada Família, Park Güell & Casa Batlló",
+          "badge": "Kultur",
+          "url": "https://www.gaudiclub.com"
+        },
+        {
+          "icon": "wave",
+          "name": "Costa Brava",
+          "desc": "Stränder, vikar & kustbyar",
+          "badge": "Strand",
+          "url": "https://www.costabrava.org"
+        },
+        {
+          "icon": "circle",
+          "name": "FC Barcelona",
+          "desc": "Biljetter & matchschema",
+          "badge": "Sport",
+          "url": "https://www.fcbarcelona.com"
+        }
+      ]
+    },
+    {
+      "eye": "Överallt",
+      "title": "Universella verktyg",
+      "items": [
+        {
+          "icon": "plane",
+          "name": "Google Flyg",
+          "desc": "Jämför flyg & hitta billigaste priserna",
+          "badge": "Flyg",
+          "url": "https://www.google.com/flights"
+        },
+        {
+          "icon": "arrows",
+          "name": "XE Valuta",
+          "desc": "Live valutakurser & konverterare",
+          "badge": "Pengar",
+          "url": "https://www.xe.com"
+        },
+        {
+          "icon": "speech",
+          "name": "Google Translate",
+          "desc": "Översätt på 100+ språk direkt",
+          "badge": "Språk",
+          "url": "https://translate.google.com"
+        },
+        {
+          "icon": "cross",
+          "name": "1177 Vård",
+          "desc": "Svenska råd om hälsa & akutvård",
+          "badge": "Hälsa",
+          "url": "https://www.1177.se"
+        },
+        {
+          "icon": "signal",
+          "name": "Flightradar24",
+          "desc": "Se riktiga plan live på kartan!",
+          "badge": "Coolt",
+          "url": "https://www.flightradar24.com"
+        },
+        {
+          "icon": "thermometer",
+          "name": "World Weather",
+          "desc": "Hyperlokal väder var som helst",
+          "badge": "Väder",
+          "url": "https://www.wunderground.com"
+        }
+      ]
+    }
+  ]
+}

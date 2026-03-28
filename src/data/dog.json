@@ -1,0 +1,372 @@
+{
+  "lists": {
+    "en": [
+      {
+        "id": "dog-pack",
+        "title": "What to pack",
+        "items": [
+          {
+            "id": "food",
+            "label": "Dog food (enough for the trip)",
+            "sub": "Pack a little extra just in case"
+          },
+          {
+            "id": "water",
+            "label": "Travel water bottle & bowl",
+            "sub": "Foldable bowl fits in any bag"
+          },
+          {
+            "id": "treats",
+            "label": "Treats & chews",
+            "sub": "Helpful for calming during car travel"
+          },
+          {
+            "id": "leash",
+            "label": "Leash & collar with ID tag",
+            "sub": "Tag should have your phone number"
+          },
+          {
+            "id": "harness",
+            "label": "Car harness or crate",
+            "sub": "Required by law in some countries"
+          },
+          {
+            "id": "blanket",
+            "label": "Favourite blanket or toy",
+            "sub": "Familiar smells reduce travel anxiety"
+          },
+          {
+            "id": "poop-bags",
+            "label": "Poop bags (lots!)",
+            "sub": "Always more than you think you need"
+          },
+          {
+            "id": "brush",
+            "label": "Brush & grooming basics",
+            "sub": "Especially important for long trips"
+          },
+          {
+            "id": "shampoo-dog",
+            "label": "Dog shampoo & quick-dry towel",
+            "sub": "A towel saves the car seats"
+          },
+          {
+            "id": "first-aid-dog",
+            "label": "Dog first aid kit",
+            "sub": "Tweezers for ticks, wound spray, bandages"
+          },
+          {
+            "id": "tick-med",
+            "label": "Tick & flea prevention",
+            "sub": "Apply before entering wooded areas"
+          },
+          {
+            "id": "meds",
+            "label": "Any medications",
+            "sub": "Bring extra — pharmacies abroad vary"
+          },
+          {
+            "id": "bed",
+            "label": "Dog bed or travel mat",
+            "sub": "Own sleeping spot reduces stress"
+          }
+        ]
+      },
+      {
+        "id": "dog-admin",
+        "title": "Documents & health",
+        "items": [
+          {
+            "id": "passport-dog",
+            "label": "Pet passport",
+            "sub": "Required for travel within the EU"
+          },
+          {
+            "id": "chip",
+            "label": "Microchip registered & updated",
+            "sub": "Check your contact details are current"
+          },
+          {
+            "id": "vaccines",
+            "label": "Vaccinations up to date",
+            "sub": "Rabies required for most international travel"
+          },
+          {
+            "id": "tapeworm",
+            "label": "Tapeworm treatment (UK entry)",
+            "sub": "Required by a vet 1–5 days before UK entry"
+          },
+          {
+            "id": "insurance-dog",
+            "label": "Pet insurance documents",
+            "sub": "Check it covers travel abroad"
+          },
+          {
+            "id": "vet-contact",
+            "label": "Emergency vet at destination saved",
+            "sub": "Look this up before you need it"
+          }
+        ]
+      },
+      {
+        "id": "dog-tips",
+        "title": "Car travel tips",
+        "items": [
+          {
+            "id": "no-front",
+            "label": "Dog secured in the back",
+            "sub": "Never loose in the front — airbag danger"
+          },
+          {
+            "id": "windows",
+            "label": "Windows open a crack",
+            "sub": "Fresh air reduces car sickness"
+          },
+          {
+            "id": "breaks",
+            "label": "Stop every 2 hours",
+            "sub": "Dogs need toilet breaks and stretches too"
+          },
+          {
+            "id": "no-alone",
+            "label": "Never leave in a hot car",
+            "sub": "Even 10 minutes can be dangerous"
+          },
+          {
+            "id": "no-feed-travel",
+            "label": "No food 2 h before travel",
+            "sub": "Reduces the chance of car sickness"
+          },
+          {
+            "id": "familiar-smell",
+            "label": "Your old T-shirt in the crate",
+            "sub": "Familiar scent calms anxious dogs"
+          }
+        ]
+      }
+    ],
+    "sv": [
+      {
+        "id": "dog-pack",
+        "title": "Att packa",
+        "items": [
+          {
+            "id": "food",
+            "label": "Hundmat (tillräckligt för resan)",
+            "sub": "Ta lite extra för säkerhets skull"
+          },
+          {
+            "id": "water",
+            "label": "Resvattenflaska & skål",
+            "sub": "Hopfällbar skål passar i alla väskor"
+          },
+          {
+            "id": "treats",
+            "label": "Godsaker & tuggben",
+            "sub": "Bra för att lugna under bilresor"
+          },
+          {
+            "id": "leash",
+            "label": "Koppel & halsband med ID-bricka",
+            "sub": "Brickan ska ha ditt telefonnummer"
+          },
+          {
+            "id": "harness",
+            "label": "Bilsele eller transportbur",
+            "sub": "Krävs enligt lag i vissa länder"
+          },
+          {
+            "id": "blanket",
+            "label": "Favoritfilt eller leksak",
+            "sub": "Välbekanta lukter minskar resoro"
+          },
+          {
+            "id": "poop-bags",
+            "label": "Bajspåsar (många!)",
+            "sub": "Alltid fler än du tror att du behöver"
+          },
+          {
+            "id": "brush",
+            "label": "Borste & skötselartiklar",
+            "sub": "Särskilt viktigt vid långa resor"
+          },
+          {
+            "id": "shampoo-dog",
+            "label": "Hundschampo & snabbhandduk",
+            "sub": "En handduk räddar bilsätena"
+          },
+          {
+            "id": "first-aid-dog",
+            "label": "Hundens förbandslåda",
+            "sub": "Pincett för fästingar, sårespray, bandage"
+          },
+          {
+            "id": "tick-med",
+            "label": "Fästing & loppremedel",
+            "sub": "Applicera innan ni går i skogsmiljö"
+          },
+          {
+            "id": "meds",
+            "label": "Mediciner",
+            "sub": "Ta extra — apotek utomlands varierar"
+          },
+          {
+            "id": "bed",
+            "label": "Hundbädd eller resematta",
+            "sub": "Egen sovplats minskar stress"
+          }
+        ]
+      },
+      {
+        "id": "dog-admin",
+        "title": "Dokument & hälsa",
+        "items": [
+          {
+            "id": "passport-dog",
+            "label": "Husdjurspass",
+            "sub": "Krävs för resor inom EU"
+          },
+          {
+            "id": "chip",
+            "label": "Mikrochip registrerat & uppdaterat",
+            "sub": "Kontrollera att dina uppgifter stämmer"
+          },
+          {
+            "id": "vaccines",
+            "label": "Vaccinationer à jour",
+            "sub": "Rabiesvaccin krävs för de flesta internationella resor"
+          },
+          {
+            "id": "tapeworm",
+            "label": "Bandmaskbehandling (inresa UK)",
+            "sub": "Krävs av vet 1–5 dagar före inresa i UK"
+          },
+          {
+            "id": "insurance-dog",
+            "label": "Djurförsäkringsdokument",
+            "sub": "Kontrollera att den gäller utomlands"
+          },
+          {
+            "id": "vet-contact",
+            "label": "Jourveterinär på destinationen sparad",
+            "sub": "Leta upp det innan du behöver det"
+          }
+        ]
+      },
+      {
+        "id": "dog-tips",
+        "title": "Tips för bilresan",
+        "items": [
+          {
+            "id": "no-front",
+            "label": "Hunden säkrad bak",
+            "sub": "Aldrig lös i framsätet — krockkudde-fara"
+          },
+          {
+            "id": "windows",
+            "label": "Fönster öppna lite",
+            "sub": "Frisk luft minskar åksjuka"
+          },
+          {
+            "id": "breaks",
+            "label": "Rast var 2:e timme",
+            "sub": "Hundar behöver också pauser och rörelse"
+          },
+          {
+            "id": "no-alone",
+            "label": "Lämna aldrig i varm bil",
+            "sub": "Även 10 minuter kan vara livsfarligt"
+          },
+          {
+            "id": "no-feed-travel",
+            "label": "Ingen mat 2 h före resa",
+            "sub": "Minskar risken för åksjuka"
+          },
+          {
+            "id": "familiar-smell",
+            "label": "Din gamla T-shirt i buren",
+            "sub": "Välbekant doft lugnar oroliga hundar"
+          }
+        ]
+      }
+    ]
+  },
+  "links": {
+    "en": [
+      {
+        "icon": "globe",
+        "name": "BringFido",
+        "desc": "Dog-friendly hotels, restaurants & activities worldwide",
+        "url": "https://www.bringfido.com"
+      },
+      {
+        "icon": "tent",
+        "name": "DogFriendly.co.uk",
+        "desc": "Holidays & accommodation for dogs in the UK",
+        "url": "https://www.dogfriendly.co.uk"
+      },
+      {
+        "icon": "stethoscope",
+        "name": "VetHelpDirect",
+        "desc": "24/7 online vet symptom checker",
+        "url": "https://www.vethelpdirect.com"
+      },
+      {
+        "icon": "paw",
+        "name": "Resa med hund",
+        "desc": "Dog-friendly travel guide for Sweden",
+        "url": "https://www.resarmedhund.se"
+      },
+      {
+        "icon": "pin",
+        "name": "Find a vet nearby",
+        "desc": "Emergency vets wherever you are",
+        "url": "https://www.google.com/maps/search/veterinary+clinic"
+      },
+      {
+        "icon": "plane",
+        "name": "IATA pet travel",
+        "desc": "Official airline rules for travelling with pets",
+        "url": "https://www.iata.org/en/programs/cargo/live-animals/pets"
+      }
+    ],
+    "sv": [
+      {
+        "icon": "globe",
+        "name": "BringFido",
+        "desc": "Hundvänliga hotell, restauranger & aktiviteter",
+        "url": "https://www.bringfido.com"
+      },
+      {
+        "icon": "tent",
+        "name": "Resa med hund",
+        "desc": "Hundvänliga boenden & utflykter i Sverige",
+        "url": "https://www.resarmedhund.se"
+      },
+      {
+        "icon": "stethoscope",
+        "name": "Djursjukvård online",
+        "desc": "Hitta veterinär dygnet runt",
+        "url": "https://vethelpdirect.com"
+      },
+      {
+        "icon": "paw",
+        "name": "Agria Djurförsäkring",
+        "desc": "Reseförsäkring och reseguide för husdjur",
+        "url": "https://www.agria.se"
+      },
+      {
+        "icon": "pin",
+        "name": "Hitta veterinär",
+        "desc": "Närmaste veterinär var du än är",
+        "url": "https://www.google.com/maps/search/veterinär"
+      },
+      {
+        "icon": "plane",
+        "name": "IATA husdjur",
+        "desc": "Officiella flygbolags-regler för husdjur",
+        "url": "https://www.iata.org/en/programs/cargo/live-animals/pets"
+      }
+    ]
+  }
+}

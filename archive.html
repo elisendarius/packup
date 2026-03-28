@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>packUp 0.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#f7f5f2;--ink2:#eeeae4;--surface:#ffffff;--surface2:#f4f1ec;
+  --rim:#e4dfd6;--rim2:#d4cec4;
+  --cream:#2a2520;--cream2:#4a4540;--cream3:#8a8278;
+  --gold:#b87800;--gold2:#d49010;--gold3:#f0b830;
+  --accent-ski:#1a5fbb;--accent-sum:#c85800;--accent-win:#a86800;--accent-wkd:#2a6038;
+  --r:20px;--r-sm:12px;
+  --display:'Playfair Display',Georgia,serif;
+  --body:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --sh-card:0 8px 40px rgba(0,0,0,.10);
+  --sh-sm:0 2px 16px rgba(0,0,0,.07);
+}
+html{background:var(--ink);color:var(--cream)}
+body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── LOADING ── */
+.loading{position:fixed;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:20px}
+.load-logo{font-family:var(--display);font-size:36px;color:var(--cream);letter-spacing:-.5px}
+.load-logo span{color:var(--gold)}
+.load-bar{width:160px;height:2px;background:var(--rim);border-radius:1px;overflow:hidden}
+.load-fill{height:100%;background:var(--gold);border-radius:1px;animation:loadfill 1.4s ease-out forwards}
+@keyframes loadfill{from{width:0}to{width:100%}}
+
+/* ── PROFILE MODAL ── */
+.modal-over{position:fixed;inset:0;background:rgba(42,37,32,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modal{background:var(--surface);border:1px solid var(--rim);border-radius:24px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 24px 70px rgba(0,0,0,.13);text-align:center}
+.modal-logo{font-family:var(--display);font-size:26px;color:var(--cream);margin-bottom:6px}
+.modal-logo span{color:var(--gold)}
+.modal h2{font-family:var(--display);font-size:17px;font-weight:400;color:var(--cream2);margin-bottom:20px;font-style:italic}
+.av-ring{width:72px;height:72px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:var(--ink);transition:background .25s,transform .2s;border:3px solid transparent}
+.av-ring.has-name{transform:scale(1.05)}
+.minput{width:100%;padding:13px 16px;border:1.5px solid var(--rim);border-radius:var(--r-sm);font-size:15px;font-family:var(--body);background:var(--ink2);color:var(--cream);outline:none;transition:border .2s;margin-bottom:16px;text-align:center;letter-spacing:.2px}
+.minput:focus{border-color:var(--gold)}
+.minput::placeholder{color:var(--cream3)}
+.mbtn{width:100%;padding:14px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--body);letter-spacing:.3px;transition:background .2s,transform .15s}
+.mbtn:hover{background:var(--gold2);transform:translateY(-1px)}
+.mbtn:active{transform:translateY(0)}
+.manage-toggle{margin-top:14px;background:none;border:none;color:var(--cream3);font-size:12px;cursor:pointer;font-family:var(--body);text-decoration:underline;padding:0}
+.manage-panel{margin-top:14px;display:none}
+.mu-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--rim)}
+.mu-row:last-child{border-bottom:none}
+.mu-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--ink);flex-shrink:0}
+.mu-name{flex:1;font-size:13px;color:var(--cream);text-align:left}
+.mu-you{font-size:10px;color:var(--cream3);background:var(--rim2);padding:2px 7px;border-radius:8px}
+.mu-del{width:24px;height:24px;border-radius:50%;border:1px solid #a32d2d;background:transparent;color:#e24b4a;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .2s}
+.mu-del:hover{background:#a32d2d;color:#fff}
+
+/* ── HEADER ── */
+.header{background:rgba(247,245,242,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--rim);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90}
+.logo{font-family:var(--display);font-size:22px;color:var(--cream);cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:-.3px}
+.logo span{color:var(--gold);font-style:italic}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#4caf50;transition:background .3s}
+.sync-dot.busy{background:var(--gold);animation:pulse .9s infinite}
+.sync-dot.err{background:#e24b4a}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.hright{display:flex;align-items:center;gap:8px}
+.hbtn{background:var(--surface2);border:1px solid var(--rim);color:var(--cream2);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;font-family:var(--body);transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;font-weight:500}
+.hbtn:hover{background:var(--rim);color:var(--cream)}
+.users-strip{display:flex;align-items:center;gap:5px;margin-right:4px}
+.u-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 10px 5px 5px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;border:1.5px solid transparent;white-space:nowrap}
+.u-pill:hover{border-color:var(--rim2);background:var(--surface2)}
+.u-pill.me{border-color:var(--gold);background:rgba(184,120,0,.07)}
+.u-pill-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+.u-pill-name{color:var(--cream2);max-width:70px;overflow:hidden;text-overflow:ellipsis}
+.u-pill.me .u-pill-name{color:var(--cream)}
+.new-user-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px dashed var(--rim2);background:transparent;color:var(--cream3);font-family:var(--body);transition:all .18s;white-space:nowrap}
+.new-user-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(184,120,0,.05)}
+
+/* ── TOP NAV (replaces bottom tab bar) ── */
+.topnav{display:flex;align-items:center;gap:2px}
+.navbtn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:none;background:transparent;color:var(--cream3);cursor:pointer;font-family:var(--body);font-size:14px;font-weight:500;letter-spacing:.2px;border-radius:10px;transition:all .18s;-webkit-tap-highlight-color:transparent;white-space:nowrap;position:relative}
+.navbtn:hover{background:var(--rim);color:var(--cream2)}
+.navbtn.on{color:var(--cream);background:var(--surface2)}
+.navbtn.on::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:18px;height:2px;background:var(--gold);border-radius:1px}
+.navbtn svg{flex-shrink:0;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+.home{padding:16px 16px 24px;max-width:960px;margin:0 auto;min-height:calc(100vh - 55px);display:flex;flex-direction:column;justify-content:center}
+.home-hero{margin-bottom:14px}
+.home-eyebrow{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.home-hero h2{font-family:var(--display);font-size:26px;font-weight:700;color:var(--cream);line-height:1.15;margin-bottom:4px}
+.home-hero p{font-size:13px;color:var(--cream3)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:540px){.grid{grid-template-columns:1fr}}
+
+/* ── TRIP CARD ── */
+.tcard{border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh-card);transition:transform .22s cubic-bezier(.4,0,.2,1),box-shadow .22s;position:relative;-webkit-tap-highlight-color:transparent;border:1px solid var(--rim)}
+.tcard:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,.13)}
+.tcard:active{transform:translateY(-1px)}
+.ctop{padding:14px 12px 8px;position:relative;overflow:hidden;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.ctop-bg{position:absolute;inset:0;z-index:0}
+.ctop-grad{position:absolute;inset:0;z-index:1}
+.cvan{max-width:130px;width:100%;display:block;position:relative;z-index:2;margin:0 auto}
+.cbot{padding:11px 14px 13px;background:var(--surface);position:relative}
+.cname{font-family:var(--display);font-size:16px;font-weight:700;color:var(--cream);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.csub{font-size:12px;color:var(--cream3);margin-bottom:6px}
+.cdur{font-family:var(--mono);font-size:11px;color:var(--cream3);margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.cdur-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);display:inline-block}
+.cprog-wrap{margin-bottom:5px}
+.cpct-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.cpct-num{font-family:var(--display);font-size:20px;font-weight:700;line-height:1}
+.cpct-sub{font-family:var(--mono);font-size:11px;color:var(--cream3)}
+.cprog{height:10px;background:var(--rim2);border-radius:5px;overflow:hidden}
+.cpfill{height:100%;border-radius:5px;transition:width .5s ease}
+.cgauges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+
+/* ── TRIP DETAIL VIEW ── */
+.trip{display:none;max-width:680px;margin:0 auto;padding:0 0 30px}
+.trip.on{display:block}
+.thero{padding:20px 16px 6px;text-align:center}
+.thero h1{font-family:var(--display);font-size:22px;font-weight:700;color:var(--cream);margin-bottom:2px}
+.thero .tsub{font-size:12px;color:var(--cream3);margin-bottom:10px}
+.hvan{max-width:180px;margin:0 auto 10px;display:block}
+
+/* CARDS inside trip */
+.dcard{margin:0 14px 12px;background:var(--surface);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh-sm);border:1px solid var(--rim)}
+.dur-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.dur-label{font-size:13px;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:6px}
+.dur-ctrl{display:flex;align-items:center;gap:12px}
+.durbtn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--gold);background:transparent;color:var(--gold);font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-weight:700;padding:0;line-height:1}
+.durbtn:hover{background:var(--gold);color:var(--ink)}
+.durval{font-family:var(--display);font-size:22px;font-weight:700;color:var(--gold);min-width:26px;text-align:center}
+.dur-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rim)}
+.dur-pill{display:inline-flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--rim2);border-radius:20px;padding:4px 11px;font-size:11px}
+.dur-pill .dp-name{color:var(--cream3)}
+.dur-pill .dp-qty{font-weight:700;color:var(--gold);font-family:var(--mono)}
+
+/* My progress */
+.prog-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.prog-label{font-size:12px;font-weight:600;color:var(--cream3);letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono)}
+.prog-pct{font-family:var(--display);font-size:54px;font-weight:700;line-height:1}
+.prog-bar{height:12px;background:var(--rim2);border-radius:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:6px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.prog-sub{margin-top:7px;font-family:var(--mono);font-size:11px;color:var(--cream3)}
+
+/* Team */
+.uc-title{font-size:12px;font-weight:600;color:var(--cream3);letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono);margin-bottom:14px}
+.uc-row{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.uc-row:last-child{margin-bottom:0}
+.u-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--ink);flex-shrink:0}
+.u-info{flex:1;min-width:0}
+.u-name{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.u-you{font-size:9px;color:var(--gold);background:rgba(184,120,0,.1);border:1px solid rgba(184,120,0,.25);padding:1px 6px;border-radius:8px;font-family:var(--mono)}
+.u-pbar{height:10px;background:var(--rim2);border-radius:5px;overflow:hidden}
+.u-pfill{height:100%;border-radius:5px;transition:width .6s ease}
+.u-pct{font-family:var(--display);font-size:17px;font-weight:700;min-width:44px;text-align:right;flex-shrink:0}
+.u-del{width:28px;height:28px;border-radius:50%;border:1px solid #a32d2d;background:transparent;color:#e24b4a;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;transition:all .2s}
+.u-del:hover{background:#a32d2d;color:#fff}
+
+/* Categories */
+.cats{margin:0 14px 10px}
+.cath{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;user-select:none;padding:2px 0}
+.caticon{width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.caticon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;color:var(--cream3)}
+.catname{font-size:13px;font-weight:600;color:var(--cream);flex:1}
+.catcount{font-family:var(--mono);font-size:10px;color:var(--cream3);background:var(--surface2);border:1px solid var(--rim);padding:2px 8px;border-radius:10px}
+.catchev{font-size:10px;color:var(--cream3);transition:transform .2s}
+.cats.coll .catchev{transform:rotate(-90deg)}
+.cats.coll .ilist{display:none}
+.ilist{background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-sm);border:1px solid var(--rim)}
+.item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--rim);cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.item:last-child{border-bottom:none}
+.item:hover{background:var(--ink2)}
+.item.done{opacity:.48}
+.chk{width:22px;height:22px;border:2px solid var(--rim2);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.item.done .chk{background:var(--gold);border-color:var(--gold)}
+.chk::after{content:'';width:4px;height:8px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) scale(0);transition:transform .18s;margin-top:-2px}
+.item.done .chk::after{transform:rotate(45deg) scale(1)}
+.itxt{flex:1;font-size:13px;color:var(--cream);line-height:1.3}
+.item.done .itxt{text-decoration:line-through;color:var(--cream3)}
+.iqty{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:9px;white-space:nowrap;flex-shrink:0}
+.iqty.fixed{background:var(--surface2);color:var(--cream3);border:1px solid var(--rim)}
+.iqty.daily{background:rgba(200,146,10,.18);color:var(--gold);font-weight:600;border:1px solid rgba(200,146,10,.3)}
+.iqty .iq-rule{font-weight:400;opacity:.7;font-size:9px}
+.idel{width:22px;height:22px;border-radius:50%;border:none;background:transparent;color:var(--rim2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;flex-shrink:0}
+.idel:hover{background:rgba(226,75,74,.2);color:#e24b4a}
+.item-dots{display:flex;gap:2px;margin-left:2px}
+.ic-dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--surface);flex-shrink:0;opacity:.9}
+
+/* Add item */
+.addsec{margin:0 14px 12px;background:var(--surface);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh-sm);border:1px dashed var(--rim2)}
+.addtitle{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.addrow{display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap}
+.ainput{flex:1;min-width:110px;padding:9px 13px;border:1px solid var(--rim2);border-radius:var(--r-sm);font-size:13px;font-family:var(--body);background:var(--ink2);color:var(--cream);outline:none;transition:border .2s}
+.ainput:focus{border-color:var(--gold)}
+.ainput::placeholder{color:var(--cream3)}
+.aselect{padding:9px 11px;border:1px solid var(--rim2);border-radius:var(--r-sm);font-size:12px;font-family:var(--body);background:var(--ink2);color:var(--cream);outline:none;cursor:pointer}
+.abtn{padding:9px 16px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--body);white-space:nowrap;transition:opacity .2s}
+.abtn:hover{opacity:.85}
+.permrow{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cream3);cursor:pointer;user-select:none}
+.permrow input{accent-color:var(--gold);cursor:pointer;width:13px;height:13px}
+.resetbtn{display:block;margin:8px auto 0;padding:7px 18px;background:transparent;border:1px solid var(--rim2);border-radius:20px;color:var(--cream3);font-size:11px;cursor:pointer;font-family:var(--body);transition:all .2s}
+.resetbtn:hover{border-color:#a32d2d;color:#e24b4a}
+
+/* ── LINKS VIEW ── */
+.links-view{display:none;padding:16px 16px 32px;max-width:798px;margin:0 auto}
+.links-view.on{display:block}
+.sec-eyebrow{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;margin-top:20px;display:block}
+.sec-eyebrow:first-child{margin-top:0}
+.sec-title{font-family:var(--display);font-size:20px;font-weight:700;color:var(--cream);margin-bottom:12px}
+.link-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+@media(max-width:420px){.link-grid{grid-template-columns:1fr}}
+.lcard{background:var(--surface);border:1px solid var(--rim);border-radius:var(--r);padding:16px 14px;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;gap:6px;box-shadow:var(--sh-sm);transition:transform .18s,border-color .18s,box-shadow .18s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.lcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,120,0,.04) 0%,transparent 60%);pointer-events:none}
+.lcard:hover{transform:translateY(-3px);border-color:var(--rim2);box-shadow:0 8px 28px rgba(0,0,0,.10)}
+.lc-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;color:var(--cream2)}
+.lc-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lc-name{font-size:14px;font-weight:700;color:var(--cream)}
+.lc-desc{font-size:11px;color:var(--cream3);line-height:1.45}
+.lc-badge{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;font-weight:500;padding:3px 9px;border-radius:12px;border:1px solid var(--rim2);color:var(--cream3);background:var(--surface2);letter-spacing:.5px;text-transform:uppercase;margin-top:2px;width:fit-content}
+.lc-arrow{position:absolute;top:14px;right:14px;color:var(--rim2);font-size:13px;transition:color .18s,transform .18s}
+.lcard:hover .lc-arrow{color:var(--gold);transform:translate(2px,-2px)}
+
+/* ── CAR VIEW ── */
+.car-view{display:none;padding:16px 16px 32px;max-width:680px;margin:0 auto}
+.car-view.on{display:block}
+.car-search-box{background:var(--surface);border-radius:var(--r);padding:18px;border:1px solid var(--rim);box-shadow:var(--sh-sm);margin-bottom:16px;position:relative;overflow:hidden}
+.car-search-box::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(184,120,0,.08),transparent 70%);pointer-events:none}
+.car-stitle{font-size:13px;font-weight:700;color:var(--cream);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.car-stitle-mono{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase}
+.car-row{display:flex;gap:8px}
+.car-inp{flex:1;padding:11px 14px;border:1px solid var(--rim2);border-radius:var(--r-sm);font-size:14px;font-family:var(--body);background:var(--ink2);color:var(--cream);outline:none;transition:border .2s}
+.car-inp:focus{border-color:var(--gold)}
+.car-inp::placeholder{color:var(--cream3)}
+.car-sbtn{padding:11px 16px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+.car-sbtn:hover{opacity:.85}
+.car-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.car-link{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;background:var(--surface2);border:1px solid var(--rim2);border-radius:20px;font-size:12px;font-weight:500;color:var(--cream2);text-decoration:none;transition:all .15s}
+.car-link:hover{background:var(--rim2);border-color:var(--gold);color:var(--gold)}
+.cl-box{background:var(--surface);border-radius:var(--r);border:1px solid var(--rim);overflow:hidden;box-shadow:var(--sh-sm);margin-bottom:14px}
+.cl-head{padding:14px 16px;display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;border-bottom:1px solid var(--rim)}
+.cl-htitle{font-size:14px;font-weight:700;color:var(--cream);flex:1}
+.cl-pct{font-family:var(--mono);font-size:12px;color:var(--gold);font-weight:600}
+.cl-progwrap{padding:10px 16px 0}
+.cl-prog{height:8px;background:var(--rim2);border-radius:4px;overflow:hidden;margin-bottom:10px}
+.cl-pfill{height:100%;border-radius:4px;transition:width .4s ease;background:var(--gold)}
+.cl-item{display:flex;align-items:flex-start;gap:11px;padding:12px 16px;border-bottom:1px solid var(--rim);cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.cl-item:last-child{border-bottom:none}
+.cl-item:hover{background:var(--surface2)}
+.cl-item.done{opacity:.45}
+.cl-chk{width:22px;height:22px;border:2px solid var(--rim2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cl-item.done .cl-chk{background:var(--gold);border-color:var(--gold)}
+.cl-chk::after{content:'';width:4px;height:8px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) scale(0);transition:transform .18s;margin-top:-2px}
+.cl-item.done .cl-chk::after{transform:rotate(45deg) scale(1)}
+.cl-txt{flex:1;font-size:13px;color:var(--cream);line-height:1.35}
+.cl-item.done .cl-txt{text-decoration:line-through;color:var(--cream3)}
+.cl-sub{font-size:11px;color:var(--cream3);display:block;margin-top:2px;line-height:1.4}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(50px);background:var(--cream);border:1px solid var(--rim2);color:var(--ink);padding:9px 20px;border-radius:24px;font-size:13px;z-index:500;transition:transform .3s ease,opacity .3s;white-space:nowrap;pointer-events:none;opacity:0;box-shadow:var(--sh-sm)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ── UTILS ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--rim2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="loading" class="loading">
+  <div class="load-logo">pack<span>Up</span></div>
+  <div style="font-family:var(--mono);font-size:11px;color:var(--cream3);letter-spacing:2px;text-transform:uppercase;margin-top:4px">v 0.2</div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-over" id="profileModal" style="display:none">
+  <div class="modal">
+    <div class="modal-logo">pack<span>Up</span></div>
+    <h2 id="mTitle">who's packing?</h2>
+    <div class="av-ring" id="avRing">?</div>
+    <input class="minput" id="pName" placeholder="Your name…" maxlength="22"
+      oninput="onNameInput(this.value)"
+      onkeydown="if(event.key==='Enter')saveProfile()"/>
+    <button class="mbtn" id="mSaveBtn" onclick="saveProfile()">Let's go →</button>
+    <button class="manage-toggle" id="manageToggle" onclick="toggleManage()">manage users</button>
+    <div class="manage-panel" id="managePanel">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;text-align:left">All users</div>
+      <div id="userList"></div>
+    </div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="logo" id="logoBtn">pack<span>Up</span> <span class="sync-dot" id="syncDot" style="margin-left:2px"></span></div>
+  <nav class="topnav" id="topnav">
+    <button class="navbtn on" id="tab-trips" onclick="switchTab('trips')">
+      <svg width="14" height="14" viewBox="0 0 16 16" stroke-width="1.5"><rect x="2" y="6" width="12" height="8" rx="1.5"/><path d="M5 6V4.5A1.5 1.5 0 0 1 6.5 3h3A1.5 1.5 0 0 1 11 4.5V6"/><line x1="2" y1="10" x2="14" y2="10"/></svg>
+      <span id="tl-trips">Trips</span>
+    </button>
+    <button class="navbtn" id="tab-links" onclick="switchTab('links')">
+      <svg width="14" height="14" viewBox="0 0 16 16" stroke-width="1.5"><circle cx="4.5" cy="4.5" r="1.5"/><circle cx="11.5" cy="4.5" r="1.5"/><circle cx="4.5" cy="11.5" r="1.5"/><circle cx="11.5" cy="11.5" r="1.5"/></svg>
+      <span id="tl-links">Links</span>
+    </button>
+    <button class="navbtn" id="tab-car" onclick="switchTab('car')">
+      <svg width="14" height="14" viewBox="0 0 16 16" stroke-width="1.5"><path d="M2 9l1.5-4h9L14 9"/><rect x="1" y="9" width="14" height="4" rx="1.5"/><circle cx="4.5" cy="13" r="1.5"/><circle cx="11.5" cy="13" r="1.5"/></svg>
+      <span id="tl-car">Car</span>
+    </button>
+    <button class="navbtn" id="tab-dog" onclick="switchTab('dog')">
+      <svg width="14" height="14" viewBox="0 0 16 16" stroke-width="1.5"><circle cx="5" cy="5" r="1.2"/><circle cx="8" cy="3.5" r="1.2"/><circle cx="11" cy="5" r="1.2"/><circle cx="6.5" cy="8" r="1.2"/><circle cx="9.5" cy="8" r="1.2"/></svg>
+      <span id="tl-dog">Dog</span>
+    </button>
+  </nav>
+  <div class="hright">
+    <button class="hbtn" id="backBtn" onclick="goHome()" style="display:none">← Back</button>
+    <div class="users-strip" id="usersStrip"></div>
+    <button class="new-user-btn" id="newUserBtn" onclick="showProfileModal(false)">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+      <span id="tl-newuser">New user</span>
+    </button>
+    <button class="hbtn" id="langBtn" onclick="toggleLang()">SV</button>
+  </div>
+</header>
+
+<div id="homeView" class="home" style="display:none">
+  <div class="home-hero">
+    <div class="home-eyebrow" id="homeEye">Your trips</div>
+    <h2 id="homeTitle">Choose your adventure</h2>
+    <p id="homeSub">Track your packing. Share your progress.</p>
+  </div>
+  <div class="grid" id="tripsGrid"></div>
+</div>
+
+<div id="linksView" class="links-view"></div>
+<div id="carView"   class="car-view"></div>
+<div id="dogView"   class="car-view"></div>
+<div id="tripView"  class="trip"></div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+
+// ── SUPABASE ───────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://klhyopbigqpmqlkdotmh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_GgQw-Lk_M2OvvfKWSiPLOw_DKZaKxG1';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── SYNC DOT ───────────────────────────────────────────────────────────
+function syncDot(s){ const d=document.getElementById('syncDot'); if(!d)return; d.className='sync-dot'+(s==='busy'?' busy':s==='err'?' err':''); }
+
+// ── STORAGE ────────────────────────────────────────────────────────────
+async function sGet(key){
+  try{
+    if(key==='profiles'){ const{data,error}=await db.from('profiles').select('*'); if(error)throw error; return data||[]; }
+    if(key.startsWith('trip-')){ const id=key.slice(5); const{data,error}=await db.from('trip_settings').select('*').eq('trip_id',id).single(); if(error&&error.code!=='PGRST116')throw error; return data||null; }
+    if(key.startsWith('checked-')){ const parts=key.split('-'); const pid=parts[parts.length-1]; const tid=parts.slice(1,-1).join('-'); const{data,error}=await db.from('checked_items').select('item_id').eq('trip_id',tid).eq('profile_id',pid); if(error)throw error; return data?data.map(r=>r.item_id):[]; }
+    const v=localStorage.getItem('pu:'+key); return v?JSON.parse(v):null;
+  }catch(e){ console.warn('[pU] sGet',key,e.message); syncDot('err'); return null; }
+}
+async function sSet(key,val){
+  try{
+    if(key==='profiles'){ for(const p of val){ const{error}=await db.from('profiles').upsert({id:p.id,name:p.name,color_hex:p.color},{onConflict:'id'}); if(error)throw error; } return; }
+    if(key.startsWith('trip-')){ const tid=key.slice(5); const{error}=await db.from('trip_settings').upsert({trip_id:tid,duration:val.duration},{onConflict:'trip_id'}); if(error)throw error; return; }
+    if(key.startsWith('checked-')){ const parts=key.split('-'); const pid=parts[parts.length-1]; const tid=parts.slice(1,-1).join('-'); const{error:de}=await db.from('checked_items').delete().eq('profile_id',pid).eq('trip_id',tid); if(de)throw de; if(val&&val.length){ const rows=val.map(id=>({profile_id:pid,trip_id:tid,item_id:id,item_type:'catalogue'})); const{error:ie}=await db.from('checked_items').insert(rows); if(ie)throw ie; } return; }
+    localStorage.setItem('pu:'+key,JSON.stringify(val));
+  }catch(e){ console.warn('[pU] sSet',key,e.message); syncDot('err'); }
+}
+
+// ── COLOUR ────────────────────────────────────────────────────────────
+const PAL=['#c85a5a','#c87030','#c89a00','#4a9a60','#3a7ab8','#7055c8','#c04888','#1a8888','#7a6030','#445a78'];
+function colorFromName(n){ if(!n||!n.trim())return PAL[5]; let h=0; for(let i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))>>>0; return PAL[h%PAL.length]; }
+function ini(n){ return(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function onNameInput(v){ const c=colorFromName(v),r=document.getElementById('avRing'); if(r){r.style.background=c;r.style.borderColor=c;r.textContent=ini(v)||'?';r.classList.toggle('has-name',!!v.trim());} }
+
+// ── TRANSLATIONS ───────────────────────────────────────────────────────
+const T={
+  en:{
+    choose:'Choose your adventure',eye:'Your trips',choose2:'Track your packing. Share your progress.',
+    duration:'Trip duration',days:'days',loading:'Loading…',
+    progress:'My progress',teamProg:'Team progress',packed:'packed',of:'of',
+    addItem:'Add an item',addName:'Item name…',addCat:'Category',
+    addPerm:'Save permanently',addBtn:'Add',
+    reset:'Reset my packing',resetConfirm:'Reset your checked items?',
+    pTitle:"Who's packing?",pSub:"Type your name",pEdit:'Edit profile',pSave:'Let\'s go →',pPh:'Your name…',
+    you:'you',perDay:'per day',
+    tripSki:'Ski Trip — Sweden',tripSummer:'Summer — Catalunya',tripWinter:'Winter — Catalunya',tripWeekend:'Weekend Getaway',
+    subSki:'Hit the slopes up north',subSummer:'Sun, sea and sangria',subWinter:'Barcelona & winter charm',subWeekend:'Pack light, enjoy more',
+    cats:{clothing:'Clothing',equipment:'Equipment',accessories:'Accessories',toiletries:'Toiletries',documents:'Documents',other:'Other',beach:'Beach & Sun'},
+    items:{
+      'ski-jacket':'Ski jacket','ski-pants':'Ski pants','thermal-top':'Thermal top','thermal-bot':'Thermal bottom','fleece':'Fleece mid-layer',
+      'ski-socks':'Ski socks','wool-socks':'Wool socks','underwear':'Underwear','tshirts':'T-shirts','apres-outfit':'Après-ski outfit','casual-eve':'Casual evening outfit',
+      'skis':'Skis / Snowboard','boots':'Ski boots','helmet':'Helmet','goggles':'Goggles','poles':'Ski poles','boot-bag':'Boot bag',
+      'gloves':'Gloves / Mittens','neck':'Neck gaiter / Balaklava','ski-pass':'Ski pass holder','backpack':'Backpack','sunglasses':'Sunglasses','hand-warmers':'Hand warmers',
+      'sunscreen':'Sunscreen SPF50','lip-balm':'Lip balm','moisturizer':'Moisturizer','deodorant':'Deodorant','first-aid':'First aid kit',
+      'passport':'Passport / ID card','insurance':'Travel insurance','lift-booking':'Lift pass booking',
+      'charger':'Phone charger','power-bank':'Power bank','camera':'Camera','snacks':'Snacks','water-bottle':'Water bottle','apres-boots':'Après-ski boots',
+      'swimsuit':'Swimsuit','shorts':'Shorts','light-shirt':'Light shirts / dresses','socks':'Socks','sandals':'Sandals','flip-flops':'Flip flops','sneakers':'Sneakers',
+      'light-jacket':'Light jacket','beach-towel':'Beach towel','beach-bag':'Beach bag','snorkel':'Snorkel & mask','waterproof-case':'Waterproof phone case',
+      'hat':'Sun hat / cap','after-sun':'After-sun lotion','mosquito':'Mosquito repellent','shampoo':'Shampoo','adapter':'Travel adapter','guidebook':'Guidebook','phrase-book':'Spanish phrasebook',
+      'jeans':'Jeans / trousers','sweaters':'Sweaters','rain-jacket':'Light rain jacket','casual-shoes':'Casual shoes','ankle-boots':'Ankle boots','scarf':'Scarf',
+      'light-gloves':'Light gloves','beanie':'Beanie / hat','umbrella':'Umbrella','daypack':'Day pack','book':'Book / e-reader',
+      'toothbrush':'Toothbrush & paste','medications':'Medications','reusable-bag':'Reusable bag','cash':'Cash',
+      'casual-pants':'Casual trousers','nice-outfit':'Smart outfit','comfy-shoes':'Comfortable shoes','jacket':'Jacket',
+    },
+  },
+  sv:{
+    choose:'Välj ditt äventyr',eye:'Dina resor',choose2:'Spåra din packning. Dela framstegen.',
+    duration:'Reslängd',days:'dagar',loading:'Laddar…',
+    progress:'Mitt framsteg',teamProg:'Lagets framsteg',packed:'packade',of:'av',
+    addItem:'Lägg till sak',addName:'Namn på sak…',addCat:'Kategori',
+    addPerm:'Spara permanent',addBtn:'Lägg till',
+    reset:'Återställ min packning',resetConfirm:'Återställa dina bockade?',
+    pTitle:'Vem packar?',pSub:'Skriv ditt namn',pEdit:'Redigera profil',pSave:'Kör! →',pPh:'Ditt namn…',
+    you:'du',perDay:'per dag',
+    tripSki:'Skidresa — Sverige',tripSummer:'Sommar — Katalonien',tripWinter:'Vinter — Katalonien',tripWeekend:'Helgresa',
+    subSki:'Till pisterna upp i norr',subSummer:'Sol, hav och sangria',subWinter:'Barcelona & vintermagi',subWeekend:'Packa lätt, njut mer',
+    cats:{clothing:'Kläder',equipment:'Utrustning',accessories:'Tillbehör',toiletries:'Toalettartiklar',documents:'Dokument',other:'Övrigt',beach:'Strand & Sol'},
+    items:{
+      'ski-jacket':'Skidjacka','ski-pants':'Skidbyxor','thermal-top':'Termisk topp','thermal-bot':'Termisk underdel','fleece':'Fleecetröja',
+      'ski-socks':'Skidstrumpor','wool-socks':'Ullstrumpor','underwear':'Underklädsel','tshirts':'T-shirts','apres-outfit':'Après-ski-outfit','casual-eve':'Kvällsoutfit',
+      'skis':'Skidor / Snowboard','boots':'Skidpjäxor','helmet':'Hjälm','goggles':'Skidglasögon','poles':'Skidstavar','boot-bag':'Pjäxväska',
+      'gloves':'Handskar / Vantar','neck':'Halsrör / Balaklava','ski-pass':'Liftkortshållare','backpack':'Ryggsäck','sunglasses':'Solglasögon','hand-warmers':'Handvärmare',
+      'sunscreen':'Solkräm SPF50','lip-balm':'Läppbalsam','moisturizer':'Fuktighetskräm','deodorant':'Deodorant','first-aid':'Förbandslåda',
+      'passport':'Pass / ID-kort','insurance':'Reseförsäkring','lift-booking':'Liftkortsbokning',
+      'charger':'Telefonladdare','power-bank':'Powerbank','camera':'Kamera','snacks':'Mellanmål','water-bottle':'Vattenflaska','apres-boots':'Après-ski-stövlar',
+      'swimsuit':'Badkläder','shorts':'Shorts','light-shirt':'Lätta skjortor','socks':'Strumpor','sandals':'Sandaler','flip-flops':'Flipflops','sneakers':'Sneakers',
+      'light-jacket':'Lättjacka','beach-towel':'Strandhandduk','beach-bag':'Strandväska','snorkel':'Snorkel & mask','waterproof-case':'Vattentätt fodral',
+      'hat':'Solhatt / keps','after-sun':'After-sun lotion','mosquito':'Myggremedel','shampoo':'Schampo','adapter':'Reseadapter','guidebook':'Reseguide','phrase-book':'Spansk parlör',
+      'jeans':'Jeans / byxor','sweaters':'Tröjor','rain-jacket':'Regnkappa','casual-shoes':'Vardagsskor','ankle-boots':'Ankelstövlar','scarf':'Halsduk',
+      'light-gloves':'Tunna handskar','beanie':'Mössa / hatt','umbrella':'Paraply','daypack':'Dagsryggsäck','book':'Bok / e-läsare',
+      'toothbrush':'Tandborste & kräm','medications':'Mediciner','reusable-bag':'Återanvändbar väska','cash':'Kontanter',
+      'casual-pants':'Casual byxor','nice-outfit':'Snygg outfit','comfy-shoes':'Bekväma skor','jacket':'Jacka',
+    },
+  }
+};
+
+// ── QUANTITY RULES ────────────────────────────────────────────────────
+const QRULES={fixed:()=>1,daily:d=>d,halfday:d=>Math.max(1,Math.ceil(d/2)),less:d=>Math.max(1,Math.ceil(d*.65)),sweaters:d=>Math.max(1,Math.ceil(d/3))};
+function calcQ(rule,d){return(QRULES[rule]||QRULES.fixed)(d);}
+function resolveQ(q,dur){if(typeof q==='number')return{qty:q,rule:'fixed'};const rule=QRULES[q]?q:'fixed';return{qty:calcQ(rule,dur),rule};}
+
+// ── VAN SVGs (white/light style on dark) ──────────────────────────────
+function mkV(roof,body,wheel,xtra=''){
+  return `<svg viewBox="0 0 240 155" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="120" cy="148" rx="100" ry="7" fill="rgba(0,0,0,.06)"/>
+  <rect x="14" y="72" width="205" height="52" rx="11" fill="${body}"/>
+  <path d="M28,72 L28,36 Q30,26 42,24 L178,24 Q190,26 196,38 L214,72 Z" fill="${roof}"/>
+  <rect x="17" y="38" width="24" height="18" rx="5" fill="rgba(200,230,255,.85)"/>
+  <circle cx="88" cy="49" r="16" fill="rgba(200,230,255,.85)"/>
+  <circle cx="88" cy="49" r="16" stroke="${body}" stroke-width="2.5" fill="none"/>
+  <circle cx="135" cy="49" r="16" fill="rgba(200,230,255,.85)"/>
+  <circle cx="135" cy="49" r="16" stroke="${body}" stroke-width="2.5" fill="none"/>
+  <path d="M198,38 L198,70 L214,70 L208,38 Z" fill="rgba(200,230,255,.85)"/>
+  <line x1="198" y1="56" x2="214" y2="56" stroke="${roof}" stroke-width="2.5"/>
+  <line x1="163" y1="74" x2="163" y2="120" stroke="rgba(0,0,0,.10)" stroke-width="1.5"/>
+  <rect x="14" y="82" width="205" height="5" rx="2.5" fill="${roof}" opacity=".5"/>
+  <circle cx="210" cy="82" r="7" fill="#fffde4" stroke="#ccc" stroke-width="1"/>
+  <circle cx="210" cy="82" r="4" fill="#fff9c0"/>
+  <rect x="14" y="80" width="10" height="14" rx="2" fill="#ff6b4a"/>
+  <circle cx="188" cy="56" r="8" fill="${roof}" stroke="${body}" stroke-width="2"/>
+  <rect x="16" y="96" width="16" height="9" rx="3" fill="#aaa"/>
+  <rect x="210" y="96" width="16" height="9" rx="3" fill="#aaa"/>
+  <circle cx="57" cy="125" r="19" fill="#2a2828"/>
+  <circle cx="57" cy="125" r="11" fill="${wheel}"/>
+  <circle cx="57" cy="125" r="4.5" fill="#1a1818"/>
+  <line x1="57" y1="114" x2="57" y2="136" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+  <line x1="46" y1="125" x2="68" y2="125" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+  <circle cx="183" cy="125" r="19" fill="#2a2828"/>
+  <circle cx="183" cy="125" r="11" fill="${wheel}"/>
+  <circle cx="183" cy="125" r="4.5" fill="#1a1818"/>
+  <line x1="183" y1="114" x2="183" y2="136" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+  <line x1="172" y1="125" x2="194" y2="125" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+  ${xtra}</svg>`;
+}
+const SVGS={
+  ski:mkV('#5a9ad8','#1a5fbb','#5a9fef',`
+    <rect x="42" y="16" width="130" height="5" rx="2" fill="#666"/>
+    <rect x="50" y="8" width="110" height="3.5" rx="1.5" fill="rgba(200,230,255,.5)"/>
+    <rect x="55" y="12" width="100" height="3.5" rx="1.5" fill="#ff88bb"/>
+    <ellipse cx="22" cy="55" rx="4" ry="12" fill="rgba(200,230,255,.4)" transform="rotate(-15 22 55)"/>
+    <ellipse cx="218" cy="55" rx="4" ry="12" fill="rgba(200,230,255,.4)" transform="rotate(15 218 55)"/>`),
+  summer:mkV('#e8800a','#e8650a','#d4640a',`
+    <circle cx="216" cy="15" r="13" fill="#fcd030" opacity=".9"/>
+    <line x1="216" y1="0" x2="216" y2="5" stroke="#fcd030" stroke-width="2" opacity=".6"/>
+    <line x1="216" y1="25" x2="216" y2="30" stroke="#fcd030" stroke-width="2" opacity=".6"/>
+    <line x1="200" y1="15" x2="205" y2="15" stroke="#fcd030" stroke-width="2" opacity=".6"/>
+    <circle cx="170" cy="90" r="8" fill="#fcd030"/>
+    <circle cx="170" cy="79" r="6" fill="#e8650a"/>
+    <circle cx="178" cy="85" r="6" fill="#e8650a"/>
+    <circle cx="178" cy="96" r="6" fill="#e8650a"/>
+    <circle cx="162" cy="96" r="6" fill="#e8650a"/>
+    <circle cx="162" cy="85" r="6" fill="#e8650a"/>`),
+  winter:mkV('#c8820a','#8b5e00','#c8860a',`
+    <path d="M22,24 Q26,13 31,18 Q29,7 35,12 Q37,3 41,8 Q39,18 35,21 Q39,25 33,25 Z" fill="#f0c060" opacity=".7"/>
+    <path d="M50,19 Q53,9 57,13 Q55,5 60,8 Q61,2 65,5 Q63,13 59,16 Q62,20 56,20 Z" fill="#f0c060" opacity=".6"/>
+    <circle cx="210" cy="14" r="9" fill="#fff8dc" opacity=".5"/>
+    <line x1="205" y1="9" x2="215" y2="19" stroke="#d49020" stroke-width="2" opacity=".6"/>
+    <line x1="215" y1="9" x2="205" y2="19" stroke="#d49020" stroke-width="2" opacity=".6"/>`),
+  weekend:mkV('#4a9060','#4a7c59','#3a6644',`
+    <circle cx="36" cy="14" r="7" fill="#70c080" opacity=".4"/>
+    <path d="M33,14 A3,3 0 1,1 39,14" fill="none" stroke="#70c080" stroke-width="1.5" opacity=".5"/>
+    <circle cx="210" cy="13" r="5" fill="#e8a030" opacity=".6"/>
+    <path d="M207,10 L210,6 L213,10" fill="none" stroke="#e8a030" stroke-width="1.5" opacity=".6"/>`),
+};
+const CARD_TOPS={
+  ski:'linear-gradient(160deg,#dceeff 0%,#b8d4f4 100%)',
+  summer:'linear-gradient(160deg,#fff0e0 0%,#ffd4a0 100%)',
+  winter:'linear-gradient(160deg,#fff8e8 0%,#fde8b0 100%)',
+  weekend:'linear-gradient(160deg,#e4f4e8 0%,#b8dcc0 100%)',
+};
+const CARD_ACCENTS={ski:'#3a80c0',summer:'#d46010',winter:'#c87808',weekend:'#3a7048'};
+
+// ── SVG ICON LIBRARY ──────────────────────────────────────────────────
+const _s=(d)=>`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const SVGI={
+  clothing:   _s('<path d="M5 1L2 4l2 1v10h8V5l2-1-3-3Q9.5 3 8 3Q6.5 3 5 1z"/>'),
+  equipment:  _s('<path d="M11 2l3 3-1.5 1.5-3-3zm-1 2L3 11l-.5 2.5 2.5-.5L12 6zm-2 2l2 2"/>'),
+  accessories:_s('<circle cx="8" cy="8" r="5.5"/><path d="M8 5v6M5 8h6"/>'),
+  toiletries: _s('<path d="M6.5 2h3v2h-3zM5 4h6l.8 10H4.2L5 4z"/><path d="M7.5 7v3.5"/>'),
+  documents:  _s('<path d="M4 2h6l2 2v10H4V2z"/><path d="M10 2v2h2"/><path d="M6.5 7h3M6.5 10h3"/>'),
+  other:      _s('<circle cx="5" cy="5" r="1.2"/><circle cx="11" cy="5" r="1.2"/><circle cx="5" cy="11" r="1.2"/><circle cx="11" cy="11" r="1.2"/>'),
+  beach:      _s('<path d="M2 11 Q5 6 8 5.5 Q11 5 14 8"/><circle cx="11" cy="4.5" r="2"/><path d="M2 13h12"/>'),
+  cloud:      _s('<path d="M4 11a3 3 0 1 1 1-5.8A4 4 0 1 1 13 9H4"/>'),
+  pin:        _s('<path d="M8 14S3 9.5 3 6a5 5 0 0 1 10 0c0 3.5-5 8-5 8z"/><circle cx="8" cy="6" r="1.5"/>'),
+  fork:       _s('<path d="M5 2v3.5A1.5 1.5 0 0 0 6.5 7v7M11 2v3c0 1.1-.9 2-2 2v7M9.5 2v3"/>'),
+  mountain:   _s('<path d="M2 13L7 5l2.5 4L11 7l3 6H2z"/>'),
+  compass:    _s('<circle cx="8" cy="8" r="6"/><path d="M10.5 5.5L9 9 5.5 10.5 7 7z"/>'),
+  train:      _s('<rect x="4" y="2" width="8" height="9" rx="2"/><path d="M4 7.5h8"/><circle cx="6" cy="13" r="1"/><circle cx="10" cy="13" r="1"/><path d="M6 11v2M10 11v2"/>'),
+  sun:        _s('<circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14M4.2 4.2l1 1M10.8 10.8l1 1M4.2 11.8l1-1M10.8 5.2l1-1"/>'),
+  building:   _s('<path d="M2 14V7l6-5 6 5v7H2z"/><rect x="6" y="9" width="4" height="5"/><path d="M5 7h.01M11 7h.01"/>'),
+  wave:       _s('<path d="M2 10 Q4.5 7 7 10 Q9.5 13 12 10 Q13.5 8 14 9"/>'),
+  circle:     _s('<circle cx="8" cy="8" r="5.5"/>'),
+  plane:      _s('<path d="M9.5 3.5L6 8l-3 1 1.5 1.5L5.5 12 7 10.5 8.5 12l1.5-1.5L8.5 8l5-3L9.5 3.5z"/>'),
+  arrows:     _s('<path d="M2 6h9M8 3l3 3-3 3"/><path d="M14 10H5M8 7l-3 3 3 3"/>'),
+  speech:     _s('<path d="M2.5 3h11v7H8L5 13v-3H2.5V3z"/>'),
+  cross:      _s('<path d="M8 3v10M3 8h10"/>'),
+  signal:     _s('<circle cx="8" cy="8" r="1.2"/><path d="M5.5 5.5a3.5 3.5 0 0 0 0 5M10.5 5.5a3.5 3.5 0 0 1 0 5M3 3a7 7 0 0 0 0 10M13 3a7 7 0 0 1 0 10"/>'),
+  thermometer:_s('<path d="M8 2v7.2"/><circle cx="8" cy="12" r="2.2"/><path d="M6 9.5A2.2 2.2 0 0 0 8 14"/>'),
+  globe:      _s('<circle cx="8" cy="8" r="6"/><path d="M2 8h12"/><path d="M8 2Q5 5 5 8Q5 11 8 14M8 2Q11 5 11 8Q11 11 8 14"/>'),
+  tent:       _s('<path d="M8 2L2 13h12L8 2z"/><path d="M8 7v6"/>'),
+  stethoscope:_s('<path d="M4 3h2a1 1 0 0 1 1 1v4a3 3 0 0 0 6 0v-1"/><circle cx="13" cy="7" r="1"/><path d="M4 3H3a1 1 0 0 0-1 1v2.5a3 3 0 0 0 6 0V4a1 1 0 0 0-1-1"/>'),
+  paw:        _s('<circle cx="5.5" cy="4.5" r="1.2"/><circle cx="8" cy="3" r="1.2"/><circle cx="10.5" cy="4.5" r="1.2"/><path d="M4 9Q8 7 12 9Q13 12 8 14.5Q3 12 4 9z"/>'),
+  search:     _s('<circle cx="7" cy="7" r="4"/><path d="M10.5 10.5L14 14"/>'),
+  bag:        _s('<path d="M5 5V3.5A3 3 0 0 1 11 3.5V5"/><rect x="2" y="5" width="12" height="9" rx="1.5"/><path d="M5 5h6"/>'),
+  clipboard:  _s('<rect x="4" y="3" width="8" height="11" rx="1"/><path d="M6.5 3V2h3v1"/><path d="M6 7.5h4M6 10.5h2.5"/>'),
+  car:        _s('<path d="M2 9l1.5-4h9L14 9"/><rect x="1" y="9" width="14" height="4" rx="1.5"/><circle cx="4.5" cy="13" r="1.5"/><circle cx="11.5" cy="13" r="1.5"/>'),
+  dog:        _s('<circle cx="5.5" cy="4.5" r="1.2"/><circle cx="8" cy="3" r="1.2"/><circle cx="10.5" cy="4.5" r="1.2"/><path d="M4 9Q8 7 12 9Q13 12 8 14.5Q3 12 4 9z"/>'),
+};
+function si(key,sz=16){const s=SVGI[key];if(!s)return'';return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${sz}px;height:${sz}px;flex-shrink:0;opacity:.7">${s.replace('<svg ',`<svg width="${sz}" height="${sz}" `)}</span>`;}
+
+// ── TRIP DATABASE ─────────────────────────────────────────────────────
+const TRIPS={
+  ski:{theme:'ski',defaultDuration:7,cats:[
+    {id:'clothing',icon:'clothing',items:[{id:'ski-jacket',q:'fixed'},{id:'ski-pants',q:'fixed'},{id:'thermal-top',q:2},{id:'thermal-bot',q:2},{id:'fleece',q:'fixed'},{id:'ski-socks',q:'halfday'},{id:'wool-socks',q:2},{id:'underwear',q:'daily'},{id:'tshirts',q:'less'},{id:'apres-outfit',q:'fixed'},{id:'casual-eve',q:'fixed'}]},
+    {id:'equipment',icon:'equipment',items:[{id:'skis',q:'fixed'},{id:'boots',q:'fixed'},{id:'helmet',q:'fixed'},{id:'goggles',q:'fixed'},{id:'poles',q:'fixed'},{id:'boot-bag',q:'fixed'}]},
+    {id:'accessories',icon:'accessories',items:[{id:'gloves',q:'fixed'},{id:'neck',q:'fixed'},{id:'ski-pass',q:'fixed'},{id:'backpack',q:'fixed'},{id:'sunglasses',q:'fixed'},{id:'hand-warmers',q:4}]},
+    {id:'toiletries',icon:'toiletries',items:[{id:'sunscreen',q:'fixed'},{id:'lip-balm',q:'fixed'},{id:'moisturizer',q:'fixed'},{id:'deodorant',q:'fixed'},{id:'first-aid',q:'fixed'}]},
+    {id:'documents',icon:'documents',items:[{id:'passport',q:'fixed'},{id:'insurance',q:'fixed'},{id:'lift-booking',q:'fixed'}]},
+    {id:'other',icon:'other',items:[{id:'charger',q:'fixed'},{id:'power-bank',q:'fixed'},{id:'camera',q:'fixed'},{id:'snacks',q:'fixed'},{id:'water-bottle',q:'fixed'},{id:'apres-boots',q:'fixed'}]},
+  ]},
+  summer:{theme:'summer',defaultDuration:10,cats:[
+    {id:'clothing',icon:'clothing',items:[{id:'swimsuit',q:2},{id:'shorts',q:'less'},{id:'tshirts',q:'less'},{id:'light-shirt',q:'less'},{id:'underwear',q:'daily'},{id:'socks',q:'halfday'},{id:'sandals',q:'fixed'},{id:'flip-flops',q:'fixed'},{id:'sneakers',q:'fixed'},{id:'light-jacket',q:'fixed'}]},
+    {id:'beach',icon:'beach',items:[{id:'beach-towel',q:'fixed'},{id:'beach-bag',q:'fixed'},{id:'snorkel',q:'fixed'},{id:'waterproof-case',q:'fixed'}]},
+    {id:'accessories',icon:'accessories',items:[{id:'sunglasses',q:'fixed'},{id:'hat',q:'fixed'},{id:'water-bottle',q:'fixed'},{id:'backpack',q:'fixed'}]},
+    {id:'toiletries',icon:'toiletries',items:[{id:'sunscreen',q:'fixed'},{id:'after-sun',q:'fixed'},{id:'mosquito',q:'fixed'},{id:'deodorant',q:'fixed'},{id:'shampoo',q:'fixed'}]},
+    {id:'documents',icon:'documents',items:[{id:'passport',q:'fixed'},{id:'insurance',q:'fixed'},{id:'adapter',q:'fixed'}]},
+    {id:'other',icon:'other',items:[{id:'charger',q:'fixed'},{id:'camera',q:'fixed'},{id:'guidebook',q:'fixed'},{id:'phrase-book',q:'fixed'},{id:'snacks',q:'fixed'}]},
+  ]},
+  winter:{theme:'winter',defaultDuration:7,cats:[
+    {id:'clothing',icon:'clothing',items:[{id:'jeans',q:2},{id:'sweaters',q:'sweaters'},{id:'tshirts',q:'less'},{id:'underwear',q:'daily'},{id:'socks',q:'daily'},{id:'rain-jacket',q:'fixed'},{id:'casual-shoes',q:'fixed'},{id:'ankle-boots',q:'fixed'},{id:'scarf',q:'fixed'},{id:'light-gloves',q:'fixed'},{id:'beanie',q:'fixed'},{id:'light-jacket',q:'fixed'}]},
+    {id:'accessories',icon:'accessories',items:[{id:'umbrella',q:'fixed'},{id:'sunglasses',q:'fixed'},{id:'daypack',q:'fixed'},{id:'water-bottle',q:'fixed'}]},
+    {id:'toiletries',icon:'toiletries',items:[{id:'moisturizer',q:'fixed'},{id:'lip-balm',q:'fixed'},{id:'deodorant',q:'fixed'},{id:'shampoo',q:'fixed'}]},
+    {id:'documents',icon:'documents',items:[{id:'passport',q:'fixed'},{id:'insurance',q:'fixed'},{id:'adapter',q:'fixed'}]},
+    {id:'other',icon:'other',items:[{id:'charger',q:'fixed'},{id:'camera',q:'fixed'},{id:'guidebook',q:'fixed'},{id:'phrase-book',q:'fixed'},{id:'book',q:'fixed'}]},
+  ]},
+  weekend:{theme:'weekend',defaultDuration:3,cats:[
+    {id:'clothing',icon:'clothing',items:[{id:'tshirts',q:'daily'},{id:'casual-pants',q:2},{id:'nice-outfit',q:'fixed'},{id:'underwear',q:'daily'},{id:'socks',q:'daily'},{id:'comfy-shoes',q:'fixed'},{id:'jacket',q:'fixed'}]},
+    {id:'toiletries',icon:'toiletries',items:[{id:'toothbrush',q:'fixed'},{id:'deodorant',q:'fixed'},{id:'shampoo',q:'fixed'},{id:'medications',q:'fixed'}]},
+    {id:'accessories',icon:'accessories',items:[{id:'sunglasses',q:'fixed'},{id:'reusable-bag',q:'fixed'},{id:'water-bottle',q:'fixed'}]},
+    {id:'other',icon:'other',items:[{id:'charger',q:'fixed'},{id:'power-bank',q:'fixed'},{id:'cash',q:'fixed'},{id:'book',q:'fixed'},{id:'snacks',q:'fixed'}]},
+  ]},
+};
+
+// ── LINKS DATA (SVG icon keys) ───────────────────────────────────────
+const LINKS={
+  en:[
+    {eye:'Sweden',title:'Nordic adventures',items:[
+      {icon:'cloud',   name:'SMHI Weather',     desc:'Official Swedish weather forecasts & warnings',badge:'Weather',   url:'https://www.smhi.se/en'},
+      {icon:'pin',     name:'Google Maps',       desc:'Navigate anywhere across Sweden',              badge:'Navigation',url:'https://maps.google.com/?q=Sweden'},
+      {icon:'fork',    name:'The Fork — Sweden', desc:'Top-rated restaurants, reviews & bookings',    badge:'Food',      url:'https://www.thefork.co.uk/restaurant/sweden'},
+      {icon:'mountain',name:'Skistar',           desc:"Sweden's largest ski resort group",             badge:'Skiing',    url:'https://www.skistar.com/en'},
+      {icon:'compass', name:'Visit Sweden',      desc:'Official travel guide & inspiration',           badge:'Tourism',   url:'https://visitsweden.com'},
+      {icon:'train',   name:'SJ Rail',           desc:'Book train tickets across Sweden',              badge:'Transport', url:'https://www.sj.se/en'},
+    ]},
+    {eye:'Catalunya',title:'Mediterranean escapes',items:[
+      {icon:'sun',     name:'Meteocat',          desc:'Catalunya regional weather service',            badge:'Weather',   url:'https://www.meteo.cat'},
+      {icon:'pin',     name:'Google Maps BCN',   desc:'Navigate Barcelona & Costa Brava',              badge:'Navigation',url:'https://maps.google.com/?q=Barcelona'},
+      {icon:'fork',    name:'The Fork — BCN',    desc:'Best tapas bars & restaurants rated',           badge:'Food',      url:'https://www.thefork.es/restaurantes/barcelona-c'},
+      {icon:'building',name:'Gaudí sites',       desc:'Sagrada Família, Park Güell & Casa Batlló',     badge:'Culture',   url:'https://www.gaudiclub.com'},
+      {icon:'wave',    name:'Costa Brava',       desc:'Beaches, coves & coastal villages',             badge:'Beach',     url:'https://www.costabrava.org/en'},
+      {icon:'circle',  name:'FC Barcelona',      desc:'Camp Nou tickets & match schedule',             badge:'Sport',     url:'https://www.fcbarcelona.com/en'},
+    ]},
+    {eye:'Everywhere',title:'Universal tools',items:[
+      {icon:'plane',       name:'Google Flights',   desc:'Compare flights & find the cheapest fares',   badge:'Flights',  url:'https://www.google.com/flights'},
+      {icon:'arrows',      name:'XE Currency',      desc:'Live exchange rates & converter tool',         badge:'Money',    url:'https://www.xe.com'},
+      {icon:'speech',      name:'Google Translate', desc:'Translate in 100+ languages instantly',        badge:'Language', url:'https://translate.google.com'},
+      {icon:'cross',       name:'1177 Health',      desc:'Swedish health advice & emergency care',       badge:'Health',   url:'https://www.1177.se'},
+      {icon:'signal',      name:'Flightradar24',    desc:'Watch real planes live on the map!',           badge:'Cool',     url:'https://www.flightradar24.com'},
+      {icon:'thermometer', name:'World Weather',    desc:'Hyperlocal weather for anywhere on Earth',     badge:'Weather',  url:'https://www.wunderground.com'},
+    ]},
+  ],
+  sv:[
+    {eye:'Sverige',title:'Nordiska äventyr',items:[
+      {icon:'cloud',   name:'SMHI Väder',        desc:'Officiella väderprognoser & varningar',         badge:'Väder',     url:'https://www.smhi.se'},
+      {icon:'pin',     name:'Google Maps',        desc:'Navigera var som helst i Sverige',              badge:'Navigation',url:'https://maps.google.com/?q=Sweden'},
+      {icon:'fork',    name:'The Fork — Sverige', desc:'Topprankade restauranger & bokningar',          badge:'Mat',       url:'https://www.thefork.se'},
+      {icon:'mountain',name:'Skistar',            desc:'Sveriges största skidortsgrupp',                badge:'Skidor',    url:'https://www.skistar.com/sv'},
+      {icon:'compass', name:'Visit Sweden',       desc:'Officiell reseguide',                           badge:'Turism',    url:'https://visitsweden.com/sv'},
+      {icon:'train',   name:'SJ Tåg',             desc:'Boka tågbiljetter i Sverige',                   badge:'Transport', url:'https://www.sj.se'},
+    ]},
+    {eye:'Katalonien',title:'Medelhavets pärlor',items:[
+      {icon:'sun',     name:'Meteocat',           desc:'Kataloniens regionala vädertjänst',             badge:'Väder',     url:'https://www.meteo.cat'},
+      {icon:'pin',     name:'Google Maps BCN',    desc:'Navigera Barcelona & Costa Brava',              badge:'Navigation',url:'https://maps.google.com/?q=Barcelona'},
+      {icon:'fork',    name:'The Fork — BCN',     desc:'Bästa tapas-barer & restauranger',             badge:'Mat',       url:'https://www.thefork.es'},
+      {icon:'building',name:'Gaudí',              desc:'Sagrada Família, Park Güell & Casa Batlló',     badge:'Kultur',    url:'https://www.gaudiclub.com'},
+      {icon:'wave',    name:'Costa Brava',        desc:'Stränder, vikar & kustbyar',                   badge:'Strand',    url:'https://www.costabrava.org'},
+      {icon:'circle',  name:'FC Barcelona',       desc:'Biljetter & matchschema',                       badge:'Sport',     url:'https://www.fcbarcelona.com'},
+    ]},
+    {eye:'Överallt',title:'Universella verktyg',items:[
+      {icon:'plane',       name:'Google Flyg',      desc:'Jämför flyg & hitta billigaste priserna',     badge:'Flyg',     url:'https://www.google.com/flights'},
+      {icon:'arrows',      name:'XE Valuta',        desc:'Live valutakurser & konverterare',             badge:'Pengar',   url:'https://www.xe.com'},
+      {icon:'speech',      name:'Google Translate', desc:'Översätt på 100+ språk direkt',               badge:'Språk',    url:'https://translate.google.com'},
+      {icon:'cross',       name:'1177 Vård',        desc:'Svenska råd om hälsa & akutvård',             badge:'Hälsa',    url:'https://www.1177.se'},
+      {icon:'signal',      name:'Flightradar24',    desc:'Se riktiga plan live på kartan!',              badge:'Coolt',    url:'https://www.flightradar24.com'},
+      {icon:'thermometer', name:'World Weather',    desc:'Hyperlokal väder var som helst',              badge:'Väder',    url:'https://www.wunderground.com'},
+    ]},
+  ],
+};
+
+// ── CAR DATA// ── CAR DATA ──────────────────────────────────────────────────────────
+const CAR_LISTS={
+  en:[
+    {id:'pre',title:'Before you leave',items:[
+      {id:'tyre',label:'Tyre pressure',sub:'All 4 tyres including the spare'},
+      {id:'oil',label:'Engine oil level',sub:'Check dipstick, top up if needed'},
+      {id:'coolant',label:'Coolant level',sub:'Look at the reservoir — not a cold engine cap'},
+      {id:'wash',label:'Screen wash fluid',sub:'Fill it up — you will need it on motorways'},
+      {id:'lights',label:'All lights working',sub:'Headlights, brake, rear and indicators'},
+      {id:'wipers',label:'Wiper blades OK',sub:'Check they clean without smearing'},
+      {id:'fuel',label:'Full tank of fuel',sub:'Never start a long trip on half a tank'},
+      {id:'triangle',label:'Warning triangle & vest',sub:'Mandatory in many countries'},
+      {id:'firstaid',label:'First aid kit',sub:'Check it is stocked and nothing is expired'},
+      {id:'docs',label:'Insurance documents',sub:'Print a copy — do not rely only on your phone'},
+      {id:'reg',label:'Vehicle registration',sub:'Keep it in the glovebox'},
+      {id:'lic',label:'All drivers have their licence',sub:'Everyone who might drive must have theirs'},
+      {id:'mount',label:'Phone mount fitted',sub:'Never hold your phone while driving'},
+      {id:'gps',label:'Route planned on GPS',sub:'Download offline maps just in case'},
+      {id:'snacks',label:'Snacks & drinks in the car',sub:'Keeps everyone happy on the road'},
+      {id:'chargercar',label:'Car phone charger',sub:'USB or 12V adapter ready to go'},
+      {id:'shades',label:'Sunglasses accessible',sub:'Low sun on motorways is genuinely dangerous'},
+      {id:'rests',label:'Rest stops planned',sub:'Every 2 hours is the recommended safe limit'},
+    ]},
+    {id:'kids',title:'Kids & comfort',items:[
+      {id:'seat',label:'Child seat fitted correctly',sub:'Check all straps and anchor points carefully'},
+      {id:'tablets',label:'Tablets & games charged',sub:'Absolutely essential for long journeys'},
+      {id:'phones',label:'Headphones for each child',sub:'Saves everyone\'s sanity'},
+      {id:'motion',label:'Travel sickness tablets',sub:'Give before departure if needed'},
+      {id:'blanket',label:'Blanket & travel pillow',sub:'For sleeping comfortably on the road'},
+      {id:'toiletbag',label:'Toilet bag easy to reach',sub:'Not buried at the bottom of the boot'},
+      {id:'wipes',label:'Wet wipes & tissues',sub:'Spills will happen'},
+      {id:'spare',label:'Spare clothes within reach',sub:'One set per child — not inside the suitcase'},
+    ]},
+  ],
+  sv:[
+    {id:'pre',title:'Innan avfärd',items:[
+      {id:'tyre',label:'Däcktryck',sub:'Alla 4 däck inklusive reservdäcket'},
+      {id:'oil',label:'Motoroljenivå',sub:'Kolla mätstickan, fyll på vid behov'},
+      {id:'coolant',label:'Kylvätskenivå',sub:'Titta på behållaren — inte ett kallt motorlock'},
+      {id:'wash',label:'Spolarvätska',sub:'Fyll på den — du behöver den på motorvägen'},
+      {id:'lights',label:'Alla lampor fungerar',sub:'Strålkastare, bromsar, bak och blinkers'},
+      {id:'wipers',label:'Vindrutetorkare OK',sub:'Kontrollera att de torkar utan att smeta'},
+      {id:'fuel',label:'Full tank',sub:'Börja aldrig en lång resa på halvtank'},
+      {id:'triangle',label:'Varningstriangel & väst',sub:'Obligatoriskt i många länder'},
+      {id:'firstaid',label:'Förbandslåda',sub:'Kontrollera att den är komplett och inte utgången'},
+      {id:'docs',label:'Försäkringshandlingar',sub:'Skriv ut en kopia — lita inte bara på telefonen'},
+      {id:'reg',label:'Registreringsbevis',sub:'Förvara det i handskfacket'},
+      {id:'lic',label:'Alla förare har körkort',sub:'Alla som kan köra måste ha sitt med'},
+      {id:'mount',label:'Telefonhållare monterad',sub:'Håll aldrig telefonen under körning'},
+      {id:'gps',label:'Rutt planerad på GPS',sub:'Ladda ner offline-kartor ifall'},
+      {id:'snacks',label:'Snacks & dryck i bilen',sub:'Håller alla glada på vägen'},
+      {id:'chargercar',label:'Billaddare för telefon',sub:'USB eller 12V-adapter redo'},
+      {id:'shades',label:'Solglasögon lättåtkomliga',sub:'Låg sol på motorväg är genuint farlig'},
+      {id:'rests',label:'Rastplatser planerade',sub:'Var 2:e timme är den rekommenderade gränsen'},
+    ]},
+    {id:'kids',title:'Barn & komfort',items:[
+      {id:'seat',label:'Bilbarnstol monterad rätt',sub:'Kontrollera alla remmar och fästen noga'},
+      {id:'tablets',label:'Surfplattor & spel laddade',sub:'Absolut nödvändigt för långa resor'},
+      {id:'phones',label:'Hörlurar till varje barn',sub:'Räddar allas förstånd'},
+      {id:'motion',label:'Tabletter mot åksjuka',sub:'Ge innan avfärd vid behov'},
+      {id:'blanket',label:'Filt & resekudde',sub:'För att sova bekvämt på vägen'},
+      {id:'toiletbag',label:'Necessär lättåtkomlig',sub:'Inte begravd i bagageutrymmet'},
+      {id:'wipes',label:'Våtservetter & näsdukar',sub:'Spill kommer att hända'},
+      {id:'spare',label:'Ombyteskläder nära till hands',sub:'Ett set per barn — inte i resväskan'},
+    ]},
+  ],
+};
+const CAR_SEARCH={
+  en:[{l:'Service schedule',q:'service schedule intervals'},{l:'Oil specification',q:'engine oil spec grade'},{l:'Tyre size',q:'tyre size recommended'},{l:'Common faults',q:'common problems reliability forum'},{l:'Owner manual PDF',q:'owner manual PDF free download'}],
+  sv:[{l:'Serviceintervall',q:'serviceintervall'},{l:'Oljespecifikation',q:'motoroljespecifikation'},{l:'Däckstorlek',q:'rekommenderad däckstorlek'},{l:'Vanliga fel',q:'vanliga problem forum tillförlitlighet'},{l:'Instruktionsbok PDF',q:'instruktionsbok PDF gratis'}],
+};
+
+// ── APP STATE ─────────────────────────────────────────────────────────
+const IDS=['ski','summer','winter','weekend'];
+let lang=localStorage.getItem('pu-lang')||'en';
+let currentTrip=null;
+let activeTab='trips';
+let pollTimer=null;
+let myProfile=null;
+let tripStates={};
+let allProfiles=[];
+let userChecked={};
+let carChecked=JSON.parse(localStorage.getItem('pu-car')||'{}');
+function defState(id){return{duration:TRIPS[id].defaultDuration,customItems:[]};}
+const t=k=>T[lang][k]||k;
+const ti=id=>(T[lang].items||{})[id]||id;
+const tc=id=>(T[lang].cats||{})[id]||id;
+function showToast(msg,ms=2100){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),ms);}
+function allItemsList(id,st){const tr=TRIPS[id],d=st.duration,arr=[];for(const c of tr.cats)for(const i of c.items){const{qty,rule}=resolveQ(i.q,d);arr.push({id:i.id,catId:c.id,qty,rule});}for(const ci of(st.customItems||[]))arr.push({id:ci.id,catId:ci.catId,qty:1,rule:'fixed',custom:true,name:ci.name,permanent:ci.permanent});return arr;}
+function calcProg(tid,st,chk){const all=allItemsList(tid,st),s=new Set(chk);return{done:all.filter(i=>s.has(i.id)).length,total:all.length};}
+function durPills(tid,dur){return TRIPS[tid].cats.flatMap(c=>c.items.filter(i=>typeof i.q==='string'&&i.q!=='fixed').map(i=>({id:i.id,qty:calcQ(i.q,dur),rule:i.q})));}
+
+// ── HALF-CIRCLE GAUGE SVG ─────────────────────────────────────────────
+function halfGauge(color,pct,label){
+  const arc=113.1;
+  const fill=(pct/100*arc).toFixed(1);
+  return `<div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px">
+    <svg width="76" height="46" viewBox="0 0 76 46" style="overflow:visible">
+      <path d="M6,42 A32,32 0 0,1 70,42" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="11" stroke-linecap="round"/>
+      <path d="M6,42 A32,32 0 0,1 70,42" fill="none" stroke="${color}" stroke-width="11" stroke-linecap="round"
+        stroke-dasharray="${(pct/100*100.5).toFixed(1)} 100.5" style="transition:stroke-dasharray .6s ease"/>
+      <text x="38" y="36" text-anchor="middle" font-size="12" font-weight="700" fill="${color}" font-family="DM Mono,monospace">${label}</text>
+    </svg>
+    <span style="font-size:13px;font-weight:700;color:${color};font-family:var(--display);line-height:1">${pct}%</span>
+  </div>`;
+}
+
+// ── PROFILE MODAL ─────────────────────────────────────────────────────
+function showProfileModal(editing=false){
+  // editing=true → edit current profile; editing=false → always blank (new user)
+  const isEdit=editing&&!!myProfile;
+  document.getElementById('mTitle').textContent=isEdit?t('pEdit'):t('pTitle');
+  document.getElementById('mSaveBtn').textContent=t('pSave');
+  document.getElementById('pName').placeholder=t('pPh');
+  const r=document.getElementById('avRing');
+  if(isEdit){
+    document.getElementById('pName').value=myProfile.name;
+    r.style.background=myProfile.color;r.style.borderColor=myProfile.color;
+    r.textContent=ini(myProfile.name);r.classList.add('has-name');
+  } else {
+    document.getElementById('pName').value='';
+    r.style.background='var(--rim2)';r.style.borderColor='var(--rim2)';
+    r.textContent='?';r.classList.remove('has-name');
+  }
+  document.getElementById('profileModal').style.display='flex';
+  setTimeout(()=>document.getElementById('pName').focus(),140);
+}
+async function saveProfile(){
+  const name=(document.getElementById('pName').value||'').trim();
+  if(!name){document.getElementById('pName').focus();return;}
+  const color=colorFromName(name);
+  // If current user exists and name matches, edit them. Otherwise always create new.
+  const isEdit=myProfile&&myProfile.name===name;
+  if(!myProfile||!isEdit){
+    // New user — but don't duplicate if same name already exists
+    const existing=allProfiles.find(p=>p.name.trim().toLowerCase()===name.toLowerCase());
+    if(existing){
+      // Just switch to that user
+      myProfile={...existing};
+    } else {
+      myProfile={id:'u'+Date.now()+Math.random().toString(36).slice(2,6),name,color};
+    }
+  } else {
+    myProfile.name=name;myProfile.color=color;
+  }
+  myProfile.color=colorFromName(myProfile.name);
+  localStorage.setItem('pu-me',JSON.stringify(myProfile));
+  const idx=allProfiles.findIndex(p=>p.id===myProfile.id);
+  if(idx>=0)allProfiles[idx]={...myProfile};else allProfiles.push({...myProfile});
+  syncDot('busy');await sSet('profiles',allProfiles);syncDot('ok');
+  document.getElementById('profileModal').style.display='none';
+  updateProfBtn();
+  document.getElementById('homeView').style.display='block';
+  if(currentTrip)renderTrip(currentTrip);else switchTab('trips');
+}
+function updateProfBtn(){
+  const strip = document.getElementById('usersStrip');
+  if (!strip) return;
+  strip.innerHTML = allProfiles.map(pr => {
+    const isMe = myProfile && pr.id === myProfile.id;
+    return `<div class="u-pill${isMe?' me':''}" onclick="showProfileModal(true)" title="${isMe?'Edit your profile':''}">
+      <div class="u-pill-av" style="background:${pr.color}">${ini(pr.name)}</div>
+      <span class="u-pill-name">${pr.name}</span>
+    </div>`;
+  }).join('');
+}
+function toggleManage(){
+  const p=document.getElementById('managePanel'),b=document.getElementById('manageToggle');
+  const open=p.style.display==='none'||!p.style.display;
+  p.style.display=open?'block':'none';b.textContent=open?'hide':'manage users';
+  if(open)renderUserList();
+}
+function renderUserList(){
+  const el=document.getElementById('userList');if(!el)return;
+  el.innerHTML=allProfiles.map(pr=>{
+    const isMe=myProfile&&pr.id===myProfile.id;
+    return`<div class="mu-row"><div class="mu-av" style="background:${pr.color}">${ini(pr.name)}</div><div class="mu-name">${pr.name}${isMe?`<span class="mu-you">you</span>`:''}</div>${isMe?'<div style="width:24px"></div>':`<button class="mu-del" onclick="deleteProfile('${pr.id}')">×</button>`}</div>`;
+  }).join('');
+}
+async function deleteProfile(id){
+  const pr=allProfiles.find(p=>p.id===id);if(!pr)return;
+  if(!confirm(`Remove "${pr.name}" from all trips?`))return;
+  syncDot('busy');
+  try{
+    const{error:e1}=await db.from('checked_items').delete().eq('profile_id',id);if(e1)throw e1;
+    const{error:e2}=await db.from('profiles').delete().eq('id',id);if(e2)throw e2;
+    allProfiles=allProfiles.filter(p=>p.id!==id);
+    IDS.forEach(tid=>{delete userChecked['_u'+id+'_'+tid];});
+    syncDot('ok');showToast('✓ '+pr.name+' removed');renderUserList();
+    if(currentTrip)renderTrip(currentTrip);else renderHome();
+  }catch(e){console.error(e.message);syncDot('err');showToast('Error removing user');}
+}
+
+function renderHome(){
+  document.getElementById('homeEye').textContent=t('eye');
+  document.getElementById('homeTitle').textContent=t('choose');
+  document.getElementById('homeSub').textContent=t('choose2');
+  document.getElementById('langBtn').textContent=lang==='en'?'SV':'EN';
+  const grid=document.getElementById('tripsGrid');grid.innerHTML='';
+  const list=[{id:'ski',name:t('tripSki'),sub:t('subSki')},{id:'summer',name:t('tripSummer'),sub:t('subSummer')},{id:'winter',name:t('tripWinter'),sub:t('subWinter')},{id:'weekend',name:t('tripWeekend'),sub:t('subWeekend')}];
+  for(const tr of list){
+    const st=tripStates[tr.id]||defState(tr.id);
+    const myChk=userChecked[tr.id]||[];
+    const p=calcProg(tr.id,st,myChk);
+    const pct=p.total?Math.round(p.done/p.total*100):0;
+    const acc=CARD_ACCENTS[tr.id];
+    let gauges='';
+    if(allProfiles.length>0){
+      for(const pr of allProfiles){
+        const ch=userChecked['_u'+pr.id+'_'+tr.id]||[];
+        const up=calcProg(tr.id,st,ch);
+        const upct=up.total?Math.round(up.done/up.total*100):0;
+        gauges+=halfGauge(pr.color,upct,ini(pr.name));
+      }
+    }
+    const card=document.createElement('div');
+    card.className='tcard';card.onclick=()=>openTrip(tr.id);
+    card.innerHTML=`
+      <div class="ctop" style="background:${CARD_TOPS[tr.id]}">
+        <div class="ctop-bg" style="background:${CARD_TOPS[tr.id]}"></div>
+        <div class="ctop-grad" style="background:linear-gradient(to bottom,transparent 40%,rgba(255,253,250,.85) 100%)"></div>
+        <div class="cvan">${SVGS[tr.id]}</div>
+      </div>
+      <div class="cbot">
+        <div class="cname">${tr.name}</div>
+        <div class="csub">${tr.sub}</div>
+        <div class="cdur"><span class="cdur-dot"></span>${st.duration} ${t('days')}</div>
+        <div class="cprog-wrap">
+          <div class="cpct-row">
+            <span class="cpct-num" style="color:${acc}">${pct}%</span>
+            <span class="cpct-sub">${p.done}/${p.total}</span>
+          </div>
+          <div class="cprog"><div class="cpfill" style="width:${pct}%;background:${acc}"></div></div>
+        </div>
+        ${gauges?`<div class="cgauges">${gauges}</div>`:''}
+      </div>`;
+    grid.appendChild(card);
+  }
+}
+
+// ── RENDER TRIP ───────────────────────────────────────────────────────
+function renderTrip(tripId){
+  const st=tripStates[tripId]||defState(tripId);
+  const trip=TRIPS[tripId];
+  const myChk=new Set(userChecked[tripId]||[]);
+  const dur=st.duration;
+  const p=calcProg(tripId,st,[...myChk]);
+  const pct=p.total?Math.round(p.done/p.total*100):0;
+  const tNames={ski:t('tripSki'),summer:t('tripSummer'),winter:t('tripWinter'),weekend:t('tripWeekend')};
+  const tSubs={ski:t('subSki'),summer:t('subSummer'),winter:t('subWinter'),weekend:t('subWeekend')};
+  const catOpts=trip.cats.map(c=>`<option value="${c.id}">${tc(c.id)}</option>`).join('');
+  const acc=CARD_ACCENTS[tripId];
+  const myCol=myProfile?myProfile.color:acc;
+  const others=allProfiles.filter(pr=>!myProfile||pr.id!==myProfile.id);
+  const pills=durPills(tripId,dur);
+  const pillsHTML=pills.map(pi=>`<div class="dur-pill"><span class="dp-name">${ti(pi.id)}</span><span class="dp-qty">×${pi.qty}</span></div>`).join('');
+  let teamHTML='';
+  for(const pr of allProfiles){
+    const ch=userChecked['_u'+pr.id+'_'+tripId]||[];
+    const up=calcProg(tripId,st,ch);
+    const upct=up.total?Math.round(up.done/up.total*100):0;
+    const isMe=myProfile&&pr.id===myProfile.id;
+    teamHTML+=`<div class="uc-row">
+      <div class="u-av" style="background:${pr.color}">${ini(pr.name)}</div>
+      <div class="u-info">
+        <div class="u-name">${pr.name}${isMe?`<span class="u-you">${t('you')}</span>`:''}</div>
+        <div class="u-pbar"><div class="u-pfill" style="width:${upct}%;background:${pr.color}"></div></div>
+      </div>
+      <div class="u-pct" style="color:${pr.color}">${upct}%</div>
+      ${!isMe?`<button class="u-del" onclick="deleteProfile('${pr.id}')">×</button>`:'<div style="width:28px"></div>'}
+    </div>`;
+  }
+  let catsHTML='';
+  for(const cat of trip.cats){
+    const cH=cat.items.map(item=>{
+      const{qty,rule}=resolveQ(item.q,dur);
+      const done=myChk.has(item.id);
+      const isD=rule!=='fixed';
+      let badge='';
+      if(isD){const rt=rule==='daily'?t('perDay'):rule==='halfday'?'1/2d':rule==='sweaters'?'1/3d':'~';badge=`<span class="iqty daily">×${qty} <span class="iq-rule">(${rt})</span></span>`;}
+      else if(typeof item.q==='number'&&item.q>1){badge=`<span class="iqty fixed">×${qty}</span>`;}
+      const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(item.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}" title="${pr.name}"></div>`).join('');
+      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div><div class="itxt">${ti(item.id)}</div>${badge}${dots?`<div class="item-dots">${dots}</div>`:''}</div>`;
+    }).join('');
+    const custH=(st.customItems||[]).filter(ci=>ci.catId===cat.id).map(ci=>{
+      const done=myChk.has(ci.id);
+      const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
+      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name}${ci.permanent?'':' ✦'}</div>${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')">×</button></div>`;
+    }).join('');
+    const total=cat.items.length+(st.customItems||[]).filter(ci=>ci.catId===cat.id).length;
+    const done2=cat.items.filter(i=>myChk.has(i.id)).length+(st.customItems||[]).filter(ci=>ci.catId===cat.id&&myChk.has(ci.id)).length;
+    catsHTML+=`<div class="cats" id="cat-${tripId}-${cat.id}">
+      <div class="cath" onclick="togCat('${tripId}','${cat.id}')">
+        <span class="caticon">${si(cat.icon)}</span><span class="catname">${tc(cat.id)}</span>
+        <span class="catcount">${done2}/${total}</span><span class="catchev">▾</span>
+      </div>
+      <div class="ilist">${cH}${custH}</div>
+    </div>`;
+  }
+  document.getElementById('tripView').innerHTML=`
+    <div class="thero">
+      <div class="hvan">${SVGS[tripId]}</div>
+      <h1>${tNames[tripId]}</h1>
+      <p class="tsub">${tSubs[tripId]}</p>
+    </div>
+    <div class="dcard">
+      <div class="dur-row">
+        <span class="dur-label">🗓 ${t('duration')}</span>
+        <div class="dur-ctrl">
+          <button class="durbtn" onclick="chDur('${tripId}',-1)">−</button>
+          <span class="durval" id="durVal">${dur}</span>
+          <button class="durbtn" onclick="chDur('${tripId}',1)">+</button>
+          <span style="font-size:12px;color:var(--cream3)">${t('days')}</span>
+        </div>
+      </div>
+      ${pillsHTML?`<div class="dur-pills">${pillsHTML}</div>`:''}
+    </div>
+    <div class="dcard">
+      <div class="prog-hdr">
+        <div><div class="prog-label">${t('progress')}</div><div class="prog-pct" id="progPct" style="color:${myCol}">${pct}%</div></div>
+        <div style="text-align:right"><div class="prog-label">&nbsp;</div><div style="font-family:var(--mono);font-size:12px;color:var(--cream3);margin-top:6px">${p.done} ${t('of')} ${p.total}</div></div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:${pct}%;background:${myCol}"></div></div>
+      <div class="prog-sub" id="progSub">${p.done} ${t('of')} ${p.total} ${t('packed')}</div>
+    </div>
+    ${allProfiles.length>1?`<div class="dcard"><div class="uc-title">${t('teamProg')}</div>${teamHTML}</div>`:''}
+    ${catsHTML}
+    <div class="addsec">
+      <div class="addtitle">+ ${t('addItem')}</div>
+      <div class="addrow">
+        <input class="ainput" id="newN" placeholder="${t('addName')}" maxlength="60" onkeydown="if(event.key==='Enter')addItem('${tripId}')"/>
+        <select class="aselect" id="newC">${catOpts}</select>
+      </div>
+      <div class="addrow">
+        <label class="permrow"><input type="checkbox" id="newP" checked/>${t('addPerm')}</label>
+        <button class="abtn" onclick="addItem('${tripId}')">${t('addBtn')}</button>
+      </div>
+    </div>
+    <button class="resetbtn" onclick="doReset('${tripId}')">${t('reset')}</button>
+    <div style="height:24px"></div>`;
+}
+function updProg(tid){
+  const st=tripStates[tid];if(!st)return;
+  const p=calcProg(tid,st,userChecked[tid]||[]);
+  const pct=p.total?Math.round(p.done/p.total*100):0;
+  const pf=document.getElementById('progFill'),pp=document.getElementById('progPct'),ps=document.getElementById('progSub');
+  if(pf)pf.style.width=pct+'%';if(pp)pp.textContent=pct+'%';
+  if(ps)ps.textContent=`${p.done} ${t('of')} ${p.total} ${t('packed')}`;
+}
+
+// ── RENDER LINKS ──────────────────────────────────────────────────────
+function renderLinks(){
+  const data=LINKS[lang]||LINKS.en;
+  document.getElementById('linksView').innerHTML=data.map(sec=>`
+    <span class="sec-eyebrow">${sec.eye}</span>
+    <div class="sec-title">${sec.title}</div>
+    <div class="link-grid">${sec.items.map(lk=>`
+      <a class="lcard" href="${lk.url}" target="_blank" rel="noopener">
+        <div class="lc-icon">${si(lk.icon,20)}</div>
+        <div class="lc-name">${lk.name}</div>
+        <div class="lc-desc">${lk.desc}</div>
+        <div class="lc-badge">${lk.badge}</div>
+        <span class="lc-arrow">↗</span>
+      </a>`).join('')}
+    </div>`).join('');
+}
+
+// ── RENDER CAR ────────────────────────────────────────────────────────
+function renderCar(){
+  const lists=CAR_LISTS[lang]||CAR_LISTS.en;
+  const srch=CAR_SEARCH[lang]||CAR_SEARCH.en;
+  const model=localStorage.getItem('pu-carmodel')||'';
+  const ph=lang==='sv'?'Bilmodell t.ex. Volvo XC60 2019…':'Car model e.g. Volvo XC60 2019…';
+  const searchLinks=model
+    ?srch.map(s=>`<a class="car-link" href="https://www.google.com/search?q=${encodeURIComponent(model+' '+s.q)}" target="_blank" rel="noopener">${si('search',12)} ${s.l}</a>`).join('')
+    :`<span style="font-size:12px;color:var(--cream3)">${lang==='sv'?'Ange bilmodellen ovan':'Enter your car model above'}</span>`;
+  const listsHTML=lists.map(lst=>{
+    const done=lst.items.filter(i=>carChecked[lst.id+'-'+i.id]).length;
+    const pct=Math.round(done/lst.items.length*100);
+    const rows=lst.items.map(i=>{const k=lst.id+'-'+i.id;const isDone=!!carChecked[k];return`<div class="cl-item${isDone?' done':''}" onclick="toggleCl('${k}','${lst.id}')"><div class="cl-chk"></div><div class="cl-txt">${i.label}<span class="cl-sub">${i.sub}</span></div></div>`;}).join('');
+    const carIconKey = lst.id==='pre'?'car':'bag';
+    return`<div class="cl-box">
+      <div class="cl-head">${si(carIconKey,14)}<span class="cl-htitle" style="margin-left:6px">${lst.title}</span><span class="cl-pct">${done}/${lst.items.length} · ${pct}%</span></div>
+      <div class="cl-progwrap"><div class="cl-prog"><div class="cl-pfill" style="width:${pct}%"></div></div></div>
+      ${rows}
+    </div>`;
+  }).join('');
+  document.getElementById('carView').innerHTML=`
+    <span class="sec-eyebrow" style="margin-top:0">${lang==='sv'?'Bilresa':'Road trip'}</span>
+    <div class="sec-title" style="margin-bottom:14px">${lang==='sv'?'Förbered bilen':'Prepare the car'}</div>
+    <div class="car-search-box">
+      <div class="car-stitle"><span class="car-stitle-mono">${lang==='sv'?'Sök om din bil':'Search your car'}</span></div>
+      <div class="car-row">
+        <input class="car-inp" id="carInp" value="${model}" placeholder="${ph}" onkeydown="if(event.key==='Enter')saveCarModel()"/>
+        <button class="car-sbtn" onclick="saveCarModel()">${lang==='sv'?'Sök':'Search'} →</button>
+      </div>
+      <div class="car-links">${searchLinks}</div>
+    </div>
+    ${listsHTML}
+    <button class="resetbtn" onclick="resetCar()">${lang==='sv'?'Återställ checklistor':'Reset all checklists'}</button>
+    <div style="height:12px"></div>`;
+}
+function saveCarModel(){const v=(document.getElementById('carInp').value||'').trim();localStorage.setItem('pu-carmodel',v);renderCar();if(v)showToast('✓ '+v);}
+function toggleCl(key,listId){carChecked[key]=!carChecked[key];localStorage.setItem('pu-car',JSON.stringify(carChecked));renderCar();}
+function resetCar(){if(!confirm(lang==='sv'?'Återställa alla checklistor?':'Reset all checklists?'))return;carChecked={};localStorage.setItem('pu-car','{}');renderCar();showToast('✓ Reset');}
+
+// ── DOG ────────────────────────────────────────────────────────────────
+const DOG_LISTS={
+  en:[
+    {id:'dog-pack',title:'What to pack',items:[
+      {id:'food',label:'Dog food (enough for the trip)',sub:'Pack a little extra just in case'},
+      {id:'water',label:'Travel water bottle & bowl',sub:'Foldable bowl fits in any bag'},
+      {id:'treats',label:'Treats & chews',sub:'Helpful for calming during car travel'},
+      {id:'leash',label:'Leash & collar with ID tag',sub:'Tag should have your phone number'},
+      {id:'harness',label:'Car harness or crate',sub:'Required by law in some countries'},
+      {id:'blanket',label:'Favourite blanket or toy',sub:'Familiar smells reduce travel anxiety'},
+      {id:'poop-bags',label:'Poop bags (lots!)',sub:'Always more than you think you need'},
+      {id:'brush',label:'Brush & grooming basics',sub:'Especially important for long trips'},
+      {id:'shampoo-dog',label:'Dog shampoo & quick-dry towel',sub:'A towel saves the car seats'},
+      {id:'first-aid-dog',label:'Dog first aid kit',sub:'Tweezers for ticks, wound spray, bandages'},
+      {id:'tick-med',label:'Tick & flea prevention',sub:'Apply before entering wooded areas'},
+      {id:'meds',label:'Any medications',sub:'Bring extra — pharmacies abroad vary'},
+      {id:'bed',label:'Dog bed or travel mat',sub:'Own sleeping spot reduces stress'},
+    ]},
+    {id:'dog-admin',title:'Documents & health',items:[
+      {id:'passport-dog',label:'Pet passport',sub:'Required for travel within the EU'},
+      {id:'chip',label:'Microchip registered & updated',sub:'Check your contact details are current'},
+      {id:'vaccines',label:'Vaccinations up to date',sub:'Rabies required for most international travel'},
+      {id:'tapeworm',label:'Tapeworm treatment (UK entry)',sub:'Required by a vet 1–5 days before UK entry'},
+      {id:'insurance-dog',label:'Pet insurance documents',sub:'Check it covers travel abroad'},
+      {id:'vet-contact',label:'Emergency vet at destination saved',sub:'Look this up before you need it'},
+    ]},
+    {id:'dog-tips',title:'Car travel tips',items:[
+      {id:'no-front',label:'Dog secured in the back',sub:'Never loose in the front — airbag danger'},
+      {id:'windows',label:'Windows open a crack',sub:'Fresh air reduces car sickness'},
+      {id:'breaks',label:'Stop every 2 hours',sub:'Dogs need toilet breaks and stretches too'},
+      {id:'no-alone',label:'Never leave in a hot car',sub:'Even 10 minutes can be dangerous'},
+      {id:'no-feed-travel',label:'No food 2 h before travel',sub:'Reduces the chance of car sickness'},
+      {id:'familiar-smell',label:'Your old T-shirt in the crate',sub:'Familiar scent calms anxious dogs'},
+    ]},
+  ],
+  sv:[
+    {id:'dog-pack',title:'Att packa',items:[
+      {id:'food',label:'Hundmat (tillräckligt för resan)',sub:'Ta lite extra för säkerhets skull'},
+      {id:'water',label:'Resvattenflaska & skål',sub:'Hopfällbar skål passar i alla väskor'},
+      {id:'treats',label:'Godsaker & tuggben',sub:'Bra för att lugna under bilresor'},
+      {id:'leash',label:'Koppel & halsband med ID-bricka',sub:'Brickan ska ha ditt telefonnummer'},
+      {id:'harness',label:'Bilsele eller transportbur',sub:'Krävs enligt lag i vissa länder'},
+      {id:'blanket',label:'Favoritfilt eller leksak',sub:'Välbekanta lukter minskar resoro'},
+      {id:'poop-bags',label:'Bajspåsar (många!)',sub:'Alltid fler än du tror att du behöver'},
+      {id:'brush',label:'Borste & skötselartiklar',sub:'Särskilt viktigt vid långa resor'},
+      {id:'shampoo-dog',label:'Hundschampo & snabbhandduk',sub:'En handduk räddar bilsätena'},
+      {id:'first-aid-dog',label:'Hundens förbandslåda',sub:'Pincett för fästingar, sårespray, bandage'},
+      {id:'tick-med',label:'Fästing & loppremedel',sub:'Applicera innan ni går i skogsmiljö'},
+      {id:'meds',label:'Mediciner',sub:'Ta extra — apotek utomlands varierar'},
+      {id:'bed',label:'Hundbädd eller resematta',sub:'Egen sovplats minskar stress'},
+    ]},
+    {id:'dog-admin',title:'Dokument & hälsa',items:[
+      {id:'passport-dog',label:'Husdjurspass',sub:'Krävs för resor inom EU'},
+      {id:'chip',label:'Mikrochip registrerat & uppdaterat',sub:'Kontrollera att dina uppgifter stämmer'},
+      {id:'vaccines',label:'Vaccinationer à jour',sub:'Rabiesvaccin krävs för de flesta internationella resor'},
+      {id:'tapeworm',label:'Bandmaskbehandling (inresa UK)',sub:'Krävs av vet 1–5 dagar före inresa i UK'},
+      {id:'insurance-dog',label:'Djurförsäkringsdokument',sub:'Kontrollera att den gäller utomlands'},
+      {id:'vet-contact',label:'Jourveterinär på destinationen sparad',sub:'Leta upp det innan du behöver det'},
+    ]},
+    {id:'dog-tips',title:'Tips för bilresan',items:[
+      {id:'no-front',label:'Hunden säkrad bak',sub:'Aldrig lös i framsätet — krockkudde-fara'},
+      {id:'windows',label:'Fönster öppna lite',sub:'Frisk luft minskar åksjuka'},
+      {id:'breaks',label:'Rast var 2:e timme',sub:'Hundar behöver också pauser och rörelse'},
+      {id:'no-alone',label:'Lämna aldrig i varm bil',sub:'Även 10 minuter kan vara livsfarligt'},
+      {id:'no-feed-travel',label:'Ingen mat 2 h före resa',sub:'Minskar risken för åksjuka'},
+      {id:'familiar-smell',label:'Din gamla T-shirt i buren',sub:'Välbekant doft lugnar oroliga hundar'},
+    ]},
+  ],
+};
+const DOG_LINKS={
+  en:[
+    {icon:'globe',      name:'BringFido',         desc:'Dog-friendly hotels, restaurants & activities worldwide',url:'https://www.bringfido.com'},
+    {icon:'tent',       name:'DogFriendly.co.uk', desc:'Holidays & accommodation for dogs in the UK',           url:'https://www.dogfriendly.co.uk'},
+    {icon:'stethoscope',name:'VetHelpDirect',      desc:'24/7 online vet symptom checker',                       url:'https://www.vethelpdirect.com'},
+    {icon:'paw',        name:'Resa med hund',      desc:'Dog-friendly travel guide for Sweden',                  url:'https://www.resarmedhund.se'},
+    {icon:'pin',        name:'Find a vet nearby',  desc:'Emergency vets wherever you are',                       url:'https://www.google.com/maps/search/veterinary+clinic'},
+    {icon:'plane',      name:'IATA pet travel',    desc:'Official airline rules for travelling with pets',       url:'https://www.iata.org/en/programs/cargo/live-animals/pets'},
+  ],
+  sv:[
+    {icon:'globe',      name:'BringFido',           desc:'Hundvänliga hotell, restauranger & aktiviteter',        url:'https://www.bringfido.com'},
+    {icon:'tent',       name:'Resa med hund',        desc:'Hundvänliga boenden & utflykter i Sverige',             url:'https://www.resarmedhund.se'},
+    {icon:'stethoscope',name:'Djursjukvård online',  desc:'Hitta veterinär dygnet runt',                           url:'https://vethelpdirect.com'},
+    {icon:'paw',        name:'Agria Djurförsäkring', desc:'Reseförsäkring och reseguide för husdjur',              url:'https://www.agria.se'},
+    {icon:'pin',        name:'Hitta veterinär',       desc:'Närmaste veterinär var du än är',                      url:'https://www.google.com/maps/search/veterinär'},
+    {icon:'plane',      name:'IATA husdjur',          desc:'Officiella flygbolags-regler för husdjur',             url:'https://www.iata.org/en/programs/cargo/live-animals/pets'},
+  ],
+};
+let dogChecked=JSON.parse(localStorage.getItem('pu-dog')||'{}');
+function renderDog(){
+  const el=document.getElementById('dogView');
+  const lists=DOG_LISTS[lang]||DOG_LISTS.en;
+  const links=DOG_LINKS[lang]||DOG_LINKS.en;
+  const heading=lang==='sv'?'Resa med hund':'Travelling with your dog';
+  const linksHead=lang==='sv'?'Användbara länkar':'Useful links';
+  const listsHTML=lists.map(lst=>{
+    const done=lst.items.filter(i=>dogChecked[lst.id+'-'+i.id]).length;
+    const pct=Math.round(done/lst.items.length*100);
+    const rows=lst.items.map(i=>{const k=lst.id+'-'+i.id;const isDone=!!dogChecked[k];
+      return`<div class="cl-item${isDone?' done':''}" onclick="toggleDog('${k}')"><div class="cl-chk"></div><div class="cl-txt">${i.label}<span class="cl-sub">${i.sub}</span></div></div>`;}).join('');
+    const iconKey = lst.id==='pre'?'car':lst.id==='kids'?'bag':lst.id==='dog-pack'?'bag':lst.id==='dog-admin'?'clipboard':lst.id==='dog-tips'?'car':'other';
+    return`<div class="cl-box"><div class="cl-head">${si(iconKey,14)}<span class="cl-htitle" style="margin-left:6px">${lst.title}</span><span class="cl-pct">${done}/${lst.items.length} · ${pct}%</span></div><div class="cl-progwrap"><div class="cl-prog"><div class="cl-pfill" style="width:${pct}%"></div></div></div>${rows}</div>`;
+  }).join('');
+  const linksHTML=`<div class="link-grid" style="margin-bottom:14px">${links.map(lk=>`<a class="lcard" href="${lk.url}" target="_blank" rel="noopener"><span class="lc-arrow">↗</span><div class="lc-icon">${si(lk.icon,20)}</div><div class="lc-name">${lk.name}</div><div class="lc-desc">${lk.desc}</div></a>`).join('')}</div>`;
+  el.innerHTML=`<span class="sec-eyebrow" style="margin-top:0">Road trip companion</span><div class="sec-title">🐶 ${heading}</div>${listsHTML}<span class="sec-eyebrow">${linksHead}</span>${linksHTML}<button class="resetbtn" onclick="resetDog()">${lang==='sv'?'Återställ hundchecklistorna':'Reset dog checklists'}</button><div style="height:12px"></div>`;
+}
+function toggleDog(key){dogChecked[key]=!dogChecked[key];localStorage.setItem('pu-dog',JSON.stringify(dogChecked));renderDog();}
+function resetDog(){if(!confirm(lang==='sv'?'Återställa hundchecklistorna?':'Reset dog checklists?'))return;dogChecked={};localStorage.setItem('pu-dog','{}');renderDog();showToast('✓ Reset');}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────
+async function toggleItem(tid,iid){
+  if(!myProfile){showProfileModal();return;}
+  const arr=userChecked[tid]||(userChecked[tid]=[]);
+  const idx=arr.indexOf(iid);if(idx>=0)arr.splice(idx,1);else arr.push(iid);
+  userChecked['_u'+myProfile.id+'_'+tid]=arr;
+  const el=document.querySelector(`[data-id="${iid}"]`);
+  if(el)el.classList.toggle('done',arr.includes(iid));
+  updProg(tid);syncDot('busy');
+  await sSet('checked-'+tid+'-'+myProfile.id,arr);syncDot('ok');
+}
+async function chDur(tid,d){
+  const st=tripStates[tid]||defState(tid);
+  st.duration=Math.max(1,Math.min(60,(st.duration||TRIPS[tid].defaultDuration)+d));
+  tripStates[tid]=st;syncDot('busy');await sSet('trip-'+tid,st);syncDot('ok');renderTrip(tid);
+}
+async function addItem(tid){
+  const n=(document.getElementById('newN').value||'').trim();if(!n){document.getElementById('newN').focus();return;}
+  const st=tripStates[tid]||defState(tid);st.customItems=st.customItems||[];
+  const id='c'+Date.now();
+  st.customItems.push({id,name:n,catId:document.getElementById('newC').value,permanent:document.getElementById('newP').checked});
+  tripStates[tid]=st;syncDot('busy');await sSet('trip-'+tid,st);syncDot('ok');
+  document.getElementById('newN').value='';renderTrip(tid);showToast('✓ '+n);
+}
+async function delItem(tid,iid){
+  const st=tripStates[tid];if(!st)return;
+  st.customItems=(st.customItems||[]).filter(ci=>ci.id!==iid);
+  userChecked[tid]=(userChecked[tid]||[]).filter(id=>id!==iid);
+  syncDot('busy');await sSet('trip-'+tid,st);
+  if(myProfile)await sSet('checked-'+tid+'-'+myProfile.id,userChecked[tid]);
+  syncDot('ok');renderTrip(tid);
+}
+async function doReset(tid){
+  if(!myProfile||!confirm(t('resetConfirm')))return;
+  userChecked[tid]=[];userChecked['_u'+myProfile.id+'_'+tid]=[];
+  const st=tripStates[tid];if(st)st.customItems=(st.customItems||[]).filter(ci=>ci.permanent);
+  syncDot('busy');await sSet('checked-'+tid+'-'+myProfile.id,[]);if(st)await sSet('trip-'+tid,st);syncDot('ok');
+  renderTrip(tid);showToast('✓ Reset');
+}
+function togCat(tid,cid){const el=document.getElementById(`cat-${tid}-${cid}`);if(el)el.classList.toggle('coll');}
+
+// ── NAV ───────────────────────────────────────────────────────────────
+function switchTab(tab){
+  activeTab=tab;
+  document.getElementById('homeView').style.display='none';
+  document.getElementById('linksView').classList.remove('on');
+  document.getElementById('carView').classList.remove('on');
+  document.getElementById('dogView').classList.remove('on');
+  document.getElementById('tripView').style.display='none';
+  document.getElementById('tripView').classList.remove('on');
+  document.getElementById('backBtn').style.display='none';
+  document.getElementById('topnav').style.display='flex';
+  currentTrip=null;stopPoll();
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('on',b.id==='tab-'+tab));
+  if(tab==='trips'){document.getElementById('homeView').style.display='block';renderHome();}
+  else if(tab==='links'){document.getElementById('linksView').classList.add('on');renderLinks();}
+  else if(tab==='car'){document.getElementById('carView').classList.add('on');renderCar();}
+  else if(tab==='dog'){document.getElementById('dogView').classList.add('on');renderDog();}
+  window.scrollTo(0,0);
+}
+function openTrip(id){
+  currentTrip=id;
+  document.getElementById('homeView').style.display='none';
+  document.getElementById('linksView').classList.remove('on');
+  document.getElementById('carView').classList.remove('on');
+  document.getElementById('dogView').classList.remove('on');
+  document.getElementById('tripView').style.display='block';
+  document.getElementById('tripView').classList.add('on');
+  document.getElementById('backBtn').style.display='inline-flex';
+  document.getElementById('topnav').style.display='none';
+  renderTrip(id);startPoll(id);window.scrollTo(0,0);
+}
+function goHome(){
+  currentTrip=null;stopPoll();
+  document.getElementById('tripView').style.display='none';
+  document.getElementById('tripView').classList.remove('on');
+  document.getElementById('backBtn').style.display='none';
+  document.getElementById('topnav').style.display='flex';
+  switchTab(activeTab);
+}
+function toggleLang(){
+  lang=lang==='en'?'sv':'en';localStorage.setItem('pu-lang',lang);
+  document.getElementById('langBtn').textContent=lang==='en'?'SV':'EN';
+  document.getElementById('tl-trips').textContent=lang==='sv'?'Resor':'Trips';
+  document.getElementById('tl-links').textContent=lang==='sv'?'Länkar':'Links';
+  document.getElementById('tl-car').textContent=lang==='sv'?'Bil':'Car';
+  document.getElementById('tl-dog').textContent=lang==='sv'?'Hund':'Dog';
+  document.getElementById('tl-newuser').textContent=lang==='sv'?'Ny användare':'New user';
+  if(currentTrip)renderTrip(currentTrip);else switchTab(activeTab);
+}
+document.getElementById('logoBtn').onclick=goHome;
+
+// ── POLLING ───────────────────────────────────────────────────────────
+function startPoll(tid){
+  stopPoll();
+  pollTimer=setInterval(async()=>{
+    try{
+      const[fSt,fPr]=await Promise.all([sGet('trip-'+tid),sGet('profiles')]);
+      let ch=false;
+      if(fSt&&JSON.stringify(fSt)!==JSON.stringify(tripStates[tid])){tripStates[tid]=fSt;ch=true;}
+      if(fPr&&JSON.stringify(fPr)!==JSON.stringify(allProfiles)){allProfiles=fPr;ch=true;}
+      for(const pr of allProfiles){
+        if(myProfile&&pr.id===myProfile.id)continue;
+        const fresh=await sGet('checked-'+tid+'-'+pr.id);
+        const ck='_u'+pr.id+'_'+tid;
+        if(fresh&&JSON.stringify(fresh)!==JSON.stringify(userChecked[ck])){userChecked[ck]=fresh;ch=true;}
+      }
+      if(ch&&currentTrip===tid)renderTrip(tid);
+    }catch(e){console.warn('[pU] poll',e.message);}
+  },4000);
+}
+function stopPoll(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+async function init(){
+  document.getElementById('langBtn').textContent=lang==='en'?'SV':'EN';
+  document.getElementById('tl-trips').textContent=lang==='sv'?'Resor':'Trips';
+  document.getElementById('tl-links').textContent=lang==='sv'?'Länkar':'Links';
+  document.getElementById('tl-car').textContent=lang==='sv'?'Bil':'Car';
+  document.getElementById('tl-dog').textContent=lang==='sv'?'Hund':'Dog';
+  document.getElementById('tl-newuser').textContent=lang==='sv'?'Ny användare':'New user';
+  syncDot('busy');
+  const saved=localStorage.getItem('pu-me');
+  if(saved)try{myProfile=JSON.parse(saved);myProfile.color=colorFromName(myProfile.name);}catch(e){}
+  const[shPr,...trs]=await Promise.all([sGet('profiles'),...IDS.map(id=>sGet('trip-'+id))]);
+  allProfiles=shPr||[];
+  IDS.forEach((id,i)=>{tripStates[id]=trs[i]||defState(id);if(!tripStates[id].customItems)tripStates[id].customItems=[];});
+  if(myProfile){
+    const idx=allProfiles.findIndex(p=>p.id===myProfile.id);
+    if(idx>=0)allProfiles[idx]={...myProfile};else allProfiles.push({...myProfile});
+    await sSet('profiles',allProfiles);
+    for(const id of IDS){const ch=await sGet('checked-'+id+'-'+myProfile.id);userChecked[id]=ch||[];userChecked['_u'+myProfile.id+'_'+id]=ch||[];}
+    for(const pr of allProfiles){if(pr.id===myProfile.id)continue;for(const id of IDS){const ch=await sGet('checked-'+id+'-'+pr.id);userChecked['_u'+pr.id+'_'+id]=ch||[];}}
+  }
+  syncDot('ok');
+  document.getElementById('loading').style.display='none';
+  updateProfBtn();
+  document.getElementById('homeView').style.display='block';
+  if(!myProfile){showProfileModal(false);}
+  else{switchTab('trips');}
+}
+init();
+</script>
+</body>
+</html>
