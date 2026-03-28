@@ -126,6 +126,26 @@ const QRULES={fixed:()=>1,daily:d=>d,halfday:d=>Math.max(1,Math.ceil(d/2)),less:
 function calcQ(rule,d){return(QRULES[rule]||QRULES.fixed)(d);}
 function resolveQ(q,dur){if(typeof q==='number')return{qty:q,rule:'fixed'};const rule=QRULES[q]?q:'fixed';return{qty:calcQ(rule,dur),rule};}
 
+// ── PER-USER PERSONAL LISTS (localStorage, keyed by userId+tripId) ────
+// Separate from shared trip_settings — each user owns their own items & hidden list
+
+function _uid() { return myProfile?.id || 'anon'; }
+
+function getCustomItems(tid) {
+  const raw = localStorage.getItem(`pu-ci-${_uid()}-${tid}`);
+  return raw ? JSON.parse(raw) : [];
+}
+function setCustomItems(tid, items) {
+  localStorage.setItem(`pu-ci-${_uid()}-${tid}`, JSON.stringify(items));
+}
+function getHiddenItems(tid) {
+  const raw = localStorage.getItem(`pu-hi-${_uid()}-${tid}`);
+  return raw ? new Set(JSON.parse(raw)) : new Set();
+}
+function setHiddenItems(tid, set) {
+  localStorage.setItem(`pu-hi-${_uid()}-${tid}`, JSON.stringify([...set]));
+}
+
 // ── VAN SVGs (white/light style on dark) ──────────────────────────────
 
 // ── DATA GLOBALS (populated by loadData) ──────────────────────
@@ -175,12 +195,14 @@ function showToast(msg, ms=2100) {
 function allItemsList(id, st) {
   const tr=TRIPS[id], d=st.duration, arr=[];
   if(!tr) return arr;
+  const hidden = getHiddenItems(id);
   for(const c of tr.cats) for(const i of c.items) {
+    if(hidden.has(i.id)) continue;
     const {qty,rule}=resolveQ(i.q,d);
     arr.push({id:i.id,catId:c.id,qty,rule});
   }
-  for(const ci of (st.customItems||[]))
-    arr.push({id:ci.id,catId:ci.catId,qty:ci.qty||1,rule:'fixed',custom:true,name:ci.name,permanent:ci.permanent});
+  for(const ci of getCustomItems(id))
+    arr.push({id:ci.id,catId:ci.catId,qty:ci.qty||1,rule:'fixed',custom:true,name:ci.name});
   return arr;
 }
 function calcProg(tid, st, chk) {
@@ -414,7 +436,8 @@ function renderTrip(tripId){
   }
   let catsHTML='';
   for(const cat of trip.cats){
-    const cH=cat.items.map(item=>{
+    const hidden=getHiddenItems(tripId);
+    const cH=cat.items.filter(item=>!hidden.has(item.id)).map(item=>{
       const{qty,rule}=resolveQ(item.q,dur);
       const done=myChk.has(item.id);
       const isD=rule!=='fixed';
@@ -422,16 +445,17 @@ function renderTrip(tripId){
       if(isD){const rt=rule==='daily'?t('perDay'):rule==='halfday'?'1/2d':rule==='sweaters'?'1/3d':'~';badge=`<span class="iqty daily">×${qty} <span class="iq-rule">(${rt})</span></span>`;}
       else if(typeof item.q==='number'&&item.q>1){badge=`<span class="iqty fixed">×${qty}</span>`;}
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(item.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}" title="${pr.name}"></div>`).join('');
-      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div><div class="itxt">${ti(item.id)}</div>${badge}${dots?`<div class="item-dots">${dots}</div>`:''}</div>`;
+      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div><div class="itxt">${ti(item.id)}</div>${badge}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
     }).join('');
-    const custH=(st.customItems||[]).filter(ci=>ci.catId===cat.id).map(ci=>{
+    const custH=getCustomItems(tripId).filter(ci=>ci.catId===cat.id).map(ci=>{
       const done=myChk.has(ci.id);
-      const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
       const qtyBadge=(ci.qty&&ci.qty>1)?`<span class="iqty fixed">×${ci.qty}</span>`:'';
-      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name}${ci.permanent?'':' ✦'}</div>${qtyBadge}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')">×</button></div>`;
+      const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
+      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span></div>${qtyBadge}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
     }).join('');
-    const total=cat.items.length+(st.customItems||[]).filter(ci=>ci.catId===cat.id).length;
-    const done2=cat.items.filter(i=>myChk.has(i.id)).length+(st.customItems||[]).filter(ci=>ci.catId===cat.id&&myChk.has(ci.id)).length;
+    const allVisible=allItemsList(tripId,st).filter(i=>i.catId===cat.id);
+    const total=allVisible.length;
+    const done2=allVisible.filter(i=>myChk.has(i.id)).length;
     catsHTML+=`<div class="cats" id="cat-${tripId}-${cat.id}">
       <div class="cath" onclick="togCat('${tripId}','${cat.id}')">
         <span class="caticon">${si(cat.icon)}</span><span class="catname">${tc(cat.id)}</span>
@@ -474,9 +498,6 @@ function renderTrip(tripId){
         <input class="ainput" id="newN" placeholder="${t('addName')}" maxlength="60" onkeydown="if(event.key==='Enter')addItem('${tripId}')"/>
         <input class="ainput aqty" id="newQ" type="number" min="1" max="99" value="1" placeholder="${t('addQty')}" style="width:62px;flex-shrink:0;text-align:center"/>
         <select class="aselect" id="newC">${catOpts}</select>
-      </div>
-      <div class="addrow">
-        <label class="permrow"><input type="checkbox" id="newP" checked/>${t('addPerm')}</label>
         <button class="abtn" onclick="addItem('${tripId}')">${t('addBtn')}</button>
       </div>
     </div>
@@ -589,29 +610,52 @@ async function chDur(tid,d){
   tripStates[tid]=st;syncDot('busy');await sSet('trip-'+tid,st);syncDot('ok');renderTrip(tid);
 }
 async function addItem(tid){
-  const n=(document.getElementById('newN').value||'').trim();if(!n){document.getElementById('newN').focus();return;}
+  const n=(document.getElementById('newN').value||'').trim();
+  if(!n){document.getElementById('newN').focus();return;}
+  if(!myProfile){showToast('Sign in first');return;}
   const qty=Math.max(1,Math.min(99,parseInt(document.getElementById('newQ')?.value)||1));
-  const st=tripStates[tid]||defState(tid);st.customItems=st.customItems||[];
-  const id='c'+Date.now();
-  st.customItems.push({id,name:n,qty,catId:document.getElementById('newC').value,permanent:document.getElementById('newP').checked});
-  tripStates[tid]=st;syncDot('busy');await sSet('trip-'+tid,st);syncDot('ok');
+  const catId=document.getElementById('newC').value;
+  const id='c'+Date.now()+Math.random().toString(36).slice(2,5);
+  const items=getCustomItems(tid);
+  items.push({id,name:n,qty,catId});
+  setCustomItems(tid,items);
   document.getElementById('newN').value='';
   const qEl=document.getElementById('newQ');if(qEl)qEl.value='1';
   renderTrip(tid);showToast('✓ '+n);
 }
-async function delItem(tid,iid){
-  const st=tripStates[tid];if(!st)return;
-  st.customItems=(st.customItems||[]).filter(ci=>ci.id!==iid);
+
+function delItem(tid,iid){
+  // Remove from custom items
+  const items=getCustomItems(tid).filter(ci=>ci.id!==iid);
+  setCustomItems(tid,items);
+  // Also uncheck if checked
   userChecked[tid]=(userChecked[tid]||[]).filter(id=>id!==iid);
-  syncDot('busy');await sSet('trip-'+tid,st);
-  if(myProfile)await sSet('checked-'+tid+'-'+myProfile.id,userChecked[tid]);
-  syncDot('ok');renderTrip(tid);
+  if(myProfile) sSet('checked-'+tid+'-'+myProfile.id, userChecked[tid]);
+  renderTrip(tid);
 }
+
+function hideItem(tid,iid){
+  // Hide a catalogue item from this user's list
+  const hidden=getHiddenItems(tid);
+  hidden.add(iid);
+  setHiddenItems(tid,hidden);
+  // Uncheck it too
+  userChecked[tid]=(userChecked[tid]||[]).filter(id=>id!==iid);
+  if(myProfile) sSet('checked-'+tid+'-'+myProfile.id, userChecked[tid]);
+  renderTrip(tid);
+}
+
 async function doReset(tid){
-  if(!myProfile||!confirm(t('resetConfirm')))return;
-  userChecked[tid]=[];userChecked['_u'+myProfile.id+'_'+tid]=[];
-  const st=tripStates[tid];if(st)st.customItems=(st.customItems||[]).filter(ci=>ci.permanent);
-  syncDot('busy');await sSet('checked-'+tid+'-'+myProfile.id,[]);if(st)await sSet('trip-'+tid,st);syncDot('ok');
+  if(!myProfile) return;
+  const msg = lang==='sv'
+    ? 'Återställa bockar? (Dina egna saker och dolda objekt behålls)'
+    : 'Reset checked items? (Your custom items and hidden items are kept)';
+  if(!confirm(msg)) return;
+  userChecked[tid]=[];
+  userChecked['_u'+myProfile.id+'_'+tid]=[];
+  syncDot('busy');
+  await sSet('checked-'+tid+'-'+myProfile.id,[]);
+  syncDot('ok');
   renderTrip(tid);showToast('✓ Reset');
 }
 function togCat(tid,cid){const el=document.getElementById(`cat-${tid}-${cid}`);if(el)el.classList.toggle('coll');}
