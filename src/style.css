@@ -122,7 +122,10 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .home-hero h2{font-family:var(--display);font-size:26px;font-weight:700;color:var(--cream);line-height:1.15;margin-bottom:4px}
 .home-hero p{font-size:13px;color:var(--cream3)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:540px){.grid{grid-template-columns:1fr}}
+@media(max-width:540px){
+  .grid{grid-template-columns:1fr}
+  .trip-top-row{flex-direction:column;padding:0 14px}
+}
 
 /* ── TRIP CARD ── */
 .tcard{border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh-card);transition:transform .22s cubic-bezier(.4,0,.2,1),box-shadow .22s;position:relative;-webkit-tap-highlight-color:transparent;border:1px solid var(--rim)}
@@ -155,6 +158,8 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 
 /* CARDS inside trip */
 .dcard{margin:0 14px 12px;background:var(--surface);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh-sm);border:1px solid var(--rim)}
+.trip-top-row{display:flex;gap:12px;padding:0 14px;margin-bottom:12px;align-items:stretch}
+.trip-top-card{flex:1;margin:0;min-width:0}
 .dur-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .dur-label{font-size:13px;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:6px}
 .dur-ctrl{display:flex;align-items:center;gap:12px}

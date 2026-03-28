@@ -470,27 +470,29 @@ function renderTrip(tripId){
       <h1>${tNames[tripId]}</h1>
       <p class="tsub">${tSubs[tripId]}</p>
     </div>
-    <div class="dcard">
-      <div class="dur-row">
-        <span class="dur-label">🗓 ${t('duration')}</span>
-        <div class="dur-ctrl">
-          <button class="durbtn" onclick="chDur('${tripId}',-1)">−</button>
-          <span class="durval" id="durVal">${dur}</span>
-          <button class="durbtn" onclick="chDur('${tripId}',1)">+</button>
-          <span style="font-size:12px;color:var(--cream3)">${t('days')}</span>
+    <div class="trip-top-row">
+      <div class="dcard trip-top-card">
+        <div class="dur-row">
+          <span class="dur-label">${t('duration')}</span>
+          <div class="dur-ctrl">
+            <button class="durbtn" onclick="chDur('${tripId}',-1)">−</button>
+            <span class="durval" id="durVal">${dur}</span>
+            <button class="durbtn" onclick="chDur('${tripId}',1)">+</button>
+            <span style="font-size:12px;color:var(--cream3)">${t('days')}</span>
+          </div>
         </div>
+        ${pillsHTML?`<div class="dur-pills">${pillsHTML}</div>`:''}
       </div>
-      ${pillsHTML?`<div class="dur-pills">${pillsHTML}</div>`:''}
-    </div>
-    <div class="dcard">
-      <div class="prog-hdr">
-        <div><div class="prog-label">${t('progress')}</div><div class="prog-pct" id="progPct" style="color:${myCol}">${pct}%</div></div>
-        <div style="text-align:right"><div class="prog-label">&nbsp;</div><div style="font-family:var(--mono);font-size:12px;color:var(--cream3);margin-top:6px">${p.done} ${t('of')} ${p.total}</div></div>
+      <div class="dcard trip-top-card">
+        <div class="prog-hdr">
+          <div><div class="prog-label">${t('progress')}</div><div class="prog-pct" id="progPct" style="color:${myCol}">${pct}%</div></div>
+          <div style="text-align:right;margin-top:4px"><div style="font-family:var(--mono);font-size:12px;color:var(--cream3)">${p.done} ${t('of')} ${p.total}</div></div>
+        </div>
+        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:${pct}%;background:${myCol}"></div></div>
+        <div class="prog-sub" id="progSub">${p.done} ${t('of')} ${p.total} ${t('packed')}</div>
       </div>
-      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:${pct}%;background:${myCol}"></div></div>
-      <div class="prog-sub" id="progSub">${p.done} ${t('of')} ${p.total} ${t('packed')}</div>
+      ${allProfiles.length>1?`<div class="dcard trip-top-card"><div class="uc-title">${t('teamProg')}</div>${teamHTML}</div>`:''}
     </div>
-    ${allProfiles.length>1?`<div class="dcard"><div class="uc-title">${t('teamProg')}</div>${teamHTML}</div>`:''}
     ${catsHTML}
     <div class="addsec">
       <div class="addtitle">+ ${t('addItem')}</div>
