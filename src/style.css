@@ -299,10 +299,13 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--rim2);border-radius:2px}
 
-/* ── BAG TYPE BADGES ── */
-.bag-tag{font-size:11px;flex-shrink:0;opacity:.75;margin-right:2px;line-height:1}
-.bag-tag.carry{color:#3a80c0}
-.bag-tag.chkd{color:#c87808}
+/* ── BAG TOGGLE BUTTONS ── */
+.bag-btns{display:inline-flex;gap:2px;flex-shrink:0;margin-right:4px}
+.bag-btn{background:none;border:1px solid var(--rim2);border-radius:4px;cursor:pointer;font-size:12px;padding:1px 4px;line-height:1;color:var(--cream3);transition:all .15s;opacity:.45}
+.bag-btn:hover{opacity:1;border-color:var(--rim2);background:var(--surface2)}
+.bag-btn.bag-btn-on{opacity:1;border-color:transparent;background:transparent}
+.bag-btn.bag-btn-on:first-child{color:#3a80c0}
+.bag-btn.bag-btn-on:last-child{color:#c87808}
 
 /* ── PER-ITEM QTY INPUT ── */
 .item-qty{width:36px;padding:2px 4px;border:1px solid var(--rim2);border-radius:4px;font-size:11px;font-family:var(--mono);background:var(--surface2);color:var(--cream);text-align:center;margin-left:4px;flex-shrink:0;-moz-appearance:textfield;transition:border .15s}

@@ -187,6 +187,23 @@ function setItemQty(tid, itemId, qty) {
   setQtyOverrides(tid, map);
 }
 
+// ── PER-ITEM BAG ASSIGNMENT (localStorage) ────────────────────────────
+// Stores user's chosen bag for each item: {itemId: 'carry_on'|'checked'}
+// Falls back to the default from trips.json if not overridden
+function getBagAssignments(tid) {
+  const raw = localStorage.getItem(`pu-bag-${_uid()}-${tid}`);
+  return raw ? JSON.parse(raw) : {};
+}
+function setBagAssignments(tid, map) {
+  localStorage.setItem(`pu-bag-${_uid()}-${tid}`, JSON.stringify(map));
+}
+function setItemBag(tid, itemId, bagType) {
+  const map = getBagAssignments(tid);
+  map[itemId] = bagType;
+  setBagAssignments(tid, map);
+  renderTrip(tid);
+}
+
 
 // ── VAN SVGs (white/light style on dark) ──────────────────────────────
 
@@ -627,6 +644,7 @@ function renderTrip(tripId){
     </div>`;
   }
   const qtyOverrides = getQtyOverrides(tripId);
+  const bagAssignments = getBagAssignments(tripId);
   let catsHTML='';
   for(const cat of trip.cats){
     const hidden=getHiddenItems(tripId);
@@ -638,18 +656,27 @@ function renderTrip(tripId){
       if(isD){const rt=rule==='daily'?t('perDay'):rule==='halfday'?'1/2d':rule==='sweaters'?'1/3d':'~';badge=`<span class="iqty daily">×${qty} <span class="iq-rule">(${rt})</span></span>`;}
       else if(typeof item.q==='number'&&item.q>1){badge=`<span class="iqty fixed">×${qty}</span>`;}
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(item.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}" title="${pr.name}"></div>`).join('');
-      const bagTag = item.bag==='carry_on' ? `<span class="bag-tag carry">✈</span>` : item.bag==='checked' ? `<span class="bag-tag chkd">🧳</span>` : '';
+      const effectiveBag = bagAssignments[item.id] || item.bag || 'checked';
+      const bagBtns = `<span class="bag-btns" onclick="event.stopPropagation()">
+        <button class="bag-btn${effectiveBag==='carry_on'?' bag-btn-on':''}" onclick="setItemBag('${tripId}','${item.id}','carry_on')" title="Carry-on">✈</button>
+        <button class="bag-btn${effectiveBag==='checked'?' bag-btn-on':''}" onclick="setItemBag('${tripId}','${item.id}','checked')" title="Checked">🧳</button>
+      </span>`;
       const qtyOvr = qtyOverrides[item.id];
       const displayQty = qtyOvr !== undefined ? qtyOvr : qty;
       const qtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${displayQty}" title="Quantity needed" onchange="setItemQty('${tripId}','${item.id}',+this.value||0);" onclick="event.stopPropagation()" tabindex="-1"/>`;
-      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagTag}<div class="itxt">${ti(item.id)}</div>${badge}${qtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
+      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagBtns}<div class="itxt">${ti(item.id)}</div>${badge}${qtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
     }).join('');
     const custH=getCustomItems(tripId).filter(ci=>ci.catId===cat.id).map(ci=>{
       const done=myChk.has(ci.id);
       const qtyBadge=(ci.qty&&ci.qty>1)?`<span class="iqty fixed">×${ci.qty}</span>`:'';
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
+      const ciEffBag = bagAssignments[ci.id] || 'checked';
+      const ciBagBtns = `<span class="bag-btns" onclick="event.stopPropagation()">
+        <button class="bag-btn${ciEffBag==='carry_on'?' bag-btn-on':''}" onclick="setItemBag('${tripId}','${ci.id}','carry_on')" title="Carry-on">✈</button>
+        <button class="bag-btn${ciEffBag==='checked'?' bag-btn-on':''}" onclick="setItemBag('${tripId}','${ci.id}','checked')" title="Checked">🧳</button>
+      </span>`;
       const ciQtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${ci.qty||1}" title="Quantity" onclick="event.stopPropagation()" onchange="updateCustomItemQty('${tripId}','${ci.id}',+this.value||1)" tabindex="-1"/>`;
-      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span></div>${ciQtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
+      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div>${ciBagBtns}<div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span></div>${ciQtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
     }).join('');
     const allVisible=allItemsList(tripId,st).filter(i=>i.catId===cat.id);
     const total=allVisible.length;
