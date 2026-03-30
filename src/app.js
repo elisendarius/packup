@@ -581,17 +581,14 @@ function renderHome(){
         <div class="cvan">${SVGS[tr.id]}</div>
       </div>
       <div class="cbot">
-        <div class="cname">${tr.name}</div>
-        <div class="csub">${tr.sub}</div>
-        <div class="cdur"><span class="cdur-dot"></span>${st.duration} ${t('days')}</div>
-        <div class="cprog-wrap">
-          <div class="cpct-row">
-            <span class="cpct-num" style="color:${acc}">${pct}%</span>
-            <span class="cpct-sub">${p.done}/${p.total}</span>
+        <div class="cbot-inner">
+          <div class="cbot-text">
+            <div class="cname">${tr.name}</div>
+            <div class="csub">${tr.sub}</div>
+            <div class="cdur"><span class="cdur-dot"></span>${st.duration} ${t('days')}</div>
           </div>
-          <div class="cprog"><div class="cpfill" style="width:${pct}%;background:${acc}"></div></div>
+          <div class="cgauges">${gauges||halfGauge(acc,pct,'')}</div>
         </div>
-        ${gauges?`<div class="cgauges">${gauges}</div>`:''}
       </div>`;
     grid.appendChild(card);
   }
