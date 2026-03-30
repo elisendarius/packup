@@ -723,5 +723,352 @@
         ]
       }
     ]
+  },
+  "spring": {
+    "theme": "spring",
+    "defaultDuration": 5,
+    "cats": [
+      {
+        "id": "clothing",
+        "icon": "clothing",
+        "items": [
+          {
+            "id": "light-jacket",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "rain-jacket",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "tshirts",
+            "q": "less",
+            "bag": "checked"
+          },
+          {
+            "id": "sweaters",
+            "q": 2,
+            "bag": "checked"
+          },
+          {
+            "id": "jeans",
+            "q": 2,
+            "bag": "checked"
+          },
+          {
+            "id": "underwear",
+            "q": "daily",
+            "bag": "checked"
+          },
+          {
+            "id": "socks",
+            "q": "daily",
+            "bag": "checked"
+          },
+          {
+            "id": "sneakers",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "casual-shoes",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "scarf",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "beanie",
+            "q": "fixed",
+            "bag": "checked"
+          }
+        ]
+      },
+      {
+        "id": "accessories",
+        "icon": "accessories",
+        "items": [
+          {
+            "id": "sunglasses",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "umbrella",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "daypack",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "water-bottle",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      },
+      {
+        "id": "toiletries",
+        "icon": "toiletries",
+        "items": [
+          {
+            "id": "deodorant",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "shampoo",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "moisturizer",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "lip-balm",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "icon": "documents",
+        "items": [
+          {
+            "id": "passport",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "insurance",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "adapter",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "icon": "other",
+        "items": [
+          {
+            "id": "charger",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "power-bank",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "camera",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "book",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "snacks",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      }
+    ]
+  },
+  "autumn": {
+    "theme": "autumn",
+    "defaultDuration": 6,
+    "cats": [
+      {
+        "id": "clothing",
+        "icon": "clothing",
+        "items": [
+          {
+            "id": "rain-jacket",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "sweaters",
+            "q": "sweaters",
+            "bag": "checked"
+          },
+          {
+            "id": "tshirts",
+            "q": "less",
+            "bag": "checked"
+          },
+          {
+            "id": "jeans",
+            "q": 2,
+            "bag": "checked"
+          },
+          {
+            "id": "casual-pants",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "underwear",
+            "q": "daily",
+            "bag": "checked"
+          },
+          {
+            "id": "socks",
+            "q": "daily",
+            "bag": "checked"
+          },
+          {
+            "id": "ankle-boots",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "sneakers",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "scarf",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "beanie",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "nice-outfit",
+            "q": "fixed",
+            "bag": "checked"
+          }
+        ]
+      },
+      {
+        "id": "accessories",
+        "icon": "accessories",
+        "items": [
+          {
+            "id": "umbrella",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "sunglasses",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "daypack",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "water-bottle",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      },
+      {
+        "id": "toiletries",
+        "icon": "toiletries",
+        "items": [
+          {
+            "id": "deodorant",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "shampoo",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "moisturizer",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "lip-balm",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "icon": "documents",
+        "items": [
+          {
+            "id": "passport",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "insurance",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "adapter",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "icon": "other",
+        "items": [
+          {
+            "id": "charger",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "camera",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "guidebook",
+            "q": "fixed",
+            "bag": "carry_on"
+          },
+          {
+            "id": "book",
+            "q": "fixed",
+            "bag": "checked"
+          },
+          {
+            "id": "snacks",
+            "q": "fixed",
+            "bag": "carry_on"
+          }
+        ]
+      }
+    ]
   }
 }

@@ -72,8 +72,8 @@ const T={
     reset:'Reset my packing',resetConfirm:'Reset your checked items?',
     pTitle:"Who's packing?",pSub:"Type your name",pEdit:'Edit profile',pSave:'Let\'s go →',pPh:'Your name…',
     you:'you',perDay:'per day',
-    tripSki:'Ski Trip — Sweden',tripSummer:'Summer — Catalunya',tripWinter:'Winter — Catalunya',tripWeekend:'Weekend Getaway',
-    subSki:'Hit the slopes up north',subSummer:'Sun, sea and sangria',subWinter:'Barcelona & winter charm',subWeekend:'Pack light, enjoy more',
+    tripSki:'Ski Trip',tripSummer:'Summer Holiday',tripWinter:'Winter City',tripWeekend:'Weekend Getaway',tripSpring:'Spring Break',tripAutumn:'Autumn Trip',
+    subSki:'Hit the slopes up north',subSummer:'Sun, sea and sangria',subWinter:'City breaks & culture',subWeekend:'Pack light, enjoy more',subSpring:'Fresh air, layered style',subAutumn:'Golden leaves, cosy layers',
     cats:{clothing:'Clothing',equipment:'Equipment',accessories:'Accessories',toiletries:'Toiletries',documents:'Documents',other:'Other',beach:'Beach & Sun'},
     items:{
       'ski-jacket':'Ski jacket','ski-pants':'Ski pants','thermal-top':'Thermal top','thermal-bot':'Thermal bottom','fleece':'Fleece mid-layer',
@@ -103,8 +103,8 @@ const T={
     reset:'Återställ min packning',resetConfirm:'Återställa dina bockade?',
     pTitle:'Vem packar?',pSub:'Skriv ditt namn',pEdit:'Redigera profil',pSave:'Kör! →',pPh:'Ditt namn…',
     you:'du',perDay:'per dag',
-    tripSki:'Skidresa — Sverige',tripSummer:'Sommar — Katalonien',tripWinter:'Vinter — Katalonien',tripWeekend:'Helgresa',
-    subSki:'Till pisterna upp i norr',subSummer:'Sol, hav och sangria',subWinter:'Barcelona & vintermagi',subWeekend:'Packa lätt, njut mer',
+    tripSki:'Skidresa',tripSummer:'Sommarsemester',tripWinter:'Vinterbad',tripWeekend:'Helgresa',tripSpring:'Vårresa',tripAutumn:'Höstresa',
+    subSki:'Till pisterna upp i norr',subSummer:'Sol, hav och sangria',subWinter:'Stadssemester & kultur',subWeekend:'Packa lätt, njut mer',subSpring:'Frisk luft, lagrat mode',subAutumn:'Gyllene löv, mysiga lager',
     cats:{clothing:'Kläder',equipment:'Utrustning',accessories:'Tillbehör',toiletries:'Toalettartiklar',documents:'Dokument',other:'Övrigt',beach:'Strand & Sol'},
     items:{
       'ski-jacket':'Skidjacka','ski-pants':'Skidbyxor','thermal-top':'Termisk topp','thermal-bot':'Termisk underdel','fleece':'Fleecetröja',
@@ -214,7 +214,7 @@ async function loadData() {
 }
 
 // ── APP STATE ─────────────────────────────────────────────────
-const IDS = ['ski','summer','winter','weekend'];
+const IDS = ['ski','summer','winter','weekend','spring','autumn'];
 let lang         = localStorage.getItem('pu-lang') || 'en';
 let currentTrip  = null;   // template id (ski/summer/winter/weekend)
 let currentListId = null;  // saved list id, or null for base template
@@ -556,7 +556,7 @@ function renderHome(){
   document.getElementById('homeTitle').textContent=t('choose');
   document.getElementById('langBtn').textContent=lang==='en'?'SV':'EN';
   const grid=document.getElementById('tripsGrid');grid.innerHTML='';
-  const list=[{id:'ski',name:t('tripSki'),sub:t('subSki')},{id:'summer',name:t('tripSummer'),sub:t('subSummer')},{id:'winter',name:t('tripWinter'),sub:t('subWinter')},{id:'weekend',name:t('tripWeekend'),sub:t('subWeekend')}];
+  const list=[{id:'ski',name:t('tripSki'),sub:t('subSki')},{id:'summer',name:t('tripSummer'),sub:t('subSummer')},{id:'winter',name:t('tripWinter'),sub:t('subWinter')},{id:'weekend',name:t('tripWeekend'),sub:t('subWeekend')},{id:'spring',name:t('tripSpring'),sub:t('subSpring')},{id:'autumn',name:t('tripAutumn'),sub:t('subAutumn')}];
   for(const tr of list){
     const st=tripStates[tr.id]||defState(tr.id);
     const myChk=userChecked[tr.id]||[];
@@ -602,8 +602,8 @@ function renderTrip(tripId){
   const dur=st.duration;
   const p=calcProg(tripId,st,[...myChk]);
   const pct=p.total?Math.round(p.done/p.total*100):0;
-  const tNames={ski:t('tripSki'),summer:t('tripSummer'),winter:t('tripWinter'),weekend:t('tripWeekend')};
-  const tSubs={ski:t('subSki'),summer:t('subSummer'),winter:t('subWinter'),weekend:t('subWeekend')};
+  const tNames={ski:t('tripSki'),summer:t('tripSummer'),winter:t('tripWinter'),weekend:t('tripWeekend'),spring:t('tripSpring'),autumn:t('tripAutumn')};
+  const tSubs={ski:t('subSki'),summer:t('subSummer'),winter:t('subWinter'),weekend:t('subWeekend'),spring:t('subSpring'),autumn:t('subAutumn')};
   const catOpts=trip.cats.map(c=>`<option value="${c.id}">${tc(c.id)}</option>`).join('');
   const acc=CARD_ACCENTS[tripId];
   const myCol=myProfile?myProfile.color:acc;

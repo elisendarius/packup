@@ -61,11 +61,27 @@ const SVGS={
     <path d="M33,14 A3,3 0 1,1 39,14" fill="none" stroke="#70c080" stroke-width="1.5" opacity=".5"/>
     <circle cx="210" cy="13" r="5" fill="#e8a030" opacity=".6"/>
     <path d="M207,10 L210,6 L213,10" fill="none" stroke="#e8a030" stroke-width="1.5" opacity=".6"/>`),
+  spring:mkV('#5aaa60','#3a8a48','#5ab060',`
+    <circle cx="30" cy="18" r="5" fill="#90d870" opacity=".5"/>
+    <circle cx="42" cy="12" r="4" fill="#f0d040" opacity=".6"/>
+    <circle cx="52" cy="18" r="3" fill="#f0a0b0" opacity=".6"/>
+    <circle cx="60" cy="12" r="5" fill="#90d870" opacity=".5"/>
+    <circle cx="72" cy="16" r="3" fill="#f0d040" opacity=".5"/>
+    <circle cx="200" cy="10" r="6" fill="#f0d040" opacity=".5"/>
+    <circle cx="212" cy="16" r="4" fill="#f0a0b0" opacity=".6"/>
+    <circle cx="220" cy="10" r="5" fill="#90d870" opacity=".5"/>`),
+  autumn:mkV('#c87820','#a05c10','#c87020',`
+    <path d="M28,22 Q32,10 38,16 Q34,6 40,12 Q38,4 44,8 Q42,18 38,20 Q42,24 36,24 Z" fill="#d46010" opacity=".6"/>
+    <path d="M46,18 Q49,9 53,13 Q51,5 56,8 Q57,2 61,5 Q59,13 55,16 Q58,20 52,20 Z" fill="#c85010" opacity=".5"/>
+    <path d="M200,22 Q204,10 210,16 Q206,6 212,12 Q210,4 216,8 Q214,18 210,20 Q214,24 208,24 Z" fill="#e07020" opacity=".5"/>
+    <circle cx="218" cy="14" r="4" fill="#d49020" opacity=".4"/>`),
 };
 const CARD_TOPS={
   ski:'linear-gradient(160deg,#dceeff 0%,#b8d4f4 100%)',
   summer:'linear-gradient(160deg,#fff0e0 0%,#ffd4a0 100%)',
   winter:'linear-gradient(160deg,#fff8e8 0%,#fde8b0 100%)',
   weekend:'linear-gradient(160deg,#e4f4e8 0%,#b8dcc0 100%)',
+  spring:'linear-gradient(160deg,#e8f8e0 0%,#c0eca0 100%)',
+  autumn:'linear-gradient(160deg,#fff0d8 0%,#f4c878 100%)',
 };
-const CARD_ACCENTS={ski:'#3a80c0',summer:'#d46010',winter:'#c87808',weekend:'#3a7048'};
+const CARD_ACCENTS={ski:'#3a80c0',summer:'#d46010',winter:'#c87808',weekend:'#3a7048',spring:'#3a8a3a',autumn:'#b85810'};
