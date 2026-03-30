@@ -66,6 +66,8 @@ const T={
     duration:'Trip duration',days:'days',loading:'Loading…',
     progress:'My progress',teamProg:'Team progress',packed:'packed',of:'of',
     addItem:'Add an item',addName:'Item name…',addCat:'Category',addQty:'Qty',
+    saveList:'Save as list',myLists:'My lists',listSaved:'List saved',deleteList:'Delete list',
+    carryOn:'Carry-on',checked:'Checked',
     addPerm:'Save permanently',addBtn:'Add',
     reset:'Reset my packing',resetConfirm:'Reset your checked items?',
     pTitle:"Who's packing?",pSub:"Type your name",pEdit:'Edit profile',pSave:'Let\'s go →',pPh:'Your name…',
@@ -95,6 +97,8 @@ const T={
     duration:'Reslängd',days:'dagar',loading:'Laddar…',
     progress:'Mitt framsteg',teamProg:'Lagets framsteg',packed:'packade',of:'av',
     addItem:'Lägg till sak',addName:'Namn på sak…',addCat:'Kategori',addQty:'Antal',
+    saveList:'Spara som lista',myLists:'Mina listor',listSaved:'Lista sparad',deleteList:'Radera lista',
+    carryOn:'Handbagage',checked:'Incheckat',
     addPerm:'Spara permanent',addBtn:'Lägg till',
     reset:'Återställ min packning',resetConfirm:'Återställa dina bockade?',
     pTitle:'Vem packar?',pSub:'Skriv ditt namn',pEdit:'Redigera profil',pSave:'Kör! →',pPh:'Ditt namn…',
@@ -146,6 +150,44 @@ function setHiddenItems(tid, set) {
   localStorage.setItem(`pu-hi-${_uid()}-${tid}`, JSON.stringify([...set]));
 }
 
+// ── NAMED LISTS (localStorage) ────────────────────────────────────────
+// A list is a named snapshot of a trip: {id, name, templateId, createdAt}
+// Its checked/hidden/custom items are stored under the listId (not templateId)
+
+function getLists() {
+  try { return JSON.parse(localStorage.getItem('pu-lists')||'[]'); } catch(e){ return []; }
+}
+function saveLists(lists) { localStorage.setItem('pu-lists', JSON.stringify(lists)); }
+function createList(name, templateId) {
+  const id = 'l'+Date.now();
+  const list = {id, name, templateId, createdAt: Date.now()};
+  const lists = getLists();
+  lists.push(list);
+  saveLists(lists);
+  return list;
+}
+function deleteList(listId) {
+  saveLists(getLists().filter(l=>l.id!==listId));
+  ['pu-ci','pu-hi'].forEach(k=>localStorage.removeItem(`${k}-${_uid()}-${listId}`));
+  localStorage.removeItem(`pu-qty-${_uid()}-${listId}`);
+}
+
+// ── PER-ITEM QTY OVERRIDES (localStorage) ────────────────────────────
+// User can override the calculated qty for any item in any trip/list
+function getQtyOverrides(tid) {
+  const raw = localStorage.getItem(`pu-qty-${_uid()}-${tid}`);
+  return raw ? JSON.parse(raw) : {};
+}
+function setQtyOverrides(tid, map) {
+  localStorage.setItem(`pu-qty-${_uid()}-${tid}`, JSON.stringify(map));
+}
+function setItemQty(tid, itemId, qty) {
+  const map = getQtyOverrides(tid);
+  if(qty === null) delete map[itemId]; else map[itemId] = qty;
+  setQtyOverrides(tid, map);
+}
+
+
 // ── VAN SVGs (white/light style on dark) ──────────────────────────────
 
 // ── DATA GLOBALS (populated by loadData) ──────────────────────
@@ -174,7 +216,8 @@ async function loadData() {
 // ── APP STATE ─────────────────────────────────────────────────
 const IDS = ['ski','summer','winter','weekend'];
 let lang         = localStorage.getItem('pu-lang') || 'en';
-let currentTrip  = null;
+let currentTrip  = null;   // template id (ski/summer/winter/weekend)
+let currentListId = null;  // saved list id, or null for base template
 let activeTab    = 'trips';
 let pollTimer    = null;
 let myProfile    = null;
@@ -402,6 +445,86 @@ function updateProfBtn(){
     }).join('');
   }
 }
+function updateSidebarLists() {
+  const lists = getLists();
+  const el = document.getElementById('sbListItems');
+  const wrap = document.getElementById('sidebarLists');
+  if(!el || !wrap) return;
+  if(!lists.length){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  el.innerHTML = lists.map(l => {
+    const isActive = l.id === currentListId;
+    const emoji = {ski:'⛷️',summer:'☀️',winter:'🏙️',weekend:'🎒'}[l.templateId]||'✈️';
+    return `<div class="sb-list-row${isActive?' active':''}" onclick="openList('${l.id}')" title="${l.name}">
+      <span>${emoji}</span><span class="sb-list-name">${l.name}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── SAVE LIST MODAL ───────────────────────────────────────────────────
+let _pendingListTemplate = null;
+
+function openSaveListModal(templateId) {
+  _pendingListTemplate = templateId;
+  document.getElementById('listNameInp').value = '';
+  const err = document.getElementById('listNameErr');
+  if(err){ err.textContent=''; err.style.display='none'; }
+  document.getElementById('saveListModal').style.display = 'flex';
+  setTimeout(()=>document.getElementById('listNameInp').focus(), 140);
+}
+function closeSaveListModal() {
+  document.getElementById('saveListModal').style.display = 'none';
+  _pendingListTemplate = null;
+}
+function confirmSaveList() {
+  const name = (document.getElementById('listNameInp').value||'').trim();
+  const err = document.getElementById('listNameErr');
+  if(!name){ if(err){err.textContent='Please enter a name.';err.style.display='block';} return; }
+  const list = createList(name, _pendingListTemplate);
+  closeSaveListModal();
+  // Copy current trip's state into the new list
+  const src = _pendingListTemplate;
+  const ci = getCustomItems(src);
+  setCustomItems(list.id, ci);
+  const hi = getHiddenItems(src);
+  setHiddenItems(list.id, hi);
+  const qo = getQtyOverrides(src);
+  setQtyOverrides(list.id, qo);
+  // Copy checked items
+  if(myProfile && userChecked[src] && userChecked[src].length){
+    userChecked[list.id] = [...userChecked[src]];
+    userChecked['_u'+myProfile.id+'_'+list.id] = [...userChecked[src]];
+    sSet('checked-'+list.id+'-'+myProfile.id, userChecked[list.id]);
+  }
+  updateSidebarLists();
+  showToast('✓ ' + t('listSaved') + ': ' + name);
+  openList(list.id);
+}
+function doDeleteList(listId) {
+  const list = getLists().find(l=>l.id===listId);
+  if(!list) return;
+  if(!confirm(`Delete "${list.name}"?`)) return;
+  deleteList(listId);
+  currentListId = null;
+  updateSidebarLists();
+  goHome();
+}
+
+// Open a saved list in trip view
+function openList(listId) {
+  const list = getLists().find(l=>l.id===listId);
+  if(!list) return;
+  currentListId = listId;
+  openTrip(list.templateId);
+}
+
+// updateCustomItemQty — update qty of a custom item
+function updateCustomItemQty(tid, itemId, qty) {
+  const items = getCustomItems(tid);
+  const ci = items.find(i=>i.id===itemId);
+  if(ci){ ci.qty = qty; setCustomItems(tid, items); }
+}
+
 function toggleManage(){
   const p=document.getElementById('managePanel'),b=document.getElementById('manageToggle');
   const open=p.style.display==='none'||!p.style.display;
@@ -450,7 +573,7 @@ function renderHome(){
       }
     }
     const card=document.createElement('div');
-    card.className='tcard';card.onclick=()=>openTrip(tr.id);
+    card.className='tcard';card.onclick=()=>{currentListId=null;openTrip(tr.id);};
     card.innerHTML=`
       <div class="ctop" style="background:${CARD_TOPS[tr.id]}">
         <div class="ctop-bg" style="background:${CARD_TOPS[tr.id]}"></div>
@@ -506,6 +629,7 @@ function renderTrip(tripId){
       ${!isMe?`<button class="u-del" onclick="deleteProfile('${pr.id}')">×</button>`:'<div style="width:28px"></div>'}
     </div>`;
   }
+  const qtyOverrides = getQtyOverrides(tripId);
   let catsHTML='';
   for(const cat of trip.cats){
     const hidden=getHiddenItems(tripId);
@@ -517,13 +641,18 @@ function renderTrip(tripId){
       if(isD){const rt=rule==='daily'?t('perDay'):rule==='halfday'?'1/2d':rule==='sweaters'?'1/3d':'~';badge=`<span class="iqty daily">×${qty} <span class="iq-rule">(${rt})</span></span>`;}
       else if(typeof item.q==='number'&&item.q>1){badge=`<span class="iqty fixed">×${qty}</span>`;}
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(item.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}" title="${pr.name}"></div>`).join('');
-      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div><div class="itxt">${ti(item.id)}</div>${badge}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
+      const bagTag = item.bag==='carry_on' ? `<span class="bag-tag carry">✈</span>` : item.bag==='checked' ? `<span class="bag-tag chkd">🧳</span>` : '';
+      const qtyOvr = qtyOverrides[item.id];
+      const displayQty = qtyOvr !== undefined ? qtyOvr : qty;
+      const qtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${displayQty}" title="Quantity needed" onchange="setItemQty('${tripId}','${item.id}',+this.value||0);" onclick="event.stopPropagation()" tabindex="-1"/>`;
+      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagTag}<div class="itxt">${ti(item.id)}</div>${badge}${qtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
     }).join('');
     const custH=getCustomItems(tripId).filter(ci=>ci.catId===cat.id).map(ci=>{
       const done=myChk.has(ci.id);
       const qtyBadge=(ci.qty&&ci.qty>1)?`<span class="iqty fixed">×${ci.qty}</span>`:'';
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
-      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span></div>${qtyBadge}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
+      const ciQtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${ci.qty||1}" title="Quantity" onclick="event.stopPropagation()" onchange="updateCustomItemQty('${tripId}','${ci.id}',+this.value||1)" tabindex="-1"/>`;
+      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div><div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span></div>${ciQtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
     }).join('');
     const allVisible=allItemsList(tripId,st).filter(i=>i.catId===cat.id);
     const total=allVisible.length;
@@ -536,11 +665,15 @@ function renderTrip(tripId){
       <div class="ilist">${cH}${custH}</div>
     </div>`;
   }
+  const listObj = currentListId ? getLists().find(l=>l.id===currentListId) : null;
+  const tripTitle = listObj ? listObj.name : tNames[tripId];
+  const tripSub   = listObj ? `${tNames[tripId]} · ${tSubs[tripId]}` : tSubs[tripId];
   document.getElementById('tripView').innerHTML=`
     <div class="thero">
       <div class="hvan">${SVGS[tripId]}</div>
-      <h1>${tNames[tripId]}</h1>
-      <p class="tsub">${tSubs[tripId]}</p>
+      <h1>${tripTitle}</h1>
+      <p class="tsub">${tripSub}</p>
+      ${!listObj ? `<button class="save-list-btn" onclick="openSaveListModal('${tripId}')">${t('saveList')} +</button>` : `<button class="save-list-btn del-list-btn" onclick="doDeleteList('${currentListId}')">${t('deleteList')}</button>`}
     </div>
     <div class="trip-top-row">
       <div class="dcard trip-top-card">
@@ -755,6 +888,8 @@ function switchTab(tab){
 }
 function openTrip(id){
   currentTrip=id;
+  // If not coming from openList(), clear the list context
+  // (openList sets currentListId before calling openTrip)
   document.getElementById('homeView').style.display='none';
   document.getElementById('linksView').classList.remove('on');
   document.getElementById('carView').classList.remove('on');
@@ -762,10 +897,10 @@ function openTrip(id){
   document.getElementById('tripView').style.display='block';
   document.getElementById('tripView').classList.add('on');
   document.getElementById('backBtn').style.display='inline-flex';
-  renderTrip(id);startPoll(id);window.scrollTo(0,0);
+  renderTrip(id);startPoll(id);updateSidebarLists();window.scrollTo(0,0);
 }
 function goHome(){
-  currentTrip=null;stopPoll();
+  currentTrip=null;currentListId=null;stopPoll();
   document.getElementById('tripView').style.display='none';
   document.getElementById('tripView').classList.remove('on');
   document.getElementById('backBtn').style.display='none';
@@ -888,5 +1023,6 @@ async function init(){
   } else {
     switchTab('trips');
   }
+  updateSidebarLists();
 }
 init();

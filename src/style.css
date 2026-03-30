@@ -302,3 +302,31 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--rim2);border-radius:2px}
+
+/* ── BAG TYPE BADGES ── */
+.bag-tag{font-size:11px;flex-shrink:0;opacity:.75;margin-right:2px;line-height:1}
+.bag-tag.carry{color:#3a80c0}
+.bag-tag.chkd{color:#c87808}
+
+/* ── PER-ITEM QTY INPUT ── */
+.item-qty{width:36px;padding:2px 4px;border:1px solid var(--rim2);border-radius:4px;font-size:11px;font-family:var(--mono);background:var(--surface2);color:var(--cream);text-align:center;margin-left:4px;flex-shrink:0;-moz-appearance:textfield;transition:border .15s}
+.item-qty::-webkit-inner-spin-button,.item-qty::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.item-qty:focus{outline:none;border-color:var(--gold);background:var(--surface)}
+.item.done .item-qty{opacity:.45}
+
+/* ── SAVE LIST BUTTON ── */
+.save-list-btn{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:5px 12px;background:rgba(184,120,0,.12);border:1px solid rgba(184,120,0,.3);border-radius:20px;color:var(--gold);font-size:12px;font-family:var(--mono);cursor:pointer;transition:all .18s;letter-spacing:.3px}
+.save-list-btn:hover{background:var(--gold);color:var(--ink)}
+.del-list-btn{background:rgba(226,75,74,.08);border-color:rgba(226,75,74,.25);color:#e24b4a}
+.del-list-btn:hover{background:#e24b4a;color:#fff}
+
+/* ── SIDEBAR SAVED LISTS ── */
+.sidebar-lists{border-top:1px solid var(--rim);margin-top:4px;padding-top:4px}
+.sidebar-lists-label{font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;padding:6px 16px 4px}
+.sb-list-row{display:flex;align-items:center;gap:8px;padding:6px 16px;cursor:pointer;border-radius:6px;margin:1px 6px;font-size:12px;color:var(--cream3);transition:all .15s;white-space:nowrap;overflow:hidden}
+.sb-list-row:hover{background:rgba(255,255,255,.06);color:var(--cream2)}
+.sb-list-row.active{background:rgba(184,120,0,.12);color:var(--gold)}
+.sb-list-name{overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+
+/* ── AUTH ERROR (reuse for list modal) ── */
+.auth-err{display:none;color:#e24b4a;font-size:12px;margin:-6px 0 8px;background:rgba(226,75,74,.08);border-radius:6px;padding:6px 10px;border:1px solid rgba(226,75,74,.2)}

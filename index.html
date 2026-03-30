@@ -54,6 +54,20 @@
   </div>
 </div>
 
+<!-- SAVE LIST MODAL -->
+<div class="modal-over" id="saveListModal" style="display:none" onclick="closeSaveListModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:340px">
+    <div class="modal-logo">pack<span>Up</span></div>
+    <h2>Save as list</h2>
+    <p style="font-size:13px;color:var(--cream3);margin-bottom:14px;line-height:1.5">Give this trip a name to save your progress separately.</p>
+    <input class="minput" id="listNameInp" placeholder="e.g. Lofsdalen 2026…" maxlength="40"
+      onkeydown="if(event.key==='Enter')confirmSaveList()"/>
+    <div class="auth-err" id="listNameErr" style="display:none"></div>
+    <button class="mbtn" onclick="confirmSaveList()" style="margin-top:10px">Save list →</button>
+    <button class="manage-toggle" onclick="closeSaveListModal()">Cancel</button>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-logo" onclick="goHome()">pack<span>Up</span> <span class="sidebar-sync" id="sidebarSync"></span></div>
@@ -74,6 +88,11 @@
       <svg width="16" height="16" viewBox="0 0 16 16" stroke-width="1.5"><circle cx="5" cy="5" r="1.2"/><circle cx="8" cy="3.5" r="1.2"/><circle cx="11" cy="5" r="1.2"/><circle cx="6.5" cy="8" r="1.2"/><circle cx="9.5" cy="8" r="1.2"/></svg>
       <span id="tl-dog">Dog</span>
     </button>
+  </div>
+  <!-- Saved lists sub-nav -->
+  <div class="sidebar-lists" id="sidebarLists" style="display:none">
+    <div class="sidebar-lists-label">My Lists</div>
+    <div id="sbListItems"></div>
   </div>
   <!-- Users in sidebar -->
   <div class="sidebar-users" id="sidebarUsers">
