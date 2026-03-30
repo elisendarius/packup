@@ -9,47 +9,58 @@
         "items": [
           {
             "id": "ski-jacket",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "ski-pants",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "thermal-top",
-            "q": 2
+            "q": 2,
+            "bag": "checked"
           },
           {
             "id": "thermal-bot",
-            "q": 2
+            "q": 2,
+            "bag": "checked"
           },
           {
             "id": "fleece",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "ski-socks",
-            "q": "halfday"
+            "q": "halfday",
+            "bag": "checked"
           },
           {
             "id": "wool-socks",
-            "q": 2
+            "q": 2,
+            "bag": "checked"
           },
           {
             "id": "underwear",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "tshirts",
-            "q": "less"
+            "q": "less",
+            "bag": "checked"
           },
           {
             "id": "apres-outfit",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "casual-eve",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       },
@@ -59,27 +70,33 @@
         "items": [
           {
             "id": "skis",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "boots",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "helmet",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "goggles",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "poles",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "boot-bag",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       },
@@ -89,27 +106,33 @@
         "items": [
           {
             "id": "gloves",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "neck",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "ski-pass",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "backpack",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "sunglasses",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "hand-warmers",
-            "q": 4
+            "q": 4,
+            "bag": "carry_on"
           }
         ]
       },
@@ -119,23 +142,28 @@
         "items": [
           {
             "id": "sunscreen",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "lip-balm",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "moisturizer",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "deodorant",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "first-aid",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -145,15 +173,18 @@
         "items": [
           {
             "id": "passport",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "insurance",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "lift-booking",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -163,27 +194,33 @@
         "items": [
           {
             "id": "charger",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "power-bank",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "camera",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "snacks",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "water-bottle",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "apres-boots",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       }
@@ -199,43 +236,53 @@
         "items": [
           {
             "id": "swimsuit",
-            "q": 2
+            "q": 2,
+            "bag": "checked"
           },
           {
             "id": "shorts",
-            "q": "less"
+            "q": "less",
+            "bag": "checked"
           },
           {
             "id": "tshirts",
-            "q": "less"
+            "q": "less",
+            "bag": "checked"
           },
           {
             "id": "light-shirt",
-            "q": "less"
+            "q": "less",
+            "bag": "checked"
           },
           {
             "id": "underwear",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "socks",
-            "q": "halfday"
+            "q": "halfday",
+            "bag": "checked"
           },
           {
             "id": "sandals",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "flip-flops",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "sneakers",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "light-jacket",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       },
@@ -245,19 +292,23 @@
         "items": [
           {
             "id": "beach-towel",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "beach-bag",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "snorkel",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "waterproof-case",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       },
@@ -267,19 +318,23 @@
         "items": [
           {
             "id": "sunglasses",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "hat",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "water-bottle",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "backpack",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -289,23 +344,28 @@
         "items": [
           {
             "id": "sunscreen",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "after-sun",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "mosquito",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "deodorant",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "shampoo",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -315,15 +375,18 @@
         "items": [
           {
             "id": "passport",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "insurance",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "adapter",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -333,23 +396,28 @@
         "items": [
           {
             "id": "charger",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "camera",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "guidebook",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "phrase-book",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "snacks",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       }
@@ -365,51 +433,63 @@
         "items": [
           {
             "id": "jeans",
-            "q": 2
+            "q": 2,
+            "bag": "checked"
           },
           {
             "id": "sweaters",
-            "q": "sweaters"
+            "q": "sweaters",
+            "bag": "checked"
           },
           {
             "id": "tshirts",
-            "q": "less"
+            "q": "less",
+            "bag": "checked"
           },
           {
             "id": "underwear",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "socks",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "rain-jacket",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "casual-shoes",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "ankle-boots",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "scarf",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "light-gloves",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "beanie",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "light-jacket",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       },
@@ -419,19 +499,23 @@
         "items": [
           {
             "id": "umbrella",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "sunglasses",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "daypack",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "water-bottle",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -441,19 +525,23 @@
         "items": [
           {
             "id": "moisturizer",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "lip-balm",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "deodorant",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "shampoo",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -463,15 +551,18 @@
         "items": [
           {
             "id": "passport",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "insurance",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "adapter",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -481,23 +572,28 @@
         "items": [
           {
             "id": "charger",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "camera",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "guidebook",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "phrase-book",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "book",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       }
@@ -513,31 +609,38 @@
         "items": [
           {
             "id": "tshirts",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "casual-pants",
-            "q": 2
+            "q": 2,
+            "bag": "checked"
           },
           {
             "id": "nice-outfit",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "underwear",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "socks",
-            "q": "daily"
+            "q": "daily",
+            "bag": "checked"
           },
           {
             "id": "comfy-shoes",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "jacket",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           }
         ]
       },
@@ -547,19 +650,23 @@
         "items": [
           {
             "id": "toothbrush",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "deodorant",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "shampoo",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "medications",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -569,15 +676,18 @@
         "items": [
           {
             "id": "sunglasses",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "reusable-bag",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "water-bottle",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       },
@@ -587,23 +697,28 @@
         "items": [
           {
             "id": "charger",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "power-bank",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "cash",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           },
           {
             "id": "book",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "checked"
           },
           {
             "id": "snacks",
-            "q": "fixed"
+            "q": "fixed",
+            "bag": "carry_on"
           }
         ]
       }
