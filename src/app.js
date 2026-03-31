@@ -651,10 +651,6 @@ function renderTrip(tripId){
     const cH=cat.items.filter(item=>!hidden.has(item.id)).map(item=>{
       const{qty,rule}=resolveQ(item.q,dur);
       const done=myChk.has(item.id);
-      const isD=rule!=='fixed';
-      let badge='';
-      if(isD){const rt=rule==='daily'?t('perDay'):rule==='halfday'?'1/2d':rule==='sweaters'?'1/3d':'~';badge=`<span class="iqty daily">×${qty} <span class="iq-rule">(${rt})</span></span>`;}
-      else if(typeof item.q==='number'&&item.q>1){badge=`<span class="iqty fixed">×${qty}</span>`;}
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(item.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}" title="${pr.name}"></div>`).join('');
       const effectiveBag = bagAssignments[item.id] || item.bag || 'checked';
       const bagBtns = `<span class="bag-btns" onclick="event.stopPropagation()">
@@ -664,11 +660,10 @@ function renderTrip(tripId){
       const qtyOvr = qtyOverrides[item.id];
       const displayQty = qtyOvr !== undefined ? qtyOvr : qty;
       const qtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${displayQty}" title="Quantity needed" onchange="setItemQty('${tripId}','${item.id}',+this.value||0);" onclick="event.stopPropagation()" tabindex="-1"/>`;
-      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagBtns}<div class="itxt">${ti(item.id)}</div>${badge}${qtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
+      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagBtns}<div class="itxt">${ti(item.id)}</div>${qtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
     }).join('');
     const custH=getCustomItems(tripId).filter(ci=>ci.catId===cat.id).map(ci=>{
       const done=myChk.has(ci.id);
-      const qtyBadge=(ci.qty&&ci.qty>1)?`<span class="iqty fixed">×${ci.qty}</span>`:'';
       const dots=others.filter(pr=>(userChecked['_u'+pr.id+'_'+tripId]||[]).includes(ci.id)).map(pr=>`<div class="ic-dot" style="background:${pr.color}"></div>`).join('');
       const ciEffBag = bagAssignments[ci.id] || 'checked';
       const ciBagBtns = `<span class="bag-btns" onclick="event.stopPropagation()">
