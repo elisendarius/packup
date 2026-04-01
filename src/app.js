@@ -103,7 +103,7 @@ const T={
     reset:'Återställ min packning',resetConfirm:'Återställa dina bockade?',
     pTitle:'Vem packar?',pSub:'Skriv ditt namn',pEdit:'Redigera profil',pSave:'Kör! →',pPh:'Ditt namn…',
     you:'du',perDay:'per dag',
-    tripSki:'Skidresa',tripSummer:'Sommarsemester',tripWinter:'Vinterbad',tripWeekend:'Helgresa',tripSpring:'Vårresa',tripAutumn:'Höstresa',
+    tripSki:'Skidresa',tripSummer:'Sommarsemester',tripWinter:'Vinter',tripWeekend:'Helgresa',tripSpring:'Vårresa',tripAutumn:'Höstresa',
     subSki:'Till pisterna upp i norr',subSummer:'Sol, hav och sangria',subWinter:'Stadssemester & kultur',subWeekend:'Packa lätt, njut mer',subSpring:'Frisk luft, lagrat mode',subAutumn:'Gyllene löv, mysiga lager',
     cats:{clothing:'Kläder',equipment:'Utrustning',accessories:'Tillbehör',toiletries:'Toalettartiklar',documents:'Dokument',other:'Övrigt',beach:'Strand & Sol'},
     items:{

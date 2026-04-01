@@ -315,9 +315,9 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 
 /* ── MOBILE ITEM ROWS ── */
 @media(max-width:700px){
-  /* Drop the bag-btns column entirely — col 2 collapses to 0 */
-  .item{grid-template-columns:20px 0 1fr 34px auto 20px;column-gap:5px;padding:9px 10px}
   .bag-btns{display:none}
+  /* 5 columns: checkbox | item name | qty | dots | delete */
+  .item{grid-template-columns:20px 1fr 34px auto 20px;column-gap:6px;padding:9px 10px}
   .itxt{font-size:12px}
   .item-qty{width:34px;font-size:11px;padding:2px;justify-self:end}
   .chk{width:20px;height:20px;border-radius:5px}
