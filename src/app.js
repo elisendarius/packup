@@ -103,7 +103,7 @@ const T={
     reset:'Återställ min packning',resetConfirm:'Återställa dina bockade?',
     pTitle:'Vem packar?',pSub:'Skriv ditt namn',pEdit:'Redigera profil',pSave:'Kör! →',pPh:'Ditt namn…',
     you:'du',perDay:'per dag',
-    tripSki:'Skidresa',tripSummer:'Sommarsemester',tripWinter:'Vinter',tripWeekend:'Helgresa',tripSpring:'Vårresa',tripAutumn:'Höstresa',
+    tripSki:'Skidresa',tripSummer:'Sommarsemester',tripWinter:'Vinterbad',tripWeekend:'Helgresa',tripSpring:'Vårresa',tripAutumn:'Höstresa',
     subSki:'Till pisterna upp i norr',subSummer:'Sol, hav och sangria',subWinter:'Stadssemester & kultur',subWeekend:'Packa lätt, njut mer',subSpring:'Frisk luft, lagrat mode',subAutumn:'Gyllene löv, mysiga lager',
     cats:{clothing:'Kläder',equipment:'Utrustning',accessories:'Tillbehör',toiletries:'Toalettartiklar',documents:'Dokument',other:'Övrigt',beach:'Strand & Sol'},
     items:{
@@ -660,7 +660,7 @@ function renderTrip(tripId){
       const qtyOvr = qtyOverrides[item.id];
       const displayQty = qtyOvr !== undefined ? qtyOvr : qty;
       const qtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${displayQty}" title="Quantity needed" onchange="setItemQty('${tripId}','${item.id}',+this.value||0);" onclick="event.stopPropagation()" tabindex="-1"/>`;
-      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagBtns}<div class="itxt">${ti(item.id)}</div>${qtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
+      return`<div class="item${done?' done':''}" data-id="${item.id}" onclick="toggleItem('${tripId}','${item.id}')"><div class="chk"></div>${bagBtns}<div class="itxt">${ti(item.id)}${dots?`<span class="item-dots">${dots}</span>`:''}</div>${qtyIn}<button class="idel" onclick="event.stopPropagation();hideItem('${tripId}','${item.id}')" title="Remove from my list">×</button></div>`;
     }).join('');
     const custH=getCustomItems(tripId).filter(ci=>ci.catId===cat.id).map(ci=>{
       const done=myChk.has(ci.id);
@@ -671,7 +671,7 @@ function renderTrip(tripId){
         <button class="bag-btn${ciEffBag==='checked'?' bag-btn-on':''}" onclick="setItemBag('${tripId}','${ci.id}','checked')" title="Checked">🧳</button>
       </span>`;
       const ciQtyIn = `<input class="item-qty" type="number" min="0" max="99" value="${ci.qty||1}" title="Quantity" onclick="event.stopPropagation()" onchange="updateCustomItemQty('${tripId}','${ci.id}',+this.value||1)" tabindex="-1"/>`;
-      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div>${ciBagBtns}<div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span></div>${ciQtyIn}${dots?`<div class="item-dots">${dots}</div>`:''}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
+      return`<div class="item${done?' done':''}" data-id="${ci.id}" onclick="toggleItem('${tripId}','${ci.id}')"><div class="chk"></div>${ciBagBtns}<div class="itxt">${ci.name} <span style="font-size:9px;color:var(--gold);font-family:var(--mono)">mine</span>${dots?`<span class="item-dots">${dots}</span>`:''}</div>${ciQtyIn}<button class="idel" onclick="event.stopPropagation();delItem('${tripId}','${ci.id}')" title="Delete">×</button></div>`;
     }).join('');
     const allVisible=allItemsList(tripId,st).filter(i=>i.catId===cat.id);
     const total=allVisible.length;

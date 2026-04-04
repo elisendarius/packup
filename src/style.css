@@ -205,7 +205,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .cats.coll .catchev{transform:rotate(-90deg)}
 .cats.coll .ilist{display:none}
 .ilist{background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-sm);border:1px solid var(--rim)}
-.item{display:grid;grid-template-columns:22px auto 1fr 38px auto 22px;align-items:center;column-gap:7px;padding:10px 14px;border-bottom:1px solid var(--rim);cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.item{display:grid;grid-template-columns:22px auto 1fr 38px 22px;align-items:center;column-gap:7px;padding:10px 14px;border-bottom:1px solid var(--rim);cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
 .item:last-child{border-bottom:none}
 .item:hover{background:var(--ink2)}
 .item.done{opacity:.48}
@@ -217,7 +217,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 .item.done .itxt{text-decoration:line-through;color:var(--cream3)}
 .idel{width:22px;height:22px;border-radius:50%;border:none;background:transparent;color:var(--rim2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;flex-shrink:0}
 .idel:hover{background:rgba(226,75,74,.2);color:#e24b4a}
-.item-dots{display:flex;gap:2px;justify-content:flex-end}
+.item-dots{display:inline-flex;gap:2px;margin-left:4px;vertical-align:middle}
 .ic-dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--surface);flex-shrink:0;opacity:.9}
 
 /* Add item */
@@ -316,8 +316,7 @@ body{font-family:var(--body);background:var(--ink);color:var(--cream);min-height
 /* ── MOBILE ITEM ROWS ── */
 @media(max-width:700px){
   .bag-btns{display:none}
-  /* 5 columns: checkbox | item name | qty | dots | delete */
-  .item{grid-template-columns:20px 1fr 34px auto 20px;column-gap:6px;padding:9px 10px}
+  .item{grid-template-columns:20px 1fr 34px 20px;column-gap:6px;padding:9px 10px}
   .itxt{font-size:12px}
   .item-qty{width:34px;font-size:11px;padding:2px;justify-self:end}
   .chk{width:20px;height:20px;border-radius:5px}
